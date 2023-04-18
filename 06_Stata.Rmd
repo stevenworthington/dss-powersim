@@ -8,64 +8,9 @@ knitr::opts_chunk$set(eval=FALSE, engine="stata", engine.path=list(stata=statapa
 # knitr::opts_knit$set(root.dir="Stata/StataInstall")
 ```
 
-# (PART) Implementation {-}
-
 # Stata
 
 ## Simple linear regression
-
-### Step 1: model specification
-
-Write down the regression model, including all variables and parameters of interest:
-
-$$
-bpsystol = \beta_0 + \beta_1(age) + \beta_2(sex) + \beta_3(age*sex) + \epsilon
-$$
-
-where the variables of interest are age, sex and the interaction of age and sex. Also, you need to estimate the coefficients for $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$.
-
-### Step 2: Variable composition
-
-Specify the details of the covariates, such as the range of age or the proportion of females.
-
-### Step 3: Parameter composition
-
-Locate or think about reasonable values for the parameters in your model.
-
-```{stata}
-webuse nhanes2
-
-regress bpsystol c.age##ib1.sex
- 
------------------------
-age            0.471***
-            (28.121)   
-
-1.sex          0.000   
-                 (.)   
-
-2.sex        -20.458***
-           (-17.557)   
-
-1.sex#c.~e     0.000   
-                 (.)   
-
-2.sex#c.~e     0.346***
-            (15.008)   
-
-_cons        110.569***
-           (130.995)   
------------------------
-N              10351   
-r2             0.255   
-r2_a           0.255   
-F           1180.868   
------------------------
-t statistics in parentheses
-* p<0.1, ** p<0.05, *** p<0.01
-```
-
-Using the data data from the National Health and Nutrition Examination Survey (NHANES), we can estimate $\beta_0=110.6$, $\beta_1=0.47$, $\beta_2=-20.46$, $\beta_3=0.35$.
 
 ### Step 4: Simulate
 
@@ -256,75 +201,6 @@ Two-sided test
 
 
 ## Mixed effects model
-
-### Step 1: model specification
-
-Write down the regression model, including all variables and parameters of interest:
-
-$$
-weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}*female_i) + \mu_{0i} + \mu_{1i}(age) + \epsilon_{it}
-$$
-
-where $i$ stands for `children`, $t$ for `age`, and we assume $\mu_{0i} \sim N(0, \tau_0)$, $\mu_{1i}\sim N(0, \tau_1)$, $\epsilon_{it} \sim N(0, \sigma)$.
-
-The covariates are `weight`, `age`, `female`, and the interaction term `age\*female`. Also, we need to estimate the coefficients for $\beta_0$ (Intercept), $\beta_1$ (coefficient for age), $\beta_2$ (coefficient for the female comparing with the male), $\beta_3$ (coefficient for the interaction), $\mu_{1i}$ (random effect of age).
-
-We also need to think about the covariates in our model. This is a longitudinal study, so we need to specify the starting age, the length of time between measurements, and the total number of measurements. We also need to consider the proportion of males and females in our study. Are we likely to sample 50% females and 50% males?
-
-Let's assume that we will measure the childrens' weight every 6 months for 2 years beginning at age 12. And let's also assume that the sample will be 50% female. The interaction term age×female is easy to calculate once we create variables for age and female.
-
-### Step 2: Variable composition
-
-Specify the details of the covariates, such as the range of age or the proportion of females.
-
-Let's assume that we will measure the children's weight every 4 months for 4 years beginning at age 10. Also, in the sample, the proportion of female is equal to that of male. It's not difficult to calculate the iteration term when generate the variable for age and female.
-
-### Step 3: Parameter composition
-
-Locate or think about reasonable values for the parameters in your model. In this step, we use an external data set measuring Asian kid's data to estimate the coefficients for the above regression model, and we get $\beta_0=5.35$, $\beta_1=3.59$, $\beta_2=-0.47$, $\beta_3=-0.24$, $\tau_0=0.24$, $\tau_1=-0.57$ and $\sigma=1.17$.
-
-```{stata}
-mixed weight c.age##i.girl || id: age, stddev
------------------------
-weight                 
-age            3.588***
-            (18.963)   
-
-0.girl         0.000   
-                 (.)   
-
-1.girl        -0.468   
-            (-1.585)   
-
-0.girl#c~e     0.000   
-                 (.)   
-
-1.girl#c~e    -0.240   
-            (-0.896)   
-
-_cons          5.351***
-            (25.770)   
------------------------
-lns1_1_1               
-_cons         -0.569***
-            (-2.640)   
------------------------
-lns1_1_2               
-_cons         -1.434   
-            (-0.847)   
------------------------
-lnsig_e                
-_cons          0.153** 
-             (2.343)   
------------------------
-N                198   
-r2                     
-r2_a                   
-F                      
------------------------
-t statistics in parentheses
-* p<0.1, ** p<0.05, *** p<0.01
-```
 
 ### Step 4: Simulate
 

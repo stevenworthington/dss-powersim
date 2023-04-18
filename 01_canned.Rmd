@@ -9,26 +9,26 @@ In some research designs, it can be an important step to calculate *a priori* st
 
 In some situations, such as a randomized controlled trial with two groups, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use an example to show how we do this. For instance, when we plan to perform a test of an hypothesis comparing the proportions of successes of tossing coins of faces in two independent populations, we would specify the following null and alternative hypotheses, respectively: 
 $$
-H_{0} :p_{1} = p_{2}
+H_0 :p_1 = p_2
 $$ 
 
 $$
-H_{1} :p_{1} \neq p_{2}
+H_1 :p_1 \neq p_2
 $$
 
-where $p\_{1} = p\_{2}$ are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes: 
+where $p_1 = p_2$ are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes: 
 $$
 N = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{ES})^{2}
 $$
 
-Where $n\_{i}$ is the sample size required in each group ($i=1,2$), $\alpha$ is the specific level of significance and $z\_{1-\frac{\alpha}{2}}$ is the critical value corresponding to the significance level. $1-\beta $ is the selected power and $z\_{1-\beta}$ is the value from the standard normal distribution holding $1-\beta$ below it. ES is the effect size, defined as follows: 
+Where $n_i$ is the sample size required in each group ($i=1,2$), $\alpha$ is the specific level of significance and $z\_{1-\frac{\alpha}{2}}$ is the critical value corresponding to the significance level. $1-\beta$ is the selected power and $z\_{1-\beta}$ is the value from the standard normal distribution holding $1-\beta$ below it. ES is the effect size, defined as follows: 
 $$
-ES = \frac{|p_{1} = p_{2} |}{\sqrt{p(1-p)}}
+ES = \frac{|p_1 = p_2|}{\sqrt{p(1-p)}}
 $$ 
 
-where $|p\_{1} =p\_{2} |$ is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, $H\_{1}$, and $p$ is the proportion by pooling the observations from the two comparison groups.
+where $|p_1 = p_2|$ is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, $H_1$, and $p$ is the proportion by pooling the observations from the two comparison groups.
 
-In Stata, we can use the following code to calculate the sample size needed to reject the null hypothesis that $H\_{0} :p\_{1} = p\_{2}$ ($ H\_{1} :p\_{1} \neq p\_{2}$) given $\hat{p\_{1}} = 0.2, \hat{p\_{2}} = 0.6$ on different fixed power levels:
+In Stata, we can use the following code to calculate the sample size needed to reject the null hypothesis that $H_0 :p_1 = p_2$ ($H_1 :p_1 \neq p_2$) given $\hat{p_1} = 0.2, \hat{p_2} = 0.6$ on different fixed power levels:
 
 ```stata
    power twoproportions 0.2 0.6, n(40(20)100) graph

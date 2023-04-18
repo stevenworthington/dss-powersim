@@ -8,9 +8,10 @@ rmd_files:
   - "index.Rmd"
   - "01_canned.Rmd"
   - "02_simulation.Rmd"
-  - "03_Stata.Rmd"
-  - "04_Python.Rmd"
-  - "05_R.Rmd"
+  - "03_thinking.Rmd"
+  - "04_R.Rmd"
+  - "05_Python.Rmd"
+  - "06_Stata.Rmd"
 
 delete_merged_file: true
 
