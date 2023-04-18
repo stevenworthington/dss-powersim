@@ -1,4 +1,4 @@
-# A template for DSS team tutorials and workshops
+# Power Simulation
 ![](https://travis-ci.org/IQSS/dss-template.svg?branch=master) [![Github All Releases](https://img.shields.io/github/downloads/IQSS/dss-template/total.svg)]()
 
 ## Media
