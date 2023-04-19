@@ -28,10 +28,10 @@ import scipy
 import matplotlib.pyplot as plt
 ```
 
-Set the seed to 1024.
+We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.
 
 ```{python}
-np.random.seed(1024)
+np.random.seed(02138)
 ```
 
 ### Step 4: Simulate
@@ -169,26 +169,7 @@ plt.show()
 
 ## Mixed effects model
 
-### Setup
-
-We import the same libraries as previously.
-
-```{python}
-import random
-import numpy as np
-import pandas as pd
-
-from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-import scipy
-
-import matplotlib.pyplot as plt
-```
-Again, we set seed to 1024.
-
-```{python}
-np.random.seed(1024)
-```
+For the mixed effects model example, we will continue to use the same Python libraries and pseudo-random number generator seed as previously.
 
 ### Step 4: Simulate
 

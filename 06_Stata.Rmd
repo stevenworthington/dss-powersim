@@ -12,13 +12,20 @@ knitr::opts_chunk$set(eval=FALSE, engine="stata", engine.path=list(stata=statapa
 
 ## Simple linear regression
 
+### Setup
+
+We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.
+
+```{stata}
+set seed 02138
+```
+
 ### Step 4: Simulate
 
 Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model.
 
 ```{stata}
 clear
-set seed 150
 set obs 400
 generate age = runiformint(18,65)
 generate female = rbinomial(1,0.5)
@@ -202,12 +209,19 @@ Two-sided test
 
 ## Mixed effects model
 
+### Setup
+
+Again, we set the seed to 02138.
+
+```{stata}
+set seed 02138
+```
+
 ### Step 4: Simulate
 
 Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model. We will simulate 5 observations at 4-month increments for 200 children.
 
 ```{stata}
-set seed 16
 clear
 set obs 200
 generate child = _n

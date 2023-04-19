@@ -1,8 +1,7 @@
 
 ```{r, include=FALSE, echo=FALSE}
 require(knitr)
-knitr::opts_chunk$set(eval=FALSE, results=TRUE, message=FALSE, warning=FALSE, error=FALSE,
-                      fig.path="figures/")
+knitr::opts_chunk$set(eval=FALSE, results=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.height=5, fig.width=8, fig.path="figures/")
 # knitr::opts_knit$set(root.dir="R/Rinstall")
 ```
 
@@ -14,19 +13,23 @@ knitr::opts_chunk$set(eval=FALSE, results=TRUE, message=FALSE, warning=FALSE, er
 
 ### Setup
 
-The main library we will use is `stats` and comes bundled with base R. However, we also need to install a couple of additional libraries onto our machine and then load them into our search path. 
+The main library we will use is `stats` and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path. 
 
 ```{r}
 # install.packages("lmtest")
+# install.packages("dplyr")
 # install.packages("ggplot2")
+# install.packages("gt")
 library(lmtest)
+library(dplyr)
 library(ggplot2)
+library(gt)
 ```
 
-We set seed to 1024. 
+We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible. 
 
 ```{r}
-set.seed(1024)
+set.seed(02138)
 ```
 
 ### Steps 4-5: Simulate and automate
@@ -34,28 +37,32 @@ set.seed(1024)
 Next, let's write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.
 
 ```{r}
-sample_cnt <- c(400, 500, 600, 700)
+sample_n <- c(400, 500, 600, 700)
 interact_coef <- c(0.2, 0.25, 0.3, 0.35, 0.4)
-repect_cnt <- seq(1, 1000)
+repeats <- 1:1000
 
-power_list <- data.frame(sample_cnt=double(), interact_coef=double(), power=double())[-1,]
+power_list <- data.frame(sample_n=double(), 
+                         interact_coef=double(), 
+                         power=double()
+                         )[-1, ]
 
-for (s in sample_cnt) {
+for (s in sample_n) {
   
   for (i in interact_coef){
     
     results <- c()
     
-    for (r in repect_cnt){
+    for (r in repeats){
       
       age <- ceiling(runif(s, 18, 65))
       female <- rbinom(s, 1, 0.5)
       interact <- age * female
       e <- rnorm(s, 0, 20)
       sbp <- 110 + 0.5*age + (-20)*female + i*interact + e
+      dataset <- data.frame(sbp, age, female, interact)
       
-      full_model <- lm(sbp ~ age + female + interact)
-      reduced_model <- lm(sbp ~ age + female)
+      full_model <- lm(sbp ~ age + female + interact, data=dataset)
+      reduced_model <- lm(sbp ~ age + female, data=dataset)
       prob <- lrtest(full_model, reduced_model)$Pr[2]
       reject <- ifelse((prob<=0.05), 1, 0)
       
@@ -63,12 +70,15 @@ for (s in sample_cnt) {
       
     }
     
-    power_list <- rbind(power_list, data.frame(sample_cnt=s, interact_coef=i, power=mean(results)))
+    power_list <- rbind(power_list, 
+                        data.frame(sample_n=s, 
+                                   interact_coef=i, 
+                                   power=mean(results)
+                                   )
+                        )
     
   }  
 }
-
-power_list
 ```
 
 ### Step 6: Summarize & visualize
@@ -76,144 +86,126 @@ power_list
 Here's the table from the simulation.
 
 ```{r}
-sample_cnt	interact_coef	power
-400	0.20	0.268
-400	0.25	0.387
-400	0.30	0.550
-400	0.35	0.652
-400	0.40	0.782
-500	0.20	0.323
-500	0.25	0.484
-500	0.30	0.609
-500	0.35	0.746
-500	0.40	0.866
-600	0.20	0.402
-600	0.25	0.551
-600	0.30	0.726
-600	0.35	0.850
-600	0.40	0.923
-700	0.20	0.450
-700	0.25	0.600
-700	0.30	0.770
-700	0.35	0.885
-700	0.40	0.957
+power_list |>
+  gt() |>
+  tab_header(title="Power values for GLM") |>
+  data_color(
+    columns=power,
+    colors=scales::col_numeric(
+      palette=c("red", "green"),
+      domain=c(0, 1)
+      )
+  )
 ```
 
 Here's the graph from the simulation. 
 
 ```{r}
-options(repr.plot.width = 15, repr.plot.height = 6)
-
-ggplot(power_list, aes(interact_coef, power, group = sample_cnt, color = sample_cnt)) + 
-  geom_line(aes(color = sample_cnt)) + 
-  geom_point(size = 4) + 
-  ylim(0,1)
+power_list |>
+  mutate(sample_n = factor(sample_n)) |>
+  ggplot(aes(x=interact_coef, y=power, 
+             group=sample_n, color=sample_n)) + 
+  geom_line() + 
+  geom_point(size=4) + 
+  ylim(0, 1) +
+  theme_bw()
 ```
-
-![](https://github.com/hlmshtj-dan/pigo/blob/main/9.png?raw=true)
-
 
 ## Mixed effects model
 
-### Setup
-
-In mixed effects model simulation in R, we still use two external libraries.
-
-```{r}
-# install.packages("lmtest")
-# install.packages("ggplot2")
-library(lmtest)
-library(ggplot2)
-```
-
-Set the seed to 1024.
-
-```{r}
-set.seed(1024)
-```
+For the mixed effects model example, we will continue to use the same R libraries and pseudo-random number generator seed as previously.
 
 ### Step 4-5: Simulate & automate
 
 Next, let's write a function that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses a for loop to run many iterations of the function. 
 
 ```{r}
-sample_cnt <- c(100, 200, 300, 400, 500)
-obser_cnt <- c(5, 6)
-repect_cnt <- seq(1, 1000)
+sample_n <- c(100, 200, 300, 400, 500)
+obs_n <- c(5, 6)
+repeats <- 1:1000
 
-power_list <- data.frame(obser=integer(), sample=integer(), power=double())
+power_list_mixed <- data.frame(obs=integer(), 
+                               sample=integer(), 
+                               power=double()
+                               )
 
-for (s in sample_cnt){
+for (s in sample_n){
   
-  for (o in obser_cnt){
+  for (o in obs_n){
     
     results <- c()
     
-    for (r in repect_cnt){
+    for (r in repeats){
       
-      child <- seq(1, s)
-      female <- rbinom(s, 1, 0.5)
-      u_0i <- rnorm(s, 0, 0.25)
-      u_1i <- rnorm(s, 0, 0.60)
-      data_set <- data.frame(child = child, female = female, u_0i = u_0i, u_1i = u_1i)
+      data.frame(
+        child = 1:s, 
+        female = rbinom(s, 1, 0.5),
+        u_0i = rnorm(s, 0, 0.25),
+        u_1i = rnorm(s, 0, 0.60)
+        ) ->
+      data_set
       
       data_set_expand <- data_set[rep(seq(nrow(data_set)), o), 1:4]
 
       age <- c()
-      for (obs in seq(0, (o-1)*0.5, 0.5)){
-        
-        age <- c(age, rep(obs, s))
-        
+      for (obser in seq(0, (o-1)*0.5, 0.5)){
+        age <- c(age, rep(obser, s))
       }
 
-      data_set_expand <- cbind(data_set_expand, age)
-      e_ij <- rnorm(s*o, 0, 1.2)
-      data_set_expand <- cbind(data_set_expand, e_ij)
-      data_set_expand$interact <- data_set_expand$age * data_set_expand$female
-      data_set_expand$weight <- 5.35 + 3.6*data_set_expand$age + (-0.5)*data_set_expand$female + (-0.25)*data_set_expand$interact + data_set_expand$u_0i + data_set_expand$age*data_set_expand$u_1i + data_set_expand$e_ij
+      data_set_expand |>
+        mutate(age = age,
+               e_ij = rnorm(s*o, 0, 1.2),
+               interact = age * female,
+               weight = 5.35 + 3.6*age + (-0.5)*female + (-0.25)*interact + u_0i + age*u_1i + e_ij
+               ) ->
+      data_set_expand
       
-      full_model <- lm(data_set_expand$weight ~ data_set_expand$age + data_set_expand$female + data_set_expand$interact)
-      reduced_model <- lm(data_set_expand$weight ~ data_set_expand$age + data_set_expand$female)
+      full_model <- lm(weight ~ age + female + interact, data=data_set_expand)
+      reduced_model <- lm(weight ~ age + female, data=data_set_expand)
+      #full_model <- lmer(weight ~ age + female + interact + (1 + age | child), data=data_set_expand)
+      #reduced_model <- lmer(weight ~ age + female + (1 + age | child), data=data_set_expand)
       prob <- lrtest(full_model, reduced_model)$Pr[2]
       reject <- ifelse((prob<=0.05), 1, 0)
       results <- rbind(results, reject)     
     }
     
-    power_list <- rbind(power_list, data.frame(obser=o, sample=s, power=mean(results)))
+    power_list_mixed <- rbind(power_list_mixed, 
+                              data.frame(obs=o, 
+                                         sample=s, 
+                                         power=mean(results)
+                                         )
+                              )
     
   }
 }
-
-power_list
 ```
 
 ### Step 6: Summarize & visualize
 
-The table result for the mixed effects model.
+The table for the mixed effects model.
 
 ```{r}
-obser	sample	power
-5	100	0.323
-6	100	0.401
-5	200	0.505
-6	200	0.651
-5	300	0.680
-6	300	0.815
-5	400	0.780
-6	400	0.897
-5	500	0.845
-6	500	0.951
+power_list_mixed |>
+  gt() |>
+  tab_header(title="Power values for mixed effects model") |>
+  data_color(
+    columns=power,
+    colors=scales::col_numeric(
+      palette=c("red", "green"),
+      domain=c(0, 1)
+      )
+  )
 ```
 
 The graph of the simulation result for mixed effects model.
 
 ```{r}
-options(repr.plot.width = 15, repr.plot.height = 6)
-
-ggplot(power_list, aes(sample, power, group = obser, color = obser)) + 
-  geom_line(aes(colour = obser)) + 
-  geom_point(size = 4) + 
-  ylim(0,1)
+power_list_mixed |>
+  mutate(obser = factor(obser)) |>
+  ggplot(aes(x=sample, y=power, 
+             group=obser, color=obser)) + 
+  geom_line() + 
+  geom_point(size=4) + 
+  ylim(0, 1) +
+  theme_bw()
 ```
-
-![](https://github.com/hlmshtj-dan/pigo/blob/main/10.png?raw=true)
