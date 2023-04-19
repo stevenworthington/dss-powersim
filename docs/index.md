@@ -1,0 +1,35 @@
+---
+title: "powersim"
+author: ""
+date: "April 2023"
+description: "This is a tutorial for power simulation"
+github-repo: "IQSS/dss-powersim"
+site: "bookdown::bookdown_site"
+documentclass: book
+geometry: "margin=1.5in"
+biblio-style: apalike
+link-citations: yes
+---
+
+# Simulation-Based Power Analysis {-}
+
+## Table of Contents {-}
+
+Here, we outline how the guide is organized into parts.
+
+1. First, we...
+2. Second, we...
+3. Lastly, we...
+
+[Here we provide an outside link to important content](https://www.rstudio.com/wp-content/uploads/2015/03/devtools-cheatsheet.pdf) which puts some useful information for this tutorial/workshop at our fingertips.
+
+Here we specify where people can provide feedback! Please email help@iq.harvard.edu
+
+## Authors and Sources {-}
+
+Here we acknowledge a few people who helped make this tutorial/workshop possible. We also reference any sources that material was taken from.
+
+1. https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/
+2. https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/
+3. https://blog.stata.com/2019/08/13/calculating-power-using-monte-carlo-simulations-part-3-linear-and-logistic-regression/
+4. https://blog.stata.com/2019/08/20/calculating-power-using-monte-carlo-simulations-part-4-multilevel-longitudinal-models/

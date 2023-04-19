@@ -1,12 +1,5 @@
 
-```{r, include=FALSE, echo=FALSE}
-#require(knitr)
-knitr::opts_chunk$set(eval=FALSE, results=TRUE, message=FALSE, warning=FALSE, error=FALSE, 
-                      fig.path="figures/")
-#knitr::opts_knit$set(root.dir="Python/PythonInstall")
-#require(reticulate)
-#use_condaenv(condaenv="r-reticulate", required=TRUE)
-```
+
 
 # Python 
 
@@ -16,7 +9,8 @@ knitr::opts_chunk$set(eval=FALSE, results=TRUE, message=FALSE, warning=FALSE, er
 
 First, let's import the libraries used for simulation based power analysis in Python.
 
-```{python}
+
+```python
 import random
 import numpy as np
 import pandas as pd
@@ -30,7 +24,8 @@ import matplotlib.pyplot as plt
 
 We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.
 
-```{python}
+
+```python
 np.random.seed(02138)
 ```
 
@@ -38,7 +33,8 @@ np.random.seed(02138)
 
 Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model.
 
-```{python}
+
+```python
 def generate_dataset(sample_size, interact_coef):
     
     data_set = []
@@ -65,7 +61,8 @@ def generate_dataset(sample_size, interact_coef):
 
 Next, let's write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.
 
-```{python}
+
+```python
 def cal_power(sample_size, interact_coef, simiu_cnt, alpha):
     
     power_list = []
@@ -99,7 +96,8 @@ def cal_power(sample_size, interact_coef, simiu_cnt, alpha):
     return [sample_size, interact_coef, mean_power]
 ```
 
-```{python}
+
+```python
 result = []
 
 for i in range(400, 800, 100):
@@ -115,7 +113,8 @@ result
 
 In this part, we export the results of the simulations which include two parts: a table and a graph showing the results from the simulations. It should be noted that the graph from Python simulation is a little bit different from that in Stata, and this is mainly caused by different simulation process within Stata and Python. 
 
-```{python}
+
+```python
 	N	interact_coef	Power
 0	400	0.20	0.320
 1	400	0.25	0.413
@@ -139,7 +138,8 @@ In this part, we export the results of the simulations which include two parts: 
 19	700	0.40	0.955
 ```
 
-```{python}
+
+```python
 n_list = result['N'].unique()
 color_list = ['darkblue', 'firebrick', 'darkgreen', 'orange']
 
@@ -175,7 +175,8 @@ For the mixed effects model example, we will continue to use the same Python lib
 
 Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model. We will simulate 5 observations at 4-month increments for 200 children.
 
-```{python}
+
+```python
 def generate_dataset(sample_size, obser_cnt):
     
     data_set = []
@@ -209,7 +210,8 @@ def generate_dataset(sample_size, obser_cnt):
 
 Next, let's write a function that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses a for loop to run many iterations of the function.
 
-```{python}
+
+```python
 def cal_power(sample_size, obser_cnt, simiu_cnt, alpha):
     
     power_list = []
@@ -243,7 +245,8 @@ def cal_power(sample_size, obser_cnt, simiu_cnt, alpha):
     return [obser_cnt, sample_size, mean_power]
 ```
 
-```{python}
+
+```python
 result = []
 
 for i in range(100, 600, 100):
@@ -259,7 +262,8 @@ result
 
 The last procedure is to export the results which contain a table and a graph. 
 
-```{python}
+
+```python
 n1	N	Power
 0	5	100	0.290
 1	6	100	0.398
@@ -273,7 +277,8 @@ n1	N	Power
 9	6	500	0.940
 ```
 
-```{python}
+
+```python
 n1_list = result['n1'].unique()
 color_list = ['darkblue', 'firebrick']
 
