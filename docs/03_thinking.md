@@ -1,5 +1,5 @@
 
-# (PART) Thinking {-}
+# (PART) Preparation {-}
 
 # Power of what?
 
