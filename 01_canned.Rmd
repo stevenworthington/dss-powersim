@@ -21,7 +21,7 @@ $$
 N = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{ES})^{2}
 $$
 
-Where $n_i$ is the sample size required in each group ($i=1,2$), $\alpha$ is the specific level of significance and $z\_{1-\frac{\alpha}{2}}$ is the critical value corresponding to the significance level. $1-\beta$ is the selected power and $z\_{1-\beta}$ is the value from the standard normal distribution holding $1-\beta$ below it. ES is the effect size, defined as follows: 
+Where $n_i$ is the sample size required in each group ($i=1,2$), $\alpha$ is the specific level of significance and $z_{1-\frac{\alpha}{2}}$ is the critical value corresponding to the significance level. $1-\beta$ is the selected power and $z_{1-\beta}$ is the value from the standard normal distribution holding $1-\beta$ below it. ES is the effect size, defined as follows: 
 $$
 ES = \frac{|p_1 = p_2|}{\sqrt{p(1-p)}}
 $$ 
