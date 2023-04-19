@@ -1355,9 +1355,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The graph of the simulation result for mixed effects model.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="r.html#cb9-1" aria-hidden="true" tabindex="-1"></a>power_list_mixed <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="r.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obser =</span> <span class="fu">factor</span>(obser)) <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="r.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="fu">factor</span>(obs)) <span class="sc">|&gt;</span></span>
 <span id="cb9-3"><a href="r.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sample, <span class="at">y=</span>power, </span>
-<span id="cb9-4"><a href="r.html#cb9-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">group=</span>obser, <span class="at">color=</span>obser)) <span class="sc">+</span> </span>
+<span id="cb9-4"><a href="r.html#cb9-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">group=</span>obs, <span class="at">color=</span>obs)) <span class="sc">+</span> </span>
 <span id="cb9-5"><a href="r.html#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
 <span id="cb9-6"><a href="r.html#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
 <span id="cb9-7"><a href="r.html#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>

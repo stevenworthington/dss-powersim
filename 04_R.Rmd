@@ -201,9 +201,9 @@ The graph of the simulation result for mixed effects model.
 
 ```{r}
 power_list_mixed |>
-  mutate(obser = factor(obser)) |>
+  mutate(obs = factor(obs)) |>
   ggplot(aes(x=sample, y=power, 
-             group=obser, color=obser)) + 
+             group=obs, color=obs)) + 
   geom_line() + 
   geom_point(size=4) + 
   ylim(0, 1) +
