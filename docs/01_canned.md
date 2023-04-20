@@ -5,7 +5,7 @@
 
 ## Canned routines
 
-In some research designs, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.
+In some research designs, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.
 
 In some situations, such as a randomized controlled trial with two groups, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use an example to show how we do this. For instance, when we plan to perform a test of an hypothesis comparing the proportions of successes of tossing coins of faces in two independent populations, we would specify the following null and alternative hypotheses, respectively: 
 $$
@@ -45,7 +45,7 @@ Usually, there are several hypotheses in a research design, but for sample size 
 
 2. Specify the significance level of the test.
 
-Usually $\alpha = .05$ is used, but other values could be substituted instead.
+Usually $\alpha = 0.05$ is used, but other values could be substituted instead.
 
 3. Get the values of the parameters necessary to compute the power function.
 

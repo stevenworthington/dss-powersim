@@ -238,7 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">1</span> Power Analysis<a href="power-analysis.html#power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="canned-routines" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Canned routines<a href="power-analysis.html#canned-routines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In some research designs, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.</p>
+<p>In some research designs, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.</p>
 <p>In some situations, such as a randomized controlled trial with two groups, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use an example to show how we do this. For instance, when we plan to perform a test of an hypothesis comparing the proportions of successes of tossing coins of faces in two independent populations, we would specify the following null and alternative hypotheses, respectively:
 <span class="math display">\[
 H_0 :p_1 = p_2
@@ -268,7 +268,7 @@ ES = \frac{|p_1 = p_2|}{\sqrt{p(1-p)}}
 <ol start="2" style="list-style-type: decimal">
 <li>Specify the significance level of the test.</li>
 </ol>
-<p>Usually <span class="math inline">\(\alpha = .05\)</span> is used, but other values could be substituted instead.</p>
+<p>Usually <span class="math inline">\(\alpha = 0.05\)</span> is used, but other values could be substituted instead.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Get the values of the parameters necessary to compute the power function.</li>
 </ol>

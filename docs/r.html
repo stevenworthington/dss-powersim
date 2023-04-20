@@ -241,14 +241,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="setup" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Setup<a href="r.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The main library we will use is <code>stats</code> and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="r.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;lmtest&quot;)</span></span>
-<span id="cb2-2"><a href="r.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;dplyr&quot;)</span></span>
-<span id="cb2-3"><a href="r.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;ggplot2&quot;)</span></span>
-<span id="cb2-4"><a href="r.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;gt&quot;)</span></span>
-<span id="cb2-5"><a href="r.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb2-6"><a href="r.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-7"><a href="r.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb2-8"><a href="r.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="r.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;pacman&quot;)</span></span>
+<span id="cb2-2"><a href="r.html#cb2-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(lmtest, lme4, dplyr, ggplot2, gt)</span></code></pre></div>
 <p>We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="r.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">02138</span>)</span></code></pre></div>
 </div>
@@ -821,8 +815,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">4.2.1</span> Step 4-5: Simulate &amp; automate<a href="r.html#step-4-5-simulate-automate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, let’s write a function that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses a for loop to run many iterations of the function.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r.html#cb7-1" aria-hidden="true" tabindex="-1"></a>sample_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>)</span>
-<span id="cb7-2"><a href="r.html#cb7-2" aria-hidden="true" tabindex="-1"></a>obs_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>)</span>
-<span id="cb7-3"><a href="r.html#cb7-3" aria-hidden="true" tabindex="-1"></a>repeats <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
+<span id="cb7-2"><a href="r.html#cb7-2" aria-hidden="true" tabindex="-1"></a>obs_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)</span>
+<span id="cb7-3"><a href="r.html#cb7-3" aria-hidden="true" tabindex="-1"></a>reps_n <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
 <span id="cb7-4"><a href="r.html#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="r.html#cb7-5" aria-hidden="true" tabindex="-1"></a>power_list_mixed <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">obs=</span><span class="fu">integer</span>(), </span>
 <span id="cb7-6"><a href="r.html#cb7-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">sample=</span><span class="fu">integer</span>(), </span>
@@ -835,13 +829,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-13"><a href="r.html#cb7-13" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb7-14"><a href="r.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
 <span id="cb7-15"><a href="r.html#cb7-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-16"><a href="r.html#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> repeats){</span>
+<span id="cb7-16"><a href="r.html#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> reps_n){</span>
 <span id="cb7-17"><a href="r.html#cb7-17" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb7-18"><a href="r.html#cb7-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">data.frame</span>(</span>
-<span id="cb7-19"><a href="r.html#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">child =</span> <span class="dv">1</span><span class="sc">:</span>s, </span>
+<span id="cb7-19"><a href="r.html#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">child =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span>s), </span>
 <span id="cb7-20"><a href="r.html#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">female =</span> <span class="fu">rbinom</span>(s, <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
-<span id="cb7-21"><a href="r.html#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">u_0i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">0.25</span>),</span>
-<span id="cb7-22"><a href="r.html#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">u_1i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">0.60</span>)</span>
+<span id="cb7-21"><a href="r.html#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">u_0i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">0.8</span>),</span>
+<span id="cb7-22"><a href="r.html#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">u_1i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">1.7</span>)</span>
 <span id="cb7-23"><a href="r.html#cb7-23" aria-hidden="true" tabindex="-1"></a>        ) <span class="ot">-&gt;</span></span>
 <span id="cb7-24"><a href="r.html#cb7-24" aria-hidden="true" tabindex="-1"></a>      data_set</span>
 <span id="cb7-25"><a href="r.html#cb7-25" aria-hidden="true" tabindex="-1"></a>      </span>
@@ -854,16 +848,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-32"><a href="r.html#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-33"><a href="r.html#cb7-33" aria-hidden="true" tabindex="-1"></a>      data_set_expand <span class="sc">|&gt;</span></span>
 <span id="cb7-34"><a href="r.html#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">age =</span> age,</span>
-<span id="cb7-35"><a href="r.html#cb7-35" aria-hidden="true" tabindex="-1"></a>               <span class="at">e_ij =</span> <span class="fu">rnorm</span>(s<span class="sc">*</span>o, <span class="dv">0</span>, <span class="fl">1.2</span>),</span>
+<span id="cb7-35"><a href="r.html#cb7-35" aria-hidden="true" tabindex="-1"></a>               <span class="at">e_ij =</span> <span class="fu">rnorm</span>(s<span class="sc">*</span>o, <span class="dv">0</span>, <span class="fl">1.35</span>),</span>
 <span id="cb7-36"><a href="r.html#cb7-36" aria-hidden="true" tabindex="-1"></a>               <span class="at">interact =</span> age <span class="sc">*</span> female,</span>
-<span id="cb7-37"><a href="r.html#cb7-37" aria-hidden="true" tabindex="-1"></a>               <span class="at">weight =</span> <span class="fl">5.35</span> <span class="sc">+</span> <span class="fl">3.6</span><span class="sc">*</span>age <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">*</span>female <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.25</span>)<span class="sc">*</span>interact <span class="sc">+</span> u_0i <span class="sc">+</span> age<span class="sc">*</span>u_1i <span class="sc">+</span> e_ij</span>
+<span id="cb7-37"><a href="r.html#cb7-37" aria-hidden="true" tabindex="-1"></a>               <span class="at">weight =</span> <span class="fl">5.35</span> <span class="sc">+</span> <span class="fl">2.1</span><span class="sc">*</span>age <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.35</span>)<span class="sc">*</span>female <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.55</span>)<span class="sc">*</span>interact <span class="sc">+</span> u_0i <span class="sc">+</span> age<span class="sc">*</span>u_1i <span class="sc">+</span> e_ij</span>
 <span id="cb7-38"><a href="r.html#cb7-38" aria-hidden="true" tabindex="-1"></a>               ) <span class="ot">-&gt;</span></span>
 <span id="cb7-39"><a href="r.html#cb7-39" aria-hidden="true" tabindex="-1"></a>      data_set_expand</span>
-<span id="cb7-40"><a href="r.html#cb7-40" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb7-41"><a href="r.html#cb7-41" aria-hidden="true" tabindex="-1"></a>      full_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> interact, <span class="at">data=</span>data_set_expand)</span>
-<span id="cb7-42"><a href="r.html#cb7-42" aria-hidden="true" tabindex="-1"></a>      reduced_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female, <span class="at">data=</span>data_set_expand)</span>
-<span id="cb7-43"><a href="r.html#cb7-43" aria-hidden="true" tabindex="-1"></a>      <span class="co">#full_model &lt;- lmer(weight ~ age + female + interact + (1 + age | child), data=data_set_expand)</span></span>
-<span id="cb7-44"><a href="r.html#cb7-44" aria-hidden="true" tabindex="-1"></a>      <span class="co">#reduced_model &lt;- lmer(weight ~ age + female + (1 + age | child), data=data_set_expand)</span></span>
+<span id="cb7-40"><a href="r.html#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="r.html#cb7-41" aria-hidden="true" tabindex="-1"></a>      full_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> interact <span class="sc">+</span> (age <span class="sc">||</span> child), </span>
+<span id="cb7-42"><a href="r.html#cb7-42" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data=</span>data_set_expand)</span>
+<span id="cb7-43"><a href="r.html#cb7-43" aria-hidden="true" tabindex="-1"></a>      reduced_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> (age <span class="sc">||</span> child), </span>
+<span id="cb7-44"><a href="r.html#cb7-44" aria-hidden="true" tabindex="-1"></a>                            <span class="at">data=</span>data_set_expand)</span>
 <span id="cb7-45"><a href="r.html#cb7-45" aria-hidden="true" tabindex="-1"></a>      prob <span class="ot">&lt;-</span> <span class="fu">lrtest</span>(full_model, reduced_model)<span class="sc">$</span>Pr[<span class="dv">2</span>]</span>
 <span id="cb7-46"><a href="r.html#cb7-46" aria-hidden="true" tabindex="-1"></a>      reject <span class="ot">&lt;-</span> <span class="fu">ifelse</span>((prob<span class="sc">&lt;=</span><span class="fl">0.05</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
 <span id="cb7-47"><a href="r.html#cb7-47" aria-hidden="true" tabindex="-1"></a>      results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, reject)     </span>
@@ -892,12 +886,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-8"><a href="r.html#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">domain=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb8-9"><a href="r.html#cb8-9" aria-hidden="true" tabindex="-1"></a>      )</span>
 <span id="cb8-10"><a href="r.html#cb8-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<div id="jfwcsyfnwg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="sixdmjfjis" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#jfwcsyfnwg .gt_table {
+#sixdmjfjis .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -922,7 +916,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_heading {
+#sixdmjfjis .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -934,12 +928,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_caption {
+#sixdmjfjis .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jfwcsyfnwg .gt_title {
+#sixdmjfjis .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -951,7 +945,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#jfwcsyfnwg .gt_subtitle {
+#sixdmjfjis .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -963,13 +957,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#jfwcsyfnwg .gt_bottom_border {
+#sixdmjfjis .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_col_headings {
+#sixdmjfjis .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -984,7 +978,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_col_heading {
+#sixdmjfjis .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1004,7 +998,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#jfwcsyfnwg .gt_column_spanner_outer {
+#sixdmjfjis .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1016,15 +1010,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#jfwcsyfnwg .gt_column_spanner_outer:first-child {
+#sixdmjfjis .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jfwcsyfnwg .gt_column_spanner_outer:last-child {
+#sixdmjfjis .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jfwcsyfnwg .gt_column_spanner {
+#sixdmjfjis .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1036,7 +1030,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#jfwcsyfnwg .gt_group_heading {
+#sixdmjfjis .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1062,7 +1056,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#jfwcsyfnwg .gt_empty_group_heading {
+#sixdmjfjis .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1077,15 +1071,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#jfwcsyfnwg .gt_from_md > :first-child {
+#sixdmjfjis .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jfwcsyfnwg .gt_from_md > :last-child {
+#sixdmjfjis .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jfwcsyfnwg .gt_row {
+#sixdmjfjis .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1104,7 +1098,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#jfwcsyfnwg .gt_stub {
+#sixdmjfjis .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1117,7 +1111,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#jfwcsyfnwg .gt_stub_row_group {
+#sixdmjfjis .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1131,11 +1125,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#jfwcsyfnwg .gt_row_group_first td {
+#sixdmjfjis .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jfwcsyfnwg .gt_summary_row {
+#sixdmjfjis .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1145,16 +1139,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#jfwcsyfnwg .gt_first_summary_row {
+#sixdmjfjis .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_first_summary_row.thick {
+#sixdmjfjis .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jfwcsyfnwg .gt_last_summary_row {
+#sixdmjfjis .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1164,7 +1158,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_grand_summary_row {
+#sixdmjfjis .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1174,7 +1168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#jfwcsyfnwg .gt_first_grand_summary_row {
+#sixdmjfjis .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1184,11 +1178,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_striped {
+#sixdmjfjis .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jfwcsyfnwg .gt_table_body {
+#sixdmjfjis .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1197,7 +1191,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_footnotes {
+#sixdmjfjis .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1211,7 +1205,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_footnote {
+#sixdmjfjis .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1220,7 +1214,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#jfwcsyfnwg .gt_sourcenotes {
+#sixdmjfjis .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1234,7 +1228,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#jfwcsyfnwg .gt_sourcenote {
+#sixdmjfjis .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1242,64 +1236,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#jfwcsyfnwg .gt_left {
+#sixdmjfjis .gt_left {
   text-align: left;
 }
 
-#jfwcsyfnwg .gt_center {
+#sixdmjfjis .gt_center {
   text-align: center;
 }
 
-#jfwcsyfnwg .gt_right {
+#sixdmjfjis .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jfwcsyfnwg .gt_font_normal {
+#sixdmjfjis .gt_font_normal {
   font-weight: normal;
 }
 
-#jfwcsyfnwg .gt_font_bold {
+#sixdmjfjis .gt_font_bold {
   font-weight: bold;
 }
 
-#jfwcsyfnwg .gt_font_italic {
+#sixdmjfjis .gt_font_italic {
   font-style: italic;
 }
 
-#jfwcsyfnwg .gt_super {
+#sixdmjfjis .gt_super {
   font-size: 65%;
 }
 
-#jfwcsyfnwg .gt_footnote_marks {
+#sixdmjfjis .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#jfwcsyfnwg .gt_asterisk {
+#sixdmjfjis .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jfwcsyfnwg .gt_indent_1 {
+#sixdmjfjis .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jfwcsyfnwg .gt_indent_2 {
+#sixdmjfjis .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jfwcsyfnwg .gt_indent_3 {
+#sixdmjfjis .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jfwcsyfnwg .gt_indent_4 {
+#sixdmjfjis .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jfwcsyfnwg .gt_indent_5 {
+#sixdmjfjis .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1318,36 +1312,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </tr>
   </thead>
   <tbody class="gt_table_body">
+    <tr><td headers="obs" class="gt_row gt_right">3</td>
+<td headers="sample" class="gt_row gt_right">100</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #EB6F00; color: #FFFFFF;">0.22</td></tr>
     <tr><td headers="obs" class="gt_row gt_right">5</td>
 <td headers="sample" class="gt_row gt_right">100</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E38100; color: #FFFFFF;">0.296</td></tr>
-    <tr><td headers="obs" class="gt_row gt_right">6</td>
-<td headers="sample" class="gt_row gt_right">100</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #D39C00; color: #000000;">0.424</td></tr>
+<td headers="power" class="gt_row gt_right" style="background-color: #DA9100; color: #FFFFFF;">0.37</td></tr>
+    <tr><td headers="obs" class="gt_row gt_right">3</td>
+<td headers="sample" class="gt_row gt_right">200</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E08700; color: #FFFFFF;">0.32</td></tr>
     <tr><td headers="obs" class="gt_row gt_right">5</td>
 <td headers="sample" class="gt_row gt_right">200</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C8AC00; color: #000000;">0.505</td></tr>
-    <tr><td headers="obs" class="gt_row gt_right">6</td>
-<td headers="sample" class="gt_row gt_right">200</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #AEC600; color: #000000;">0.650</td></tr>
+<td headers="power" class="gt_row gt_right" style="background-color: #C9AB00; color: #000000;">0.50</td></tr>
+    <tr><td headers="obs" class="gt_row gt_right">3</td>
+<td headers="sample" class="gt_row gt_right">300</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #D39E00; color: #000000;">0.43</td></tr>
     <tr><td headers="obs" class="gt_row gt_right">5</td>
 <td headers="sample" class="gt_row gt_right">300</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #ACC800; color: #000000;">0.663</td></tr>
-    <tr><td headers="obs" class="gt_row gt_right">6</td>
-<td headers="sample" class="gt_row gt_right">300</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #85E200; color: #000000;">0.817</td></tr>
+<td headers="power" class="gt_row gt_right" style="background-color: #B4C100; color: #000000;">0.62</td></tr>
+    <tr><td headers="obs" class="gt_row gt_right">3</td>
+<td headers="sample" class="gt_row gt_right">400</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #BDB800; color: #000000;">0.57</td></tr>
     <tr><td headers="obs" class="gt_row gt_right">5</td>
 <td headers="sample" class="gt_row gt_right">400</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #8DDE00; color: #000000;">0.791</td></tr>
-    <tr><td headers="obs" class="gt_row gt_right">6</td>
-<td headers="sample" class="gt_row gt_right">400</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #62F000; color: #000000;">0.907</td></tr>
+<td headers="power" class="gt_row gt_right" style="background-color: #AAC900; color: #000000;">0.67</td></tr>
+    <tr><td headers="obs" class="gt_row gt_right">3</td>
+<td headers="sample" class="gt_row gt_right">500</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
     <tr><td headers="obs" class="gt_row gt_right">5</td>
 <td headers="sample" class="gt_row gt_right">500</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #7AE700; color: #000000;">0.848</td></tr>
-    <tr><td headers="obs" class="gt_row gt_right">6</td>
-<td headers="sample" class="gt_row gt_right">500</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #40F900; color: #000000;">0.961</td></tr>
+<td headers="power" class="gt_row gt_right" style="background-color: #72EA00; color: #000000;">0.87</td></tr>
   </tbody>
   
   
