@@ -29,7 +29,16 @@ Here we specify where people can provide feedback! Please email help@iq.harvard.
 
 Here we acknowledge a few people who helped make this tutorial/workshop possible. We also reference any sources that material was taken from.
 
-1. https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/
-2. https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/
-3. https://blog.stata.com/2019/08/13/calculating-power-using-monte-carlo-simulations-part-3-linear-and-logistic-regression/
-4. https://blog.stata.com/2019/08/20/calculating-power-using-monte-carlo-simulations-part-4-multilevel-longitudinal-models/
+### R
+
+1. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/>
+2. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-ii/>
+3. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iii/>
+4. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>
+
+### Stata
+
+1. <https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/>
+2. <https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/>
+3. <https://blog.stata.com/2019/08/13/calculating-power-using-monte-carlo-simulations-part-3-linear-and-logistic-regression/>
+4. <https://blog.stata.com/2019/08/20/calculating-power-using-monte-carlo-simulations-part-4-multilevel-longitudinal-models/>

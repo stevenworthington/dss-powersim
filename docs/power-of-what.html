@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="power-analysis-via-simulation.html"/>
-<link rel="next" href="r.html"/>
+<link rel="next" href="r-1.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -138,7 +138,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Simulation-Based Power Analysis</a>
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#table-of-contents"><i class="fa fa-check"></i>Table of Contents</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors-and-sources"><i class="fa fa-check"></i>Authors and Sources</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors-and-sources"><i class="fa fa-check"></i>Authors and Sources</a>
+<ul>
+<li class="chapter" data-level="0.0.1" data-path="index.html"><a href="index.html#r"><i class="fa fa-check"></i><b>0.0.1</b> R</a></li>
+<li class="chapter" data-level="0.0.2" data-path="index.html"><a href="index.html#stata"><i class="fa fa-check"></i><b>0.0.2</b> Stata</a></li>
+</ul></li>
 </ul></li>
 <li class="part"><span><b>I Concepts</b></span></li>
 <li class="chapter" data-level="1" data-path="power-analysis.html"><a href="power-analysis.html"><i class="fa fa-check"></i><b>1</b> Power Analysis</a>
@@ -153,65 +157,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>II Preparation</b></span></li>
 <li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of what?</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="power-of-what.html"><a href="power-of-what.html#simple-linear-regression"><i class="fa fa-check"></i><b>3.1</b> Simple linear regression</a>
+<li class="chapter" data-level="3.0.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification"><i class="fa fa-check"></i><b>3.0.1</b> Step 1: model specification</a></li>
+<li class="chapter" data-level="3.0.2" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition"><i class="fa fa-check"></i><b>3.0.2</b> Step 3: Parameter composition</a></li>
+<li class="chapter" data-level="3.1" data-path="power-of-what.html"><a href="power-of-what.html#mixed-effects-model"><i class="fa fa-check"></i><b>3.1</b> Mixed effects model</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification"><i class="fa fa-check"></i><b>3.1.1</b> Step 1: model specification</a></li>
-<li class="chapter" data-level="3.1.2" data-path="power-of-what.html"><a href="power-of-what.html#step-2-variable-composition"><i class="fa fa-check"></i><b>3.1.2</b> Step 2: Variable composition</a></li>
-<li class="chapter" data-level="3.1.3" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition"><i class="fa fa-check"></i><b>3.1.3</b> Step 3: Parameter composition</a></li>
-</ul></li>
-<li class="chapter" data-level="3.2" data-path="power-of-what.html"><a href="power-of-what.html#mixed-effects-model"><i class="fa fa-check"></i><b>3.2</b> Mixed effects model</a>
-<ul>
-<li class="chapter" data-level="3.2.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification-1"><i class="fa fa-check"></i><b>3.2.1</b> Step 1: model specification</a></li>
-<li class="chapter" data-level="3.2.2" data-path="power-of-what.html"><a href="power-of-what.html#step-2-variable-composition-1"><i class="fa fa-check"></i><b>3.2.2</b> Step 2: Variable composition</a></li>
-<li class="chapter" data-level="3.2.3" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition-1"><i class="fa fa-check"></i><b>3.2.3</b> Step 3: Parameter composition</a></li>
+<li class="chapter" data-level="3.1.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification-1"><i class="fa fa-check"></i><b>3.1.1</b> Step 1: model specification</a></li>
+<li class="chapter" data-level="3.1.2" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition-1"><i class="fa fa-check"></i><b>3.1.2</b> Step 3: Parameter composition</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>III Implementation</b></span></li>
-<li class="chapter" data-level="4" data-path="r.html"><a href="r.html"><i class="fa fa-check"></i><b>4</b> R</a>
+<li class="chapter" data-level="4" data-path="r-1.html"><a href="r-1.html"><i class="fa fa-check"></i><b>4</b> R</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="r.html"><a href="r.html#simple-linear-regression-1"><i class="fa fa-check"></i><b>4.1</b> Simple linear regression</a>
+<li class="chapter" data-level="4.1" data-path="r-1.html"><a href="r-1.html#simple-linear-regression"><i class="fa fa-check"></i><b>4.1</b> Simple linear regression</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="r.html"><a href="r.html#setup"><i class="fa fa-check"></i><b>4.1.1</b> Setup</a></li>
-<li class="chapter" data-level="4.1.2" data-path="r.html"><a href="r.html#steps-4-5-simulate-and-automate"><i class="fa fa-check"></i><b>4.1.2</b> Steps 4-5: Simulate and automate</a></li>
-<li class="chapter" data-level="4.1.3" data-path="r.html"><a href="r.html#step-6-summarize-visualize"><i class="fa fa-check"></i><b>4.1.3</b> Step 6: Summarize &amp; visualize</a></li>
+<li class="chapter" data-level="4.1.1" data-path="r-1.html"><a href="r-1.html#setup"><i class="fa fa-check"></i><b>4.1.1</b> Setup</a></li>
+<li class="chapter" data-level="4.1.2" data-path="r-1.html"><a href="r-1.html#steps-4-5-simulate-and-automate"><i class="fa fa-check"></i><b>4.1.2</b> Steps 4-5: Simulate and automate</a></li>
+<li class="chapter" data-level="4.1.3" data-path="r-1.html"><a href="r-1.html#step-6-summarize"><i class="fa fa-check"></i><b>4.1.3</b> Step 6: Summarize</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="r.html"><a href="r.html#mixed-effects-model-1"><i class="fa fa-check"></i><b>4.2</b> Mixed effects model</a>
+<li class="chapter" data-level="4.2" data-path="r-1.html"><a href="r-1.html#mixed-effects-model-1"><i class="fa fa-check"></i><b>4.2</b> Mixed effects model</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="r.html"><a href="r.html#step-4-5-simulate-automate"><i class="fa fa-check"></i><b>4.2.1</b> Step 4-5: Simulate &amp; automate</a></li>
-<li class="chapter" data-level="4.2.2" data-path="r.html"><a href="r.html#step-6-summarize-visualize-1"><i class="fa fa-check"></i><b>4.2.2</b> Step 6: Summarize &amp; visualize</a></li>
+<li class="chapter" data-level="4.2.1" data-path="r-1.html"><a href="r-1.html#step-4-5-simulate-automate"><i class="fa fa-check"></i><b>4.2.1</b> Step 4-5: Simulate &amp; automate</a></li>
+<li class="chapter" data-level="4.2.2" data-path="r-1.html"><a href="r-1.html#step-6-summarize-1"><i class="fa fa-check"></i><b>4.2.2</b> Step 6: Summarize</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="python.html"><a href="python.html"><i class="fa fa-check"></i><b>5</b> Python</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="python.html"><a href="python.html#simple-linear-regression-2"><i class="fa fa-check"></i><b>5.1</b> Simple linear regression</a>
+<li class="chapter" data-level="5.1" data-path="python.html"><a href="python.html#simple-linear-regression-1"><i class="fa fa-check"></i><b>5.1</b> Simple linear regression</a>
 <ul>
 <li class="chapter" data-level="5.1.1" data-path="python.html"><a href="python.html#setup-1"><i class="fa fa-check"></i><b>5.1.1</b> Setup</a></li>
 <li class="chapter" data-level="5.1.2" data-path="python.html"><a href="python.html#step-4-simulate"><i class="fa fa-check"></i><b>5.1.2</b> Step 4: Simulate</a></li>
 <li class="chapter" data-level="5.1.3" data-path="python.html"><a href="python.html#step-5-automate"><i class="fa fa-check"></i><b>5.1.3</b> Step 5: Automate</a></li>
-<li class="chapter" data-level="5.1.4" data-path="python.html"><a href="python.html#step-6-summarize-visualize-2"><i class="fa fa-check"></i><b>5.1.4</b> Step 6: Summarize &amp; visualize</a></li>
+<li class="chapter" data-level="5.1.4" data-path="python.html"><a href="python.html#step-6-summarize-2"><i class="fa fa-check"></i><b>5.1.4</b> Step 6: Summarize</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="python.html"><a href="python.html#mixed-effects-model-2"><i class="fa fa-check"></i><b>5.2</b> Mixed effects model</a>
 <ul>
 <li class="chapter" data-level="5.2.1" data-path="python.html"><a href="python.html#step-4-simulate-1"><i class="fa fa-check"></i><b>5.2.1</b> Step 4: Simulate</a></li>
 <li class="chapter" data-level="5.2.2" data-path="python.html"><a href="python.html#step-5-automate-1"><i class="fa fa-check"></i><b>5.2.2</b> Step 5: Automate</a></li>
-<li class="chapter" data-level="5.2.3" data-path="python.html"><a href="python.html#step-6-summarize-visualize-3"><i class="fa fa-check"></i><b>5.2.3</b> Step 6: Summarize &amp; visualize</a></li>
+<li class="chapter" data-level="5.2.3" data-path="python.html"><a href="python.html#step-6-summarize-3"><i class="fa fa-check"></i><b>5.2.3</b> Step 6: Summarize</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="stata.html"><a href="stata.html"><i class="fa fa-check"></i><b>6</b> Stata</a>
+<li class="chapter" data-level="6" data-path="stata-1.html"><a href="stata-1.html"><i class="fa fa-check"></i><b>6</b> Stata</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="stata.html"><a href="stata.html#simple-linear-regression-3"><i class="fa fa-check"></i><b>6.1</b> Simple linear regression</a>
+<li class="chapter" data-level="6.1" data-path="stata-1.html"><a href="stata-1.html#simple-linear-regression-2"><i class="fa fa-check"></i><b>6.1</b> Simple linear regression</a>
 <ul>
-<li class="chapter" data-level="6.1.1" data-path="stata.html"><a href="stata.html#setup-2"><i class="fa fa-check"></i><b>6.1.1</b> Setup</a></li>
-<li class="chapter" data-level="6.1.2" data-path="stata.html"><a href="stata.html#step-4-simulate-2"><i class="fa fa-check"></i><b>6.1.2</b> Step 4: Simulate</a></li>
-<li class="chapter" data-level="6.1.3" data-path="stata.html"><a href="stata.html#step-5-automate-2"><i class="fa fa-check"></i><b>6.1.3</b> Step 5: Automate</a></li>
-<li class="chapter" data-level="6.1.4" data-path="stata.html"><a href="stata.html#step-6-summarize-visualize-4"><i class="fa fa-check"></i><b>6.1.4</b> Step 6: Summarize &amp; visualize</a></li>
+<li class="chapter" data-level="6.1.1" data-path="stata-1.html"><a href="stata-1.html#setup-2"><i class="fa fa-check"></i><b>6.1.1</b> Setup</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stata-1.html"><a href="stata-1.html#step-4-simulate-2"><i class="fa fa-check"></i><b>6.1.2</b> Step 4: Simulate</a></li>
+<li class="chapter" data-level="6.1.3" data-path="stata-1.html"><a href="stata-1.html#step-5-automate-2"><i class="fa fa-check"></i><b>6.1.3</b> Step 5: Automate</a></li>
+<li class="chapter" data-level="6.1.4" data-path="stata-1.html"><a href="stata-1.html#step-6-summarize-4"><i class="fa fa-check"></i><b>6.1.4</b> Step 6: Summarize</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="stata.html"><a href="stata.html#mixed-effects-model-3"><i class="fa fa-check"></i><b>6.2</b> Mixed effects model</a>
+<li class="chapter" data-level="6.2" data-path="stata-1.html"><a href="stata-1.html#mixed-effects-model-3"><i class="fa fa-check"></i><b>6.2</b> Mixed effects model</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="stata.html"><a href="stata.html#setup-3"><i class="fa fa-check"></i><b>6.2.1</b> Setup</a></li>
-<li class="chapter" data-level="6.2.2" data-path="stata.html"><a href="stata.html#step-4-simulate-3"><i class="fa fa-check"></i><b>6.2.2</b> Step 4: Simulate</a></li>
-<li class="chapter" data-level="6.2.3" data-path="stata.html"><a href="stata.html#step-5-automate-3"><i class="fa fa-check"></i><b>6.2.3</b> Step 5: Automate</a></li>
-<li class="chapter" data-level="6.2.4" data-path="stata.html"><a href="stata.html#step-6-summarize-visualize-5"><i class="fa fa-check"></i><b>6.2.4</b> Step 6: Summarize &amp; visualize</a></li>
+<li class="chapter" data-level="6.2.1" data-path="stata-1.html"><a href="stata-1.html#setup-3"><i class="fa fa-check"></i><b>6.2.1</b> Setup</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stata-1.html"><a href="stata-1.html#step-4-simulate-3"><i class="fa fa-check"></i><b>6.2.2</b> Step 4: Simulate</a></li>
+<li class="chapter" data-level="6.2.3" data-path="stata-1.html"><a href="stata-1.html#step-5-automate-3"><i class="fa fa-check"></i><b>6.2.3</b> Step 5: Automate</a></li>
+<li class="chapter" data-level="6.2.4" data-path="stata-1.html"><a href="stata-1.html#step-6-summarize-5"><i class="fa fa-check"></i><b>6.2.4</b> Step 6: Summarize</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -237,47 +236,317 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-of-what" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Power of what?<a href="power-of-what.html#power-of-what" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>The first 3 steps in power simulation involve nothing more than thinking and then writing down your thoughts using a pencil and paper. But, prior to walking through these steps there is an even more fundamental issue to be addressed - the power of what?</p>
-<p>What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or a combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question, “power of what?”.</p>
-<div id="simple-linear-regression" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Simple linear regression<a href="power-of-what.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or a combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question, “power of what?”.
+## Simple linear regression</p>
 <p>In the following implementations of power simulation in R, Python, and Stata, we will walk through a concrete example using a simple linear regression model, before moving to a more complicated example using a mixed effects model. While canned routines exist to calculate power for some simple general linear models, this exercise will serve to build intuition about the process of power simulation that will be helpful for the more complex case.</p>
-<div id="step-1-model-specification" class="section level3 hasAnchor" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="step-1-model-specification" class="section level3 hasAnchor" number="3.0.1">
+<h3><span class="header-section-number">3.0.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first step is to write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
 bpsystol = \beta_0 + \beta_1(age) + \beta_2(sex) + \beta_3(age*sex) + \epsilon
 \]</span></p>
 <p>In this case, the data are from the National Health and Nutrition Examination Survey (<code>NHANES</code>) (<a href="https://www.cdc.gov/nchs/nhanes/index.htm" class="uri">https://www.cdc.gov/nchs/nhanes/index.htm</a>) and the variables of interest are <code>bpsystol</code> (systolic blood pressure), <code>age</code>, <code>sex</code>, and their interaction, and the parameters of interest are <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span>.</p>
+<caption>
+<span id="tab:param-def">Table 3.1: </span>
+</caption>
+<div custom-style="Table Caption">
+<em>Variables in the data-generating model and associated R code.</em>
 </div>
-<div id="step-2-variable-composition" class="section level3 hasAnchor" number="3.1.2">
-<h3><span class="header-section-number">3.1.2</span> Step 2: Variable composition<a href="power-of-what.html#step-2-variable-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">code</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(RT_{si}\)</span></td>
+<td align="left"></td>
+<td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(X_i\)</span></td>
+<td align="left"></td>
+<td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\beta_0\)</span></td>
+<td align="left"></td>
+<td align="left">intercept; grand mean RT</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\beta_1\)</span></td>
+<td align="left"></td>
+<td align="left">slope; mean effect of ingroup/outgroup</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\tau_0\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-subject random intercepts</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\tau_1\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-subject random slopes</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\rho\)</span></td>
+<td align="left"></td>
+<td align="left">correlation between by-subject random intercepts and slopes</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\omega_0\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-item random intercepts</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\sigma\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of residuals</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(T_{0s}\)</span></td>
+<td align="left"></td>
+<td align="left">random intercept for subject <span class="math inline">\(s\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(T_{1s}\)</span></td>
+<td align="left"></td>
+<td align="left">random slope for subject <span class="math inline">\(s\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(O_{0i}\)</span></td>
+<td align="left"></td>
+<td align="left">random intercept for item <span class="math inline">\(i\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(e_{si}\)</span></td>
+<td align="left"></td>
+<td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">### Step 2: V</td>
+<td align="left">ariable composition</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
 <p>Once we have the model equation, we need to specify the details of the covariates, such as the range of <code>age</code> or the proportion of females (<code>sex</code>). For example, the range of <code>age</code> might encompass the full range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].</p>
 </div>
-<div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.1.3">
-<h3><span class="header-section-number">3.1.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to locate or think about reasonable values for the parameters in your model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects and use these as a starting point.</p>
+<div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.0.2">
+<h3><span class="header-section-number">3.0.2</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects and use these as a starting point.</p>
+<caption>
+<span id="tab:params-all">Table 3.2: </span>
+</caption>
+<div custom-style="Table Caption">
+<em>Settings for all data-generating parameters.</em>
 </div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">code</th>
+<th align="left">value</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">800</td>
+<td align="left">intercept; i.e., the grand mean</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">50</td>
+<td align="left">slope; i.e, effect of category</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">80</td>
+<td align="left">by-item random intercept sd</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">100</td>
+<td align="left">by-subject random intercept sd</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">40</td>
+<td align="left">by-subject random slope sd</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">0.2</td>
+<td align="left">correlation between intercept and slope</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">200</td>
+<td align="left">residual (error) sd</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="mixed-effects-model" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Mixed effects model<a href="power-of-what.html#mixed-effects-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mixed-effects-model" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Mixed effects model<a href="power-of-what.html#mixed-effects-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Our mixed effects model example will follow the same steps as the simple linear regression, but this time with data that exhibits clustering.</p>
-<div id="step-1-model-specification-1" class="section level3 hasAnchor" number="3.2.1">
-<h3><span class="header-section-number">3.2.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="step-1-model-specification-1" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Once again, we first write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
 weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}*female_i) + \mu_{0i} + \mu_{1i}(age) + \epsilon_{it}
 \]</span></p>
 <p>where <span class="math inline">\(i\)</span> stands for <code>children</code>, <span class="math inline">\(t\)</span> for <code>age</code>, and we assume <span class="math inline">\(\mu_{0i} \sim N(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1i}\sim N(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{it} \sim N(0, \sigma)\)</span>. These data are available from Stata (<a href="http://www.stata-press.com/data/r15/childweight.dta" class="uri">http://www.stata-press.com/data/r15/childweight.dta</a>).</p>
 <p>The covariates are <code>weight</code>, <code>age</code>, <code>female</code>, and the interaction term <code>age\*female</code>. The parameters are: <span class="math inline">\(\beta_0\)</span> (Intercept), <span class="math inline">\(\beta_1\)</span> (coefficient for age), <span class="math inline">\(\beta_2\)</span> (coefficient for the female comparing with the male), <span class="math inline">\(\beta_3\)</span> (coefficient for the interaction), <span class="math inline">\(\mu_{1i}\)</span> (random effect of age).</p>
+<caption>
+<span id="tab:param-def-mixed">Table 3.3: </span>
+</caption>
+<div custom-style="Table Caption">
+<em>Variables in the data-generating model and associated R code.</em>
 </div>
-<div id="step-2-variable-composition-1" class="section level3 hasAnchor" number="3.2.2">
-<h3><span class="header-section-number">3.2.2</span> Step 2: Variable composition<a href="power-of-what.html#step-2-variable-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">code</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(RT_{si}\)</span></td>
+<td align="left"></td>
+<td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(X_i\)</span></td>
+<td align="left"></td>
+<td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\beta_0\)</span></td>
+<td align="left"></td>
+<td align="left">intercept; grand mean RT</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\beta_1\)</span></td>
+<td align="left"></td>
+<td align="left">slope; mean effect of ingroup/outgroup</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\tau_0\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-subject random intercepts</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\tau_1\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-subject random slopes</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\rho\)</span></td>
+<td align="left"></td>
+<td align="left">correlation between by-subject random intercepts and slopes</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\omega_0\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-item random intercepts</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\sigma\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of residuals</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(T_{0s}\)</span></td>
+<td align="left"></td>
+<td align="left">random intercept for subject <span class="math inline">\(s\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(T_{1s}\)</span></td>
+<td align="left"></td>
+<td align="left">random slope for subject <span class="math inline">\(s\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(O_{0i}\)</span></td>
+<td align="left"></td>
+<td align="left">random intercept for item <span class="math inline">\(i\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(e_{si}\)</span></td>
+<td align="left"></td>
+<td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">### Step 2: V</td>
+<td align="left">ariable composition</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
 <p>We also need to think about the covariates in our model. This is a longitudinal study, so we need to specify the starting <code>age</code>, the length of time between measurements, and the total number of measurements. We also need to consider the proportion of males and females in our study. Are we likely to sample 50% females and 50% males?</p>
 <p>Let’s assume that we will measure the children’s weight every 4 months for 4 years beginning at age 10. Also, let’s assume that the sample will be 50% female. The interaction term (<code>age\*female</code>) is easy to calculate once we create variables for <code>age</code> and <code>female</code>.</p>
 </div>
-<div id="step-3-parameter-composition-1" class="section level3 hasAnchor" number="3.2.3">
-<h3><span class="header-section-number">3.2.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to locate or think about reasonable values for the parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects.</p>
+<div id="step-3-parameter-composition-1" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects.</p>
+<caption>
+<span id="tab:params-all-mixed">Table 3.4: </span>
+</caption>
+<div custom-style="Table Caption">
+<em>Settings for all data-generating parameters.</em>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">code</th>
+<th align="left">value</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">800</td>
+<td align="left">intercept; i.e., the grand mean</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">50</td>
+<td align="left">slope; i.e, effect of category</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">80</td>
+<td align="left">by-item random intercept sd</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">100</td>
+<td align="left">by-subject random intercept sd</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">40</td>
+<td align="left">by-subject random slope sd</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">0.2</td>
+<td align="left">correlation between intercept and slope</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">200</td>
+<td align="left">residual (error) sd</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
@@ -291,7 +560,7 @@ weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}
         </div>
       </div>
 <a href="power-analysis-via-simulation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="r-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

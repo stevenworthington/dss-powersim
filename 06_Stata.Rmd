@@ -163,7 +163,7 @@ program power_cmd_simregress_init, sclass
 end
 ```
 
-### Step 6: Summarize & visualize
+### Step 6: Summarize
 
 Now, we’re ready to use `power simregress`! The output below shows the simulated power when the interaction parameter equals 0.2 to 0.4 in increments of 0.05 for samples of size 400, 500, 600, and 700.
 
@@ -380,7 +380,7 @@ program power_cmd_simmixed_init, sclass
 end
 ```
 
-### Step 6: Summarize & visualize
+### Step 6: Summarize
 
 Now, we can use `power simmixed` to simulate power for a variety of assumptions. The example below simulates power for a range of sample sizes at both levels 1 and 2. Level 2 sample sizes range from 100 to 500 children in increments of 100. At level 1, we consider 5 and 6 observations per child.
 

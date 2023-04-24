@@ -1,5 +1,5 @@
 
-```{r setup, include=FALSE, echo=FALSE}
+```{r, include=FALSE, echo=FALSE}
 require(knitr)
 knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.height=5, fig.width=8, fig.path="figures/")
 # knitr::opts_knit$set(root.dir="R/Rinstall")
@@ -17,14 +17,7 @@ The main library we will use is `stats` and comes bundled with base R. However, 
 
 ```{r}
 # install.packages("pacman")
-pacman::p_load(
-  lme4,        # model specification / estimation
-  lmtest,
-  afex,        # anova and deriving p-values from lmer
-  broom.mixed, # extracting tidy data from model fits 
-  tidyverse,   # data wrangling and visualisation
-  gt           # nice tables
-  )
+pacman::p_load(lmtest, lme4, dplyr, ggplot2, gt)
 ```
 
 We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible. 

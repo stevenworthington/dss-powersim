@@ -11,9 +11,9 @@ As the example shows in the previous section, for several basic statistical test
 - Think 
     1. **Model specification:** Write down the regression model, including all variables and parameters of interest.
     2. **Variable composition:** Specify the details of the covariates, such as the range of age or the proportion of females.
-    3. **Parameter composition:** Establish reasonable values for the data-generating parameters in your model.
+    3. **Parameter composition:** Locate or think about reasonable values for the parameters in your model.
 
 - Act  
-    4. **Simulate:** Simulate the sampling process for a single dataset, assuming the alternative hypothesis, and fit the model.
+    4. **Simulate:** Simulate a single dataset assuming the alternative hypothesis, and fit the model.
     5. **Automate:** Write a function/program/macro to create the datasets, fit the models, test the hypotheses of interest, and calculate power. The function/program/macro should allow for iterating power calculations over a grid of parameter values.
     6. **Summarize:** Summarize the output in tables and figures.

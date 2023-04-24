@@ -109,7 +109,7 @@ result.columns = ['N', 'interact_coef', 'Power']
 result
 ```
 
-### Step 6: Summarize & visualize
+### Step 6: Summarize
 
 In this part, we export the results of the simulations which include two parts: a table and a graph showing the results from the simulations. It should be noted that the graph from Python simulation is a little bit different from that in Stata, and this is mainly caused by different simulation process within Stata and Python. 
 
@@ -258,7 +258,7 @@ result.columns = ['n1', 'N', 'Power']
 result
 ```
 
-### Step 6: Summarize & visualize
+### Step 6: Summarize
 
 The last procedure is to export the results which contain a table and a graph. 
 
