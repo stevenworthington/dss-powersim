@@ -20,31 +20,24 @@ In the following implementations of power simulation in R, Python, and Stata, we
 The first step is to write down the regression model of interest, including all variables and parameters:
 
 $$
-bpsystol = \beta_0 + \beta_1(age) + \beta_2(sex) + \beta_3(age*sex) + \epsilon
+liking_i = \beta_0 + \beta_1(genre_i) + \epsilon_i
 $$
 
-In this case, the data are from the National Health and Nutrition Examination Survey (`NHANES`) (<https://www.cdc.gov/nchs/nhanes/index.htm>) and the variables of interest are `bpsystol` (systolic blood pressure), `age`, `sex`, and their interaction, and the parameters of interest are $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$.
+In this case, the data are from Julian Quandt's blogpost (<https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>), and the parameter of interest is $\beta_1$.
 
 ```{r param-def, echo=FALSE, results="asis"}
 tibble::tribble(~`model`, ~`code`, ~`description`,
         "$RT_{si}$", "\\texttt{RT}", "reaction time for subject $s$ to item $i$",
         "$X_i$", "\\texttt{X\\_i}", "condition for item $i$ (-.5 = ingroup, .5 = outgroup)",
         "$\\beta_0$", "\\texttt{beta\\_0}", "intercept; grand mean RT",
-        "$\\beta_1$", "\\texttt{beta\\_1}", "slope; mean effect of ingroup/outgroup",
-        "$\\tau_0$", "\\texttt{tau\\_0}", "standard deviation of by-subject random intercepts",
-        "$\\tau_1$", "\\texttt{tau\\_1}", "standard deviation of by-subject random slopes",        
-        "$\\rho$", "\\texttt{rho}", "correlation between by-subject random intercepts and slopes",
-        "$\\omega_0$", "\\texttt{omega\\_0}", "standard deviation of by-item random intercepts",
-        "$\\sigma$", "\\texttt{sigma}", "standard deviation of residuals",
-        "$T_{0s}$", "\\texttt{T\\_0s}", "random intercept for subject $s$",
-        "$T_{1s}$", "\\texttt{T\\_1s}", "random slope for subject $s$",
-        "$O_{0i}$", "\\texttt{O\\_0i}", "random intercept for item $i$",
+        "$\\beta_1$", "\\texttt{beta\\_1}", "slope; mean effect of ingroup/outgroup",        
         "$e_{si}$", "\\texttt{e\\_si}", "residual for the trial involving subject $s$ and item $i$")%>%
   apa_table(align = c("l", "l", "l"),
             caption = "Variables in the data-generating model and associated R code.",
             escape = FALSE,
             placement = "H")
 ```
+
 ### Step 2: Variable composition
 
 Once we have the model equation, we need to specify the details of the covariates, such as the range of `age` or the proportion of females (`sex`). For example, the range of `age` might encompass the full range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].
@@ -76,18 +69,18 @@ Our mixed effects model example will follow the same steps as the simple linear 
 
 Once again, we first write down the regression model of interest, including all variables and parameters:
 
+~  + (1 + genre | participant)
+
 $$
-weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}*female_i) + \mu_{0i} + \mu_{1i}(age) + \epsilon_{it}
+liking_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times genre_i + \epsilon_{ij}
 $$
 
-where $i$ stands for `children`, $t$ for `age`, and we assume $\mu_{0i} \sim N(0, \tau_0)$, $\mu_{1i}\sim N(0, \tau_1)$, $\epsilon_{it} \sim N(0, \sigma)$. These data are available from Stata (<http://www.stata-press.com/data/r15/childweight.dta>).
-
-The covariates are `weight`, `age`, `female`, and the interaction term `age\*female`. The parameters are: $\beta_0$ (Intercept), $\beta_1$ (coefficient for age), $\beta_2$ (coefficient for the female comparing with the male), $\beta_3$ (coefficient for the interaction), $\mu_{1i}$ (random effect of age).
+where $i$ stands for `children`, $t$ for `age`, and we assume $\mu_{0i} \sim N(0, \tau_0)$, $\mu_{1i}\sim N(0, \tau_1)$, $\epsilon_{it} \sim N(0, \sigma)$. 
 
 ```{r param-def-mixed, echo=FALSE, results="asis"}
 tibble::tribble(~`model`, ~`code`, ~`description`,
-        "$RT_{si}$", "\\texttt{RT}", "reaction time for subject $s$ to item $i$",
-        "$X_i$", "\\texttt{X\\_i}", "condition for item $i$ (-.5 = ingroup, .5 = outgroup)",
+        "$liking_{ij}$", "\\texttt{liking}", "reaction time for subject $s$ to item $i$",
+        "$genre_i$", "\\texttt{genre\\_i}", "condition for item $i$ (-.5 = ingroup, .5 = outgroup)",
         "$\\beta_0$", "\\texttt{beta\\_0}", "intercept; grand mean RT",
         "$\\beta_1$", "\\texttt{beta\\_1}", "slope; mean effect of ingroup/outgroup",
         "$\\tau_0$", "\\texttt{tau\\_0}", "standard deviation of by-subject random intercepts",
@@ -104,6 +97,7 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
             escape = FALSE,
             placement = "H")
 ```
+
 ### Step 2: Variable composition
 
 We also need to think about the covariates in our model. This is a longitudinal study, so we need to specify the starting `age`, the length of time between measurements, and the total number of measurements. We also need to consider the proportion of males and females in our study. Are we likely to sample 50% females and 50% males?

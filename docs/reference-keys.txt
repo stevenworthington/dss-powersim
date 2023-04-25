@@ -11,9 +11,11 @@ power-analysis-via-simulation
 step-by-step-1
 power-of-what
 step-1-model-specification
+step-2-variable-composition
 step-3-parameter-composition
 mixed-effects-model
 step-1-model-specification-1
+step-2-variable-composition-1
 step-3-parameter-composition-1
 r-1
 simple-linear-regression

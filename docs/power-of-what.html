@@ -158,11 +158,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of what?</a>
 <ul>
 <li class="chapter" data-level="3.0.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification"><i class="fa fa-check"></i><b>3.0.1</b> Step 1: model specification</a></li>
-<li class="chapter" data-level="3.0.2" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition"><i class="fa fa-check"></i><b>3.0.2</b> Step 3: Parameter composition</a></li>
+<li class="chapter" data-level="3.0.2" data-path="power-of-what.html"><a href="power-of-what.html#step-2-variable-composition"><i class="fa fa-check"></i><b>3.0.2</b> Step 2: Variable composition</a></li>
+<li class="chapter" data-level="3.0.3" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition"><i class="fa fa-check"></i><b>3.0.3</b> Step 3: Parameter composition</a></li>
 <li class="chapter" data-level="3.1" data-path="power-of-what.html"><a href="power-of-what.html#mixed-effects-model"><i class="fa fa-check"></i><b>3.1</b> Mixed effects model</a>
 <ul>
 <li class="chapter" data-level="3.1.1" data-path="power-of-what.html"><a href="power-of-what.html#step-1-model-specification-1"><i class="fa fa-check"></i><b>3.1.1</b> Step 1: model specification</a></li>
-<li class="chapter" data-level="3.1.2" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition-1"><i class="fa fa-check"></i><b>3.1.2</b> Step 3: Parameter composition</a></li>
+<li class="chapter" data-level="3.1.2" data-path="power-of-what.html"><a href="power-of-what.html#step-2-variable-composition-1"><i class="fa fa-check"></i><b>3.1.2</b> Step 2: Variable composition</a></li>
+<li class="chapter" data-level="3.1.3" data-path="power-of-what.html"><a href="power-of-what.html#step-3-parameter-composition-1"><i class="fa fa-check"></i><b>3.1.3</b> Step 3: Parameter composition</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>III Implementation</b></span></li>
@@ -243,9 +245,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">3.0.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first step is to write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
-bpsystol = \beta_0 + \beta_1(age) + \beta_2(sex) + \beta_3(age*sex) + \epsilon
+liking_i = \beta_0 + \beta_1(genre_i) + \epsilon_i
 \]</span></p>
-<p>In this case, the data are from the National Health and Nutrition Examination Survey (<code>NHANES</code>) (<a href="https://www.cdc.gov/nchs/nhanes/index.htm" class="uri">https://www.cdc.gov/nchs/nhanes/index.htm</a>) and the variables of interest are <code>bpsystol</code> (systolic blood pressure), <code>age</code>, <code>sex</code>, and their interaction, and the parameters of interest are <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span>.</p>
+<p>In this case, the data are from Julian Quandt’s blogpost (<a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a>), and the parameter of interest is <span class="math inline">\(\beta_1\)</span>.</p>
 <caption>
 <span id="tab:param-def">Table 3.1: </span>
 </caption>
@@ -282,61 +284,19 @@ bpsystol = \beta_0 + \beta_1(age) + \beta_2(sex) + \beta_3(age*sex) + \epsilon
 <td align="left">slope; mean effect of ingroup/outgroup</td>
 </tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(\tau_0\)</span></td>
-<td align="left"></td>
-<td align="left">standard deviation of by-subject random intercepts</td>
-</tr>
-<tr class="even">
-<td align="left"><span class="math inline">\(\tau_1\)</span></td>
-<td align="left"></td>
-<td align="left">standard deviation of by-subject random slopes</td>
-</tr>
-<tr class="odd">
-<td align="left"><span class="math inline">\(\rho\)</span></td>
-<td align="left"></td>
-<td align="left">correlation between by-subject random intercepts and slopes</td>
-</tr>
-<tr class="even">
-<td align="left"><span class="math inline">\(\omega_0\)</span></td>
-<td align="left"></td>
-<td align="left">standard deviation of by-item random intercepts</td>
-</tr>
-<tr class="odd">
-<td align="left"><span class="math inline">\(\sigma\)</span></td>
-<td align="left"></td>
-<td align="left">standard deviation of residuals</td>
-</tr>
-<tr class="even">
-<td align="left"><span class="math inline">\(T_{0s}\)</span></td>
-<td align="left"></td>
-<td align="left">random intercept for subject <span class="math inline">\(s\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left"><span class="math inline">\(T_{1s}\)</span></td>
-<td align="left"></td>
-<td align="left">random slope for subject <span class="math inline">\(s\)</span></td>
-</tr>
-<tr class="even">
-<td align="left"><span class="math inline">\(O_{0i}\)</span></td>
-<td align="left"></td>
-<td align="left">random intercept for item <span class="math inline">\(i\)</span></td>
-</tr>
-<tr class="odd">
 <td align="left"><span class="math inline">\(e_{si}\)</span></td>
 <td align="left"></td>
 <td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
 </tr>
-<tr class="even">
-<td align="left">### Step 2: V</td>
-<td align="left">ariable composition</td>
-<td align="left"></td>
-</tr>
 </tbody>
 </table>
+</div>
+<div id="step-2-variable-composition" class="section level3 hasAnchor" number="3.0.2">
+<h3><span class="header-section-number">3.0.2</span> Step 2: Variable composition<a href="power-of-what.html#step-2-variable-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Once we have the model equation, we need to specify the details of the covariates, such as the range of <code>age</code> or the proportion of females (<code>sex</code>). For example, the range of <code>age</code> might encompass the full range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].</p>
 </div>
-<div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.0.2">
-<h3><span class="header-section-number">3.0.2</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.0.3">
+<h3><span class="header-section-number">3.0.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects and use these as a starting point.</p>
 <caption>
 <span id="tab:params-all">Table 3.2: </span>
@@ -396,12 +356,18 @@ bpsystol = \beta_0 + \beta_1(age) + \beta_2(sex) + \beta_3(age*sex) + \epsilon
 <p>Our mixed effects model example will follow the same steps as the simple linear regression, but this time with data that exhibits clustering.</p>
 <div id="step-1-model-specification-1" class="section level3 hasAnchor" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Once again, we first write down the regression model of interest, including all variables and parameters:</p>
+<dl>
+<dt>Once again, we first write down the regression model of interest, including all variables and parameters:</dt>
+<dd>
+<ul>
+<li>(1 + genre | participant)</li>
+</ul>
+</dd>
+</dl>
 <p><span class="math display">\[
-weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}*female_i) + \mu_{0i} + \mu_{1i}(age) + \epsilon_{it}
+liking_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times genre_i + \epsilon_{ij}
 \]</span></p>
-<p>where <span class="math inline">\(i\)</span> stands for <code>children</code>, <span class="math inline">\(t\)</span> for <code>age</code>, and we assume <span class="math inline">\(\mu_{0i} \sim N(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1i}\sim N(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{it} \sim N(0, \sigma)\)</span>. These data are available from Stata (<a href="http://www.stata-press.com/data/r15/childweight.dta" class="uri">http://www.stata-press.com/data/r15/childweight.dta</a>).</p>
-<p>The covariates are <code>weight</code>, <code>age</code>, <code>female</code>, and the interaction term <code>age\*female</code>. The parameters are: <span class="math inline">\(\beta_0\)</span> (Intercept), <span class="math inline">\(\beta_1\)</span> (coefficient for age), <span class="math inline">\(\beta_2\)</span> (coefficient for the female comparing with the male), <span class="math inline">\(\beta_3\)</span> (coefficient for the interaction), <span class="math inline">\(\mu_{1i}\)</span> (random effect of age).</p>
+<p>where <span class="math inline">\(i\)</span> stands for <code>children</code>, <span class="math inline">\(t\)</span> for <code>age</code>, and we assume <span class="math inline">\(\mu_{0i} \sim N(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1i}\sim N(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{it} \sim N(0, \sigma)\)</span>.</p>
 <caption>
 <span id="tab:param-def-mixed">Table 3.3: </span>
 </caption>
@@ -418,12 +384,12 @@ weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><span class="math inline">\(RT_{si}\)</span></td>
+<td align="left"><span class="math inline">\(liking_{ij}\)</span></td>
 <td align="left"></td>
 <td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
 </tr>
 <tr class="even">
-<td align="left"><span class="math inline">\(X_i\)</span></td>
+<td align="left"><span class="math inline">\(genre_i\)</span></td>
 <td align="left"></td>
 <td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
 </tr>
@@ -482,18 +448,16 @@ weight_{it} = \beta_0 + \beta_1(age_{it}) + \beta_2(female_i) + \beta_3(age_{it}
 <td align="left"></td>
 <td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
 </tr>
-<tr class="even">
-<td align="left">### Step 2: V</td>
-<td align="left">ariable composition</td>
-<td align="left"></td>
-</tr>
 </tbody>
 </table>
+</div>
+<div id="step-2-variable-composition-1" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Step 2: Variable composition<a href="power-of-what.html#step-2-variable-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We also need to think about the covariates in our model. This is a longitudinal study, so we need to specify the starting <code>age</code>, the length of time between measurements, and the total number of measurements. We also need to consider the proportion of males and females in our study. Are we likely to sample 50% females and 50% males?</p>
 <p>Let’s assume that we will measure the children’s weight every 4 months for 4 years beginning at age 10. Also, let’s assume that the sample will be 50% female. The interaction term (<code>age\*female</code>) is easy to calculate once we create variables for <code>age</code> and <code>female</code>.</p>
 </div>
-<div id="step-3-parameter-composition-1" class="section level3 hasAnchor" number="3.1.2">
-<h3><span class="header-section-number">3.1.2</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="step-3-parameter-composition-1" class="section level3 hasAnchor" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects.</p>
 <caption>
 <span id="tab:params-all-mixed">Table 3.4: </span>
