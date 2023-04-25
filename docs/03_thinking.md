@@ -11,7 +11,7 @@ What quantity within your model do you wish to calculate power for? Overall mode
 
 ## Study design
 
-The study design we will use as an example throughout this tutorial comes from Julian Quandt's blogpost (<https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>). He describes this hyopthetical research design as:
+The study design we will use as an example throughout this tutorial comes from Julian Quandt's blogpost (<https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>). He describes this as:
 
 > A new hypothetical research question focused on music preference. The overarching research goal will be to - once and for all - find out whether Rock or Pop music is better. Of course, we could just ask people what they prefer, but we do not want to do that because we want a more objective measure of what is Rock and Pop (people might have different ideas about the genres). Therefore, we will have participants listen to a bunch of different songs that are either from a Spotify "best-of-pop" or "best-of-rock" playlist and have them rate the song on a evaluation scale from 0-100 points. 
 
@@ -27,21 +27,21 @@ $$
 \textrm{liking}_i = \beta_0 + \beta_1 \times \textrm{genre}_i + \epsilon_i
 $$
 
-where $i$ stands for `song`, and we assume $\epsilon_{i} \sim N(0, \sigma)$. The parameter of interest is $\beta_1$ - the average difference in the rating of songs between the two genres. 
+where $i$ stands for `song`, and we assume $\epsilon_{i} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average difference in the rating of songs between the two genres. 
 
 <caption>(\#tab:param-def)</caption>
 
 <div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
 
 
-model                  code                description                                               
----------------------  ------------------  ----------------------------------------------------------
-$	extrm{liking}_{ij}$   \texttt{liking}     reaction time for subject $s$ to item $i$                 
-$	extrm{genre}_i$       \texttt{genre\_i}   condition for item $i$ (-.5 = ingroup, .5 = outgroup)     
-$\beta_0$              \texttt{beta\_0}    intercept; grand mean RT                                  
-$\beta_1$              \texttt{beta\_1}    slope; mean effect of ingroup/outgroup                    
-$\sigma$               \texttt{sigma}      standard deviation of residuals                           
-$e_{i}$                \texttt{e\_si}      residual for the trial involving subject $s$ and item $i$ 
+model                    code                  description                                               
+-----------------------  --------------------  ----------------------------------------------------------
+$\textrm{liking}_{ij}$   $\texttt{liking}$     reaction time for subject $s$ to item $i$                 
+$\textrm{genre}_i$       $\texttt{genre\_i}$   condition for item $i$ (-.5 = ingroup, .5 = outgroup)     
+$\beta_0$                $\texttt{beta\_0}$    intercept; grand mean RT                                  
+$\beta_1$                $\texttt{beta\_1}$    slope; mean effect of ingroup/outgroup                    
+$\sigma$                 $\texttt{sigma}$      standard deviation of residuals                           
+$e_{i}$                  $\texttt{e\_si}$      residual for the trial involving subject $s$ and item $i$ 
 
 ### Step 2: Variable composition
 
@@ -56,11 +56,11 @@ Finally, we need to establish the data-generating parameters in your model. You 
 <div custom-style='Table Caption'>*Settings for all data-generating parameters.*</div>
 
 
-code               value   description                     
------------------  ------  --------------------------------
-\texttt{beta\_0}   800     intercept; i.e., the grand mean 
-\texttt{beta\_1}   50      slope; i.e, effect of category  
-\texttt{sigma}     200     residual (error) sd             
+code                 value   description                     
+-------------------  ------  --------------------------------
+$\texttt{beta\_0}$   800     intercept; i.e., the grand mean 
+$\texttt{beta\_1}$   50      slope; i.e, effect of category  
+$\texttt{sigma}$     200     residual (error) sd             
 
 ## Mixed effects model
 
@@ -74,28 +74,28 @@ $$
 \textrm{liking}_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 $$
 
-where $i$ stands for `song`, $j$ for `participant`, and we assume $\mu_{0j} \sim N(0, \tau_0)$, $\mu_{1j} \sim N(0, \tau_1)$, $\epsilon_{ij} \sim N(0, \sigma)$. 
+where $i$ stands for `song`, $j$ for `participant`, and we assume $\mu_{0j} \sim \mathcal{N}(0, \tau_0)$, $\mu_{1j} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. 
 
 <caption>(\#tab:param-def-mixed)</caption>
 
 <div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
 
 
-model                  code                description                                                 
----------------------  ------------------  ------------------------------------------------------------
-$	extrm{liking}_{ij}$   \texttt{liking}     reaction time for subject $s$ to item $i$                   
-$	extrm{genre}_i$       \texttt{genre\_i}   condition for item $i$ (-.5 = ingroup, .5 = outgroup)       
-$\beta_0$              \texttt{beta\_0}    intercept; grand mean RT                                    
-$\beta_1$              \texttt{beta\_1}    slope; mean effect of ingroup/outgroup                      
-$\tau_0$               \texttt{tau\_0}     standard deviation of by-subject random intercepts          
-$\tau_1$               \texttt{tau\_1}     standard deviation of by-subject random slopes              
-$\rho$                 \texttt{rho}        correlation between by-subject random intercepts and slopes 
-$\omega_0$             \texttt{omega\_0}   standard deviation of by-item random intercepts             
-$\sigma$               \texttt{sigma}      standard deviation of residuals                             
-$T_{0s}$               \texttt{T\_0s}      random intercept for subject $s$                            
-$T_{1s}$               \texttt{T\_1s}      random slope for subject $s$                                
-$O_{0i}$               \texttt{O\_0i}      random intercept for item $i$                               
-$e_{si}$               \texttt{e\_si}      residual for the trial involving subject $s$ and item $i$   
+model                    code                  description                                                 
+-----------------------  --------------------  ------------------------------------------------------------
+$\textrm{liking}_{ij}$   $\texttt{liking}$     reaction time for subject $s$ to item $i$                   
+$\textrm{genre}_i$       $\texttt{genre\_i}$   condition for item $i$ (-.5 = ingroup, .5 = outgroup)       
+$\beta_0$                $\texttt{beta\_0}$    intercept; grand mean RT                                    
+$\beta_1$                $\texttt{beta\_1}$    slope; mean effect of ingroup/outgroup                      
+$\tau_0$                 $\texttt{tau\_0}$     standard deviation of by-subject random intercepts          
+$\tau_1$                 $\texttt{tau\_1}$     standard deviation of by-subject random slopes              
+$\rho$                   $\texttt{rho}$        correlation between by-subject random intercepts and slopes 
+$\omega_0$               $\texttt{omega\_0}$   standard deviation of by-item random intercepts             
+$\sigma$                 $\texttt{sigma}$      standard deviation of residuals                             
+$T_{0s}$                 $\texttt{T\_0s}$      random intercept for subject $s$                            
+$T_{1s}$                 $\texttt{T\_1s}$      random slope for subject $s$                                
+$O_{0i}$                 $\texttt{O\_0i}$      random intercept for item $i$                               
+$e_{si}$                 $\texttt{e\_si}$      residual for the trial involving subject $s$ and item $i$   
 
 ### Step 2: Variable composition
 
@@ -112,12 +112,12 @@ Finally, we need to establish the data-generating parameters in your model. As b
 <div custom-style='Table Caption'>*Settings for all data-generating parameters.*</div>
 
 
-code                value   description                             
-------------------  ------  ----------------------------------------
-\texttt{beta\_0}    800     intercept; i.e., the grand mean         
-\texttt{beta\_1}    50      slope; i.e, effect of category          
-\texttt{omega\_0}   80      by-item random intercept sd             
-\texttt{tau\_0}     100     by-subject random intercept sd          
-\texttt{tau\_1}     40      by-subject random slope sd              
-\texttt{rho}        0.2     correlation between intercept and slope 
-\texttt{sigma}      200     residual (error) sd                     
+code                  value   description                             
+--------------------  ------  ----------------------------------------
+$\texttt{beta\_0}$    800     intercept; i.e., the grand mean         
+$\texttt{beta\_1}$    50      slope; i.e, effect of category          
+$\texttt{omega\_0}$   80      by-item random intercept sd             
+$\texttt{tau\_0}$     100     by-subject random intercept sd          
+$\texttt{tau\_1}$     40      by-subject random slope sd              
+$\texttt{rho}$        0.2     correlation between intercept and slope 
+$\texttt{sigma}$      200     residual (error) sd                     

@@ -245,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or a combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question, “power of what?”.</p>
 <div id="study-design" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Study design<a href="power-of-what.html#study-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The study design we will use as an example throughout this tutorial comes from Julian Quandt’s blogpost (<a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a>). He describes this hyopthetical research design as:</p>
+<p>The study design we will use as an example throughout this tutorial comes from Julian Quandt’s blogpost (<a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a>). He describes this as:</p>
 <blockquote>
 <p>A new hypothetical research question focused on music preference. The overarching research goal will be to - once and for all - find out whether Rock or Pop music is better. Of course, we could just ask people what they prefer, but we do not want to do that because we want a more objective measure of what is Rock and Pop (people might have different ideas about the genres). Therefore, we will have participants listen to a bunch of different songs that are either from a Spotify “best-of-pop” or “best-of-rock” playlist and have them rate the song on a evaluation scale from 0-100 points.</p>
 </blockquote>
@@ -259,7 +259,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[
 \textrm{liking}_i = \beta_0 + \beta_1 \times \textrm{genre}_i + \epsilon_i
 \]</span></p>
-<p>where <span class="math inline">\(i\)</span> stands for <code>song</code>, and we assume <span class="math inline">\(\epsilon_{i} \sim N(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average difference in the rating of songs between the two genres.</p>
+<p>where <span class="math inline">\(i\)</span> stands for <code>song</code>, and we assume <span class="math inline">\(\epsilon_{i} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average difference in the rating of songs between the two genres.</p>
 <caption>
 <span id="tab:param-def">Table 3.1: </span>
 </caption>
@@ -276,33 +276,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">$ extrm{liking}_{ij}$</td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\textrm{liking}_{ij}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{liking}\)</span></td>
 <td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
 </tr>
 <tr class="even">
-<td align="left">$ extrm{genre}_i$</td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\textrm{genre}_i\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{genre\_i}\)</span></td>
 <td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\beta_0\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_0}\)</span></td>
 <td align="left">intercept; grand mean RT</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\beta_1\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_1}\)</span></td>
 <td align="left">slope; mean effect of ingroup/outgroup</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\sigma\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
 <td align="left">standard deviation of residuals</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(e_{i}\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{e\_si}\)</span></td>
 <td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
 </tr>
 </tbody>
@@ -331,17 +331,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_0}\)</span></td>
 <td align="left">800</td>
 <td align="left">intercept; i.e., the grand mean</td>
 </tr>
 <tr class="even">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_1}\)</span></td>
 <td align="left">50</td>
 <td align="left">slope; i.e, effect of category</td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
 <td align="left">200</td>
 <td align="left">residual (error) sd</td>
 </tr>
@@ -358,7 +358,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[
 \textrm{liking}_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 \]</span></p>
-<p>where <span class="math inline">\(i\)</span> stands for <code>song</code>, <span class="math inline">\(j\)</span> for <code>participant</code>, and we assume <span class="math inline">\(\mu_{0j} \sim N(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1j} \sim N(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma)\)</span>.</p>
+<p>where <span class="math inline">\(i\)</span> stands for <code>song</code>, <span class="math inline">\(j\)</span> for <code>participant</code>, and we assume <span class="math inline">\(\mu_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>.</p>
 <caption>
 <span id="tab:param-def-mixed">Table 3.3: </span>
 </caption>
@@ -375,68 +375,68 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">$ extrm{liking}_{ij}$</td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\textrm{liking}_{ij}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{liking}\)</span></td>
 <td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
 </tr>
 <tr class="even">
-<td align="left">$ extrm{genre}_i$</td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\textrm{genre}_i\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{genre\_i}\)</span></td>
 <td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\beta_0\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_0}\)</span></td>
 <td align="left">intercept; grand mean RT</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\beta_1\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_1}\)</span></td>
 <td align="left">slope; mean effect of ingroup/outgroup</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\tau_0\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{tau\_0}\)</span></td>
 <td align="left">standard deviation of by-subject random intercepts</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\tau_1\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{tau\_1}\)</span></td>
 <td align="left">standard deviation of by-subject random slopes</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\rho\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{rho}\)</span></td>
 <td align="left">correlation between by-subject random intercepts and slopes</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\omega_0\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{omega\_0}\)</span></td>
 <td align="left">standard deviation of by-item random intercepts</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\sigma\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
 <td align="left">standard deviation of residuals</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(T_{0s}\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{T\_0s}\)</span></td>
 <td align="left">random intercept for subject <span class="math inline">\(s\)</span></td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(T_{1s}\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{T\_1s}\)</span></td>
 <td align="left">random slope for subject <span class="math inline">\(s\)</span></td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(O_{0i}\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{O\_0i}\)</span></td>
 <td align="left">random intercept for item <span class="math inline">\(i\)</span></td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(e_{si}\)</span></td>
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{e\_si}\)</span></td>
 <td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
 </tr>
 </tbody>
@@ -466,37 +466,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_0}\)</span></td>
 <td align="left">800</td>
 <td align="left">intercept; i.e., the grand mean</td>
 </tr>
 <tr class="even">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{beta\_1}\)</span></td>
 <td align="left">50</td>
 <td align="left">slope; i.e, effect of category</td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{omega\_0}\)</span></td>
 <td align="left">80</td>
 <td align="left">by-item random intercept sd</td>
 </tr>
 <tr class="even">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{tau\_0}\)</span></td>
 <td align="left">100</td>
 <td align="left">by-subject random intercept sd</td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{tau\_1}\)</span></td>
 <td align="left">40</td>
 <td align="left">by-subject random slope sd</td>
 </tr>
 <tr class="even">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{rho}\)</span></td>
 <td align="left">0.2</td>
 <td align="left">correlation between intercept and slope</td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
+<td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
 <td align="left">200</td>
 <td align="left">residual (error) sd</td>
 </tr>
