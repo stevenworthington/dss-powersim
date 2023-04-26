@@ -36,7 +36,7 @@ where the subscript $i$ denotes an individual song, `liking` is an integer-based
 
 model                 code                  description                                                
 --------------------  --------------------  -----------------------------------------------------------
-$\textrm{liking}_i$   $\texttt{liking_i}$   rating of song $i$ on interval [0, 100]                    
+$\textrm{liking}_i$   $\texttt{liking_i}$   rating of song $i$ on the interval [0, 100]                
 $\textrm{genre}_i$    $\texttt{genre_i}$    genre of song $i$ (0='pop', 1='rock')                      
 $\beta_0$             $\texttt{beta_0}$     intercept; mean of liking rating for 'pop' genre           
 $\beta_1$             $\texttt{beta_1}$     'slope'; mean difference btw 'pop' and 'rock' song ratings 
@@ -71,29 +71,29 @@ Our mixed effects model example will follow the same steps as the simple linear 
 Once again, we first write down the regression model of interest, including all variables and parameters:
 
 $$
-\textrm{liking}_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+\textrm{liking}_{ij} = \beta_0 + U_{0j} + (\beta_1 + U_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 $$
 
-where the subscript $i$ denotes an individual song and $j$ a participant, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $\mu_{0j} \sim \mathcal{N}(0, \tau_0)$, $\mu_{1j} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model. 
+where the subscript $i$ denotes an individual song and $j$ a participant, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $U_{0j} \sim \mathcal{N}(0, \tau_0)$, $U_{1j} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model. 
 
 <caption>(\#tab:param-def-mixed)</caption>
 
 <div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
 
 
-model                    code                 description                                                 
------------------------  -------------------  ------------------------------------------------------------
-$\textrm{liking}_{ij}$   $\texttt{liking}$    rating of song $i$ for participant $j$ on interval [0, 100] 
-$\textrm{genre}_i$       $\texttt{genre_i}$   genre of song $i$ (0='pop', 1='rock')                       
-$\beta_0$                $\texttt{beta_0}$    intercept; mean of liking rating for 'pop' genre            
-$\beta_1$                $\texttt{beta_1}$    slope; mean difference btw 'pop' and 'rock' song ratings    
-$\tau_0$                 $\texttt{tau_0}$     standard deviation of by-subject random intercepts          
-$\tau_1$                 $\texttt{tau_1}$     standard deviation of by-subject random slopes              
-$\rho$                   $\texttt{rho}$       correlation between by-subject random intercepts and slopes 
-$\sigma$                 $\texttt{sigma}$     standard deviation of residuals                             
-$T_{0j}$                 $\texttt{T_0j}$      random intercept for subject $j$                            
-$T_{1j}$                 $\texttt{T_1j}$      random slope for subject $j$                                
-$e_{ij}$                 $\texttt{e_ij}$      residual of song $i$ for participant $j$                    
+model                    code                   description                                                     
+-----------------------  ---------------------  ----------------------------------------------------------------
+$\textrm{liking}_{ij}$   $\texttt{liking_ij}$   rating of song $i$ for participant $j$ on the interval [0, 100] 
+$\textrm{genre}_i$       $\texttt{genre_i}$     genre of song $i$ (0='pop', 1='rock')                           
+$\beta_0$                $\texttt{beta_0}$      intercept; mean of liking rating for 'pop' genre                
+$\beta_1$                $\texttt{beta_1}$      slope; mean difference btw 'pop' and 'rock' song ratings        
+$\tau_0$                 $\texttt{tau_0}$       standard deviation of by-subject random intercepts              
+$\tau_1$                 $\texttt{tau_1}$       standard deviation of by-subject random slopes                  
+$\rho$                   $\texttt{rho}$         correlation between by-subject random intercepts and slopes     
+$\sigma$                 $\texttt{sigma}$       standard deviation of residuals                                 
+$U_{0j}$                 $\texttt{U_0j}$        random intercept for subject $j$                                
+$U_{1j}$                 $\texttt{U_1j}$        random slope for subject $j$                                    
+$e_{ij}$                 $\texttt{e_ij}$        residual of song $i$ for participant $j$                        
 
 ### Step 2: Variable composition
 

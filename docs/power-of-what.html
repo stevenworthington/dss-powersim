@@ -278,7 +278,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td align="left"><span class="math inline">\(\textrm{liking}_i\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{liking_i}\)</span></td>
-<td align="left">rating of song <span class="math inline">\(i\)</span> on interval [0, 100]</td>
+<td align="left">rating of song <span class="math inline">\(i\)</span> on the interval [0, 100]</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\textrm{genre}_i\)</span></td>
@@ -356,9 +356,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">3.3.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Once again, we first write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
-\textrm{liking}_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+\textrm{liking}_{ij} = \beta_0 + U_{0j} + (\beta_1 + U_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 \]</span></p>
-<p>where the subscript <span class="math inline">\(i\)</span> denotes an individual song and <span class="math inline">\(j\)</span> a participant, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(\mu_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
+<p>where the subscript <span class="math inline">\(i\)</span> denotes an individual song and <span class="math inline">\(j\)</span> a participant, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(U_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(U_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
 <caption>
 <span id="tab:param-def-mixed">Table 3.3: </span>
 </caption>
@@ -376,8 +376,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\textrm{liking}_{ij}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{liking}\)</span></td>
-<td align="left">rating of song <span class="math inline">\(i\)</span> for participant <span class="math inline">\(j\)</span> on interval [0, 100]</td>
+<td align="left"><span class="math inline">\(\texttt{liking_ij}\)</span></td>
+<td align="left">rating of song <span class="math inline">\(i\)</span> for participant <span class="math inline">\(j\)</span> on the interval [0, 100]</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\textrm{genre}_i\)</span></td>
@@ -415,13 +415,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">standard deviation of residuals</td>
 </tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(T_{0j}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{T_0j}\)</span></td>
+<td align="left"><span class="math inline">\(U_{0j}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{U_0j}\)</span></td>
 <td align="left">random intercept for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="even">
-<td align="left"><span class="math inline">\(T_{1j}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{T_1j}\)</span></td>
+<td align="left"><span class="math inline">\(U_{1j}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{U_1j}\)</span></td>
 <td align="left">random slope for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="odd">
