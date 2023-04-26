@@ -1,5 +1,5 @@
-tab:param-def
-tab:params-all
+tab:param-def-glm
+tab:params-all-glm
 tab:param-def-mixed
 tab:params-all-mixed
 r

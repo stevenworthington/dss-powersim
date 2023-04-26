@@ -241,27 +241,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="power-of-what" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Power of what?<a href="power-of-what.html#power-of-what" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>The first 3 steps in power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps there is an even more fundamental issue to be addressed - the power of what?</p>
-<p>What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or a combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question, “power of what?”.</p>
+<p>The initial steps of power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps, there is an even more fundamental issue to be addressed - the power of what?</p>
+<p>What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question: “power of what?”</p>
 <div id="study-design" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Study design<a href="power-of-what.html#study-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The study design we will use as an example throughout this tutorial comes from Julian Quandt’s blogpost (<a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a>). He describes this as:</p>
 <blockquote>
-<p>A new hypothetical research question focused on music preference. The overarching research goal will be to - once and for all - find out whether Rock or Pop music is better. Of course, we could just ask people what they prefer, but we do not want to do that because we want a more objective measure of what is Rock and Pop (people might have different ideas about the genres). Therefore, we will have participants listen to a bunch of different songs that are either from a Spotify “best-of-pop” or “best-of-rock” playlist and have them rate the song on a evaluation scale from 0-100 points.</p>
+<p>A new hypothetical research question focused on music preference. The overarching research goal will be to find out whether Rock or Pop music is better. Of course, we could just ask people what they prefer, but we want a more objective measure of what is Rock and Pop (people might have different ideas about the genres). Therefore, we will have participants listen to a bunch of different songs that are either from a Spotify “best-of-pop” or “best-of-rock” playlist and have them rate each song on an evaluation scale from 0-100 points.</p>
 </blockquote>
 </div>
 <div id="simple-linear-regression" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Simple linear regression<a href="power-of-what.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In the following implementations of power simulation in R, Python, and Stata, we will walk through a concrete example using a simple linear regression model, before moving to a more complicated example using a mixed effects model. While canned routines exist to calculate power for some simple general linear models, this exercise will serve to build intuition about the process of power simulation that will be helpful for the more complex case.</p>
+<p>Canned routines exist to perform power analysis for some simple general linear models (GLMs), however, using simulation to calculate power for a GLM will serve as scaffolding to build intuition about the process of conducting power simulation more generally, which will be helpful when we later move to a more complex case using a mixed effects model. While the outcome in this example is bounded on the interval [0, 100], we will not concern ourselves with the issue of using a linear model with such an outcome. Likewise, we will make no effort to address the within-subject nature of the effect of interest in the GLM example.</p>
 <div id="step-1-model-specification" class="section level3 hasAnchor" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The first step is to write down the regression model of interest, including all variables and parameters:</p>
+<p>The first step in simulation-based power analysis is to write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
 \textrm{liking}_i = \beta_0 + \beta_1 \times \textrm{genre}_i + \epsilon_i
 \]</span></p>
-<p>where <span class="math inline">\(i\)</span> stands for <code>song</code>, and we assume <span class="math inline">\(\epsilon_{i} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average difference in the rating of songs between the two genres.</p>
+<p>where the subscript <span class="math inline">\(i\)</span> denotes an individual song, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(\epsilon_{i} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average difference in the rating of songs between the two genres. Table 3.1 lists all of the variables and parameters in the model.</p>
 <caption>
-<span id="tab:param-def">Table 3.1: </span>
+<span id="tab:param-def-glm">Table 3.1: </span>
 </caption>
 <div custom-style="Table Caption">
 <em>Variables in the data-generating model and associated R code.</em>
@@ -276,24 +276,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><span class="math inline">\(\textrm{liking}_{ij}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{liking}\)</span></td>
-<td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
+<td align="left"><span class="math inline">\(\textrm{liking}_i\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{liking_i}\)</span></td>
+<td align="left">rating of song <span class="math inline">\(i\)</span> on interval [0, 100]</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\textrm{genre}_i\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{genre_i}\)</span></td>
-<td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
+<td align="left">genre of song <span class="math inline">\(i\)</span> (0=‘pop’, 1=‘rock’)</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\beta_0\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{beta_0}\)</span></td>
-<td align="left">intercept; grand mean RT</td>
+<td align="left">intercept; mean of liking rating for ‘pop’ genre</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\beta_1\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{beta_1}\)</span></td>
-<td align="left">slope; mean effect of ingroup/outgroup</td>
+<td align="left">‘slope’; mean difference btw ‘pop’ and ‘rock’ song ratings</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\sigma\)</span></td>
@@ -303,7 +303,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="even">
 <td align="left"><span class="math inline">\(e_{i}\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{e_i}\)</span></td>
-<td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
+<td align="left">residual for song <span class="math inline">\(i\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -314,9 +314,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects and use these as a starting point.</p>
+<p>Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
 <caption>
-<span id="tab:params-all">Table 3.2: </span>
+<span id="tab:params-all-glm">Table 3.2: </span>
 </caption>
 <div custom-style="Table Caption">
 <em>Settings for all data-generating parameters.</em>
@@ -332,17 +332,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\texttt{beta_0}\)</span></td>
-<td align="left">800</td>
-<td align="left">intercept; i.e., the grand mean</td>
+<td align="left">65</td>
+<td align="left">intercept; i.e., mean of liking rating for ‘pop’ genre</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\texttt{beta_1}\)</span></td>
-<td align="left">50</td>
-<td align="left">slope; i.e, effect of category</td>
+<td align="left">15</td>
+<td align="left">slope; i.e, mean difference btw ‘pop’ and ‘rock’ song ratings</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
-<td align="left">200</td>
+<td align="left">5</td>
 <td align="left">residual (error) sd</td>
 </tr>
 </tbody>
@@ -351,14 +351,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="mixed-effects-model" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Mixed effects model<a href="power-of-what.html#mixed-effects-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Our mixed effects model example will follow the same steps as the simple linear regression, but this time with data that exhibits clustering.</p>
+<p>Our mixed effects model example will follow the same steps as the simple linear regression, but this time incorporate some model machinery to account for by-subject clustering in the data.</p>
 <div id="step-1-model-specification-1" class="section level3 hasAnchor" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Once again, we first write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
 \textrm{liking}_{ij} = \beta_0 + \mu_{0j} + (\beta_1 + \mu_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 \]</span></p>
-<p>where <span class="math inline">\(i\)</span> stands for <code>song</code>, <span class="math inline">\(j\)</span> for <code>participant</code>, and we assume <span class="math inline">\(\mu_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>.</p>
+<p>where the subscript <span class="math inline">\(i\)</span> denotes an individual song and <span class="math inline">\(j\)</span> a participant, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(\mu_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(\mu_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
 <caption>
 <span id="tab:param-def-mixed">Table 3.3: </span>
 </caption>
@@ -377,22 +377,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td align="left"><span class="math inline">\(\textrm{liking}_{ij}\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{liking}\)</span></td>
-<td align="left">reaction time for subject <span class="math inline">\(s\)</span> to item <span class="math inline">\(i\)</span></td>
+<td align="left">rating of song <span class="math inline">\(i\)</span> for participant <span class="math inline">\(j\)</span> on interval [0, 100]</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\textrm{genre}_i\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{genre_i}\)</span></td>
-<td align="left">condition for item <span class="math inline">\(i\)</span> (-.5 = ingroup, .5 = outgroup)</td>
+<td align="left">genre of song <span class="math inline">\(i\)</span> (0=‘pop’, 1=‘rock’)</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\beta_0\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{beta_0}\)</span></td>
-<td align="left">intercept; grand mean RT</td>
+<td align="left">intercept; mean of liking rating for ‘pop’ genre</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\beta_1\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{beta_1}\)</span></td>
-<td align="left">slope; mean effect of ingroup/outgroup</td>
+<td align="left">slope; mean difference btw ‘pop’ and ‘rock’ song ratings</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\tau_0\)</span></td>
@@ -410,34 +410,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">correlation between by-subject random intercepts and slopes</td>
 </tr>
 <tr class="even">
-<td align="left"><span class="math inline">\(\omega_0\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{omega_0}\)</span></td>
-<td align="left">standard deviation of by-item random intercepts</td>
-</tr>
-<tr class="odd">
 <td align="left"><span class="math inline">\(\sigma\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
 <td align="left">standard deviation of residuals</td>
 </tr>
-<tr class="even">
-<td align="left"><span class="math inline">\(T_{0s}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{T_0s}\)</span></td>
-<td align="left">random intercept for subject <span class="math inline">\(s\)</span></td>
-</tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(T_{1s}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{T_1s}\)</span></td>
-<td align="left">random slope for subject <span class="math inline">\(s\)</span></td>
+<td align="left"><span class="math inline">\(T_{0j}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{T_0j}\)</span></td>
+<td align="left">random intercept for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="even">
-<td align="left"><span class="math inline">\(O_{0i}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{O_0i}\)</span></td>
-<td align="left">random intercept for item <span class="math inline">\(i\)</span></td>
+<td align="left"><span class="math inline">\(T_{1j}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{T_1j}\)</span></td>
+<td align="left">random slope for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(e_{si}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{e_si}\)</span></td>
-<td align="left">residual for the trial involving subject <span class="math inline">\(s\)</span> and item <span class="math inline">\(i\)</span></td>
+<td align="left"><span class="math inline">\(e_{ij}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{e_ij}\)</span></td>
+<td align="left">residual of song <span class="math inline">\(i\)</span> for participant <span class="math inline">\(j\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -449,7 +439,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="step-3-parameter-composition-1" class="section level3 hasAnchor" number="3.3.3">
 <h3><span class="header-section-number">3.3.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects.</p>
+<p>Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects. Table 3.4 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
 <caption>
 <span id="tab:params-all-mixed">Table 3.4: </span>
 </caption>
@@ -467,37 +457,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\texttt{beta_0}\)</span></td>
-<td align="left">800</td>
-<td align="left">intercept; i.e., the grand mean</td>
+<td align="left">65</td>
+<td align="left">intercept; i.e., mean of liking rating for ‘pop’ genre</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\texttt{beta_1}\)</span></td>
-<td align="left">50</td>
-<td align="left">slope; i.e, effect of category</td>
+<td align="left">15</td>
+<td align="left">slope; i.e, mean difference btw ‘pop’ and ‘rock’ song ratings</td>
 </tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(\texttt{omega_0}\)</span></td>
-<td align="left">80</td>
-<td align="left">by-item random intercept sd</td>
-</tr>
-<tr class="even">
 <td align="left"><span class="math inline">\(\texttt{tau_0}\)</span></td>
-<td align="left">100</td>
+<td align="left">7</td>
 <td align="left">by-subject random intercept sd</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><span class="math inline">\(\texttt{tau_1}\)</span></td>
-<td align="left">40</td>
+<td align="left">3</td>
 <td align="left">by-subject random slope sd</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><span class="math inline">\(\texttt{rho}\)</span></td>
 <td align="left">0.2</td>
 <td align="left">correlation between intercept and slope</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
-<td align="left">200</td>
+<td align="left">5</td>
 <td align="left">residual (error) sd</td>
 </tr>
 </tbody>
