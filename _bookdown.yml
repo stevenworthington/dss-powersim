@@ -8,7 +8,7 @@ rmd_files:
   - "index.Rmd"
   - "01_canned.Rmd"
   - "02_simulation.Rmd"
-  - "03_thinking.Rmd"
+  - "03_preparation.Rmd"
   - "04_R.Rmd"
   - "05_Python.Rmd"
   - "06_Stata.Rmd"

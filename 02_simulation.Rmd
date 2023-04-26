@@ -1,4 +1,5 @@
-# Power Analysis via Simulation
+
+# Simulation-Based Power Analysis
 
 For some studies, formulas may not exist to calculate sample size, such as in complex study designs or when using mixed effects models for inference. In such cases, we must rely on simulation-based power analysis. The basic idea is to simulate running the study many times and calculate the proportion of times we reject the null hypothesis. This proportion provides an estimate of power. Generating a dataset and running an analysis for the hypothesis test is part of the simulation. One thing to mention is that randomness is usually introduced into the process through the dataset generation.
 

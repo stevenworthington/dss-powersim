@@ -31,12 +31,18 @@ Here we acknowledge a few people who helped make this tutorial/workshop possible
 
 ### R
 
+DeBruine & Barr (2021) paper on using simulation to understand mixed effects models: <https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119>
+
+Julian Quandt's 4-part blog series on power analysis via simulation:
+
 1. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/>
 2. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-ii/>
 3. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iii/>
 4. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>
 
 ### Stata
+
+Chuck Huber's 4-part blog series on power analysis via simulation:
 
 1. <https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/>
 2. <https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/>

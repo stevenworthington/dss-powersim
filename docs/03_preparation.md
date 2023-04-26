@@ -1,14 +1,11 @@
 
-```{r setup, include=FALSE, echo=FALSE}
-pacman::p_load(tidyverse, papaja, knitr)
-knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, fig.height=5, fig.width=8, fig.path="figures/")
-```
+
 
 # (PART) Preparation {-}
 
 # Power of what?
 
-The first 3 steps in power simulation involve nothing more than thinking and then writing down your thoughts using a pencil and paper. But, prior to walking through these steps there is an even more fundamental issue to be addressed - the power of what?
+The first 3 steps in power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps there is an even more fundamental issue to be addressed - the power of what?
 
 What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or a combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question, "power of what?".
 
@@ -32,19 +29,19 @@ $$
 
 where $i$ stands for `song`, and we assume $\epsilon_{i} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average difference in the rating of songs between the two genres. 
 
-```{r param-def, echo=FALSE, results="asis"}
-tibble::tribble(~`model`, ~`code`, ~`description`,
-        "$\\textrm{liking}_{ij}$", "$\\texttt{liking}$", "reaction time for subject $s$ to item $i$",
-        "$\\textrm{genre}_i$", "$\\texttt{genre_i}$", "condition for item $i$ (-.5 = ingroup, .5 = outgroup)",
-        "$\\beta_0$", "$\\texttt{beta_0}$", "intercept; grand mean RT",
-        "$\\beta_1$", "$\\texttt{beta_1}$", "slope; mean effect of ingroup/outgroup", 
-        "$\\sigma$", "$\\texttt{sigma}$", "standard deviation of residuals",       
-        "$e_{i}$", "$\\texttt{e_i}$", "residual for the trial involving subject $s$ and item $i$")%>%
-  apa_table(align = c("l", "l", "l"),
-            caption = "Variables in the data-generating model and associated R code.",
-            escape = FALSE,
-            placement = "H")
-```
+<caption>(\#tab:param-def)</caption>
+
+<div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
+
+
+model                    code                 description                                               
+-----------------------  -------------------  ----------------------------------------------------------
+$\textrm{liking}_{ij}$   $\texttt{liking}$    reaction time for subject $s$ to item $i$                 
+$\textrm{genre}_i$       $\texttt{genre_i}$   condition for item $i$ (-.5 = ingroup, .5 = outgroup)     
+$\beta_0$                $\texttt{beta_0}$    intercept; grand mean RT                                  
+$\beta_1$                $\texttt{beta_1}$    slope; mean effect of ingroup/outgroup                    
+$\sigma$                 $\texttt{sigma}$     standard deviation of residuals                           
+$e_{i}$                  $\texttt{e_i}$       residual for the trial involving subject $s$ and item $i$ 
 
 ### Step 2: Variable composition
 
@@ -54,16 +51,16 @@ Once we have the model equation, we need to specify the details of the covariate
 
 Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague's, substantive expertise about the phenomenom you're studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects and use these as a starting point.
 
-```{r params-all, echo=FALSE, results="asis"}
-tibble::tribble(~`code`, ~`value`, ~`description`,
-        "$\\texttt{beta_0}$", "800", "intercept; i.e., the grand mean",
-        "$\\texttt{beta_1}$", "50", "slope; i.e, effect of category",
-        "$\\texttt{sigma}$", "200", "residual (error) sd") %>%
-  apa_table(align = c("l", "l", "l"),
-            caption = "Settings for all data-generating parameters.",
-            escape = FALSE,
-            placement = "H")
-```
+<caption>(\#tab:params-all)</caption>
+
+<div custom-style='Table Caption'>*Settings for all data-generating parameters.*</div>
+
+
+code                value   description                     
+------------------  ------  --------------------------------
+$\texttt{beta_0}$   800     intercept; i.e., the grand mean 
+$\texttt{beta_1}$   50      slope; i.e, effect of category  
+$\texttt{sigma}$    200     residual (error) sd             
 
 ## Mixed effects model
 
@@ -79,26 +76,26 @@ $$
 
 where $i$ stands for `song`, $j$ for `participant`, and we assume $\mu_{0j} \sim \mathcal{N}(0, \tau_0)$, $\mu_{1j} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. 
 
-```{r param-def-mixed, echo=FALSE, results="asis"}
-tibble::tribble(~`model`, ~`code`, ~`description`,
-        "$\\textrm{liking}_{ij}$", "$\\texttt{liking}$", "reaction time for subject $s$ to item $i$",
-        "$\\textrm{genre}_i$", "$\\texttt{genre_i}$", "condition for item $i$ (-.5 = ingroup, .5 = outgroup)",
-        "$\\beta_0$", "$\\texttt{beta_0}$", "intercept; grand mean RT",
-        "$\\beta_1$", "$\\texttt{beta_1}$", "slope; mean effect of ingroup/outgroup",
-        "$\\tau_0$", "$\\texttt{tau_0}$", "standard deviation of by-subject random intercepts",
-        "$\\tau_1$", "$\\texttt{tau_1}$", "standard deviation of by-subject random slopes",        
-        "$\\rho$", "$\\texttt{rho}$", "correlation between by-subject random intercepts and slopes",
-        "$\\omega_0$", "$\\texttt{omega_0}$", "standard deviation of by-item random intercepts",
-        "$\\sigma$", "$\\texttt{sigma}$", "standard deviation of residuals",
-        "$T_{0s}$", "$\\texttt{T_0s}$", "random intercept for subject $s$",
-        "$T_{1s}$", "$\\texttt{T_1s}$", "random slope for subject $s$",
-        "$O_{0i}$", "$\\texttt{O_0i}$", "random intercept for item $i$",
-        "$e_{si}$", "$\\texttt{e_si}$", "residual for the trial involving subject $s$ and item $i$") %>%
-  apa_table(align = c("l", "l", "l"),
-            caption = "Variables in the data-generating model and associated R code.",
-            escape = FALSE,
-            placement = "H")
-```
+<caption>(\#tab:param-def-mixed)</caption>
+
+<div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
+
+
+model                    code                 description                                                 
+-----------------------  -------------------  ------------------------------------------------------------
+$\textrm{liking}_{ij}$   $\texttt{liking}$    reaction time for subject $s$ to item $i$                   
+$\textrm{genre}_i$       $\texttt{genre_i}$   condition for item $i$ (-.5 = ingroup, .5 = outgroup)       
+$\beta_0$                $\texttt{beta_0}$    intercept; grand mean RT                                    
+$\beta_1$                $\texttt{beta_1}$    slope; mean effect of ingroup/outgroup                      
+$\tau_0$                 $\texttt{tau_0}$     standard deviation of by-subject random intercepts          
+$\tau_1$                 $\texttt{tau_1}$     standard deviation of by-subject random slopes              
+$\rho$                   $\texttt{rho}$       correlation between by-subject random intercepts and slopes 
+$\omega_0$               $\texttt{omega_0}$   standard deviation of by-item random intercepts             
+$\sigma$                 $\texttt{sigma}$     standard deviation of residuals                             
+$T_{0s}$                 $\texttt{T_0s}$      random intercept for subject $s$                            
+$T_{1s}$                 $\texttt{T_1s}$      random slope for subject $s$                                
+$O_{0i}$                 $\texttt{O_0i}$      random intercept for item $i$                               
+$e_{si}$                 $\texttt{e_si}$      residual for the trial involving subject $s$ and item $i$   
 
 ### Step 2: Variable composition
 
@@ -110,17 +107,17 @@ Let's assume that we will measure the children's weight every 4 months for 4 yea
 
 Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you're studying or by referencing the literature for studies that report similar effects.
 
-```{r params-all-mixed, echo=FALSE, results="asis"}
-tibble::tribble(~`code`, ~`value`, ~`description`,
-        "$\\texttt{beta_0}$", "800", "intercept; i.e., the grand mean",
-        "$\\texttt{beta_1}$", "50", "slope; i.e, effect of category",
-        "$\\texttt{omega_0}$", "80", "by-item random intercept sd",
-        "$\\texttt{tau_0}$", "100", "by-subject random intercept sd",
-        "$\\texttt{tau_1}$", "40", "by-subject random slope sd",
-        "$\\texttt{rho}$", "0.2", "correlation between intercept and slope",
-        "$\\texttt{sigma}$", "200", "residual (error) sd") %>%
-  apa_table(align = c("l", "l", "l"),
-            caption = "Settings for all data-generating parameters.",
-            escape = FALSE,
-            placement = "H")
-```
+<caption>(\#tab:params-all-mixed)</caption>
+
+<div custom-style='Table Caption'>*Settings for all data-generating parameters.*</div>
+
+
+code                 value   description                             
+-------------------  ------  ----------------------------------------
+$\texttt{beta_0}$    800     intercept; i.e., the grand mean         
+$\texttt{beta_1}$    50      slope; i.e, effect of category          
+$\texttt{omega_0}$   80      by-item random intercept sd             
+$\texttt{tau_0}$     100     by-subject random intercept sd          
+$\texttt{tau_1}$     40      by-subject random slope sd              
+$\texttt{rho}$       0.2     correlation between intercept and slope 
+$\texttt{sigma}$     200     residual (error) sd                     

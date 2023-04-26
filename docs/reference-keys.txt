@@ -7,7 +7,7 @@ stata
 power-analysis
 canned-routines
 step-by-step
-power-analysis-via-simulation
+simulation-based-power-analysis-1
 step-by-step-1
 power-of-what
 study-design

@@ -3,6 +3,10 @@
 
 # Power Analysis
 
+<div class="alert alert-success">
+Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting the null hypothesis when it is false.
+</div>
+
 ## Canned routines
 
 In some research designs, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.
