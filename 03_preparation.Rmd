@@ -41,7 +41,7 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
         "$\\sigma$", "$\\texttt{sigma}$", "standard deviation of residuals",       
         "$e_{i}$", "$\\texttt{e_i}$", "residual for song $i$") %>%
   apa_table(align = c("l", "l", "l"),
-            caption = "Variables in the data-generating model and associated R code.",
+            caption = "Variables in the data-generating model and associated code-based names.",
             escape = FALSE,
             placement = "H")
 ```
@@ -93,7 +93,7 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
         "$U_{1j}$", "$\\texttt{U_1j}$", "random slope for subject $j$",
         "$e_{ij}$", "$\\texttt{e_ij}$", "residual of song $i$ for participant $j$") %>%
   apa_table(align = c("l", "l", "l"),
-            caption = "Variables in the data-generating model and associated R code.",
+            caption = "Variables in the data-generating model and associated code-based names.",
             escape = FALSE,
             placement = "H")
 ```

@@ -31,7 +31,7 @@ where the subscript $i$ denotes an individual song, `liking` is an integer-based
 
 <caption>(\#tab:param-def-glm)</caption>
 
-<div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
+<div custom-style='Table Caption'>*Variables in the data-generating model and associated code-based names.*</div>
 
 
 model                 code                  description                                                
@@ -78,7 +78,7 @@ where the subscript $i$ denotes an individual song and $j$ a participant, `likin
 
 <caption>(\#tab:param-def-mixed)</caption>
 
-<div custom-style='Table Caption'>*Variables in the data-generating model and associated R code.*</div>
+<div custom-style='Table Caption'>*Variables in the data-generating model and associated code-based names.*</div>
 
 
 model                    code                   description                                                     
