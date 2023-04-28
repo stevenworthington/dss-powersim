@@ -5,7 +5,7 @@ tab:params-all-mixed
 power-analysis
 canned-routines
 step-by-step
-simulation-based-power-analysis
+simulation-based-power-analysis-1
 step-by-step-1
 power-of-what
 study-design
