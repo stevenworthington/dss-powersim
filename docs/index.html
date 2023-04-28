@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>powersim</title>
+  <title>Simulation-Based Power Analysis</title>
   <meta name="description" content="This is a tutorial for power simulation" />
   <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="powersim" />
+  <meta property="og:title" content="Simulation-Based Power Analysis" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
   <meta name="github-repo" content="IQSS/dss-powersim" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="powersim" />
+  <meta name="twitter:title" content="Simulation-Based Power Analysis" />
   
   <meta name="twitter:description" content="This is a tutorial for power simulation" />
   
@@ -135,9 +135,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Power Simulation</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Simulation-Based Power Analysis</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Table of Contents</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#table-of-contents"><i class="fa fa-check"></i>Table of Contents</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i>Contributors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i>Sources</a>
 <ul>
@@ -151,9 +150,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="power-analysis.html"><a href="power-analysis.html#canned-routines"><i class="fa fa-check"></i><b>1.1</b> Canned routines</a></li>
 <li class="chapter" data-level="1.2" data-path="power-analysis.html"><a href="power-analysis.html#step-by-step"><i class="fa fa-check"></i><b>1.2</b> Step by step</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="simulation-based-power-analysis-1.html"><a href="simulation-based-power-analysis-1.html"><i class="fa fa-check"></i><b>2</b> Simulation-Based Power Analysis</a>
+<li class="chapter" data-level="2" data-path="simulation-based-power-analysis.html"><a href="simulation-based-power-analysis.html"><i class="fa fa-check"></i><b>2</b> Simulation-Based Power Analysis</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="simulation-based-power-analysis-1.html"><a href="simulation-based-power-analysis-1.html#step-by-step-1"><i class="fa fa-check"></i><b>2.1</b> Step by step</a></li>
+<li class="chapter" data-level="2.1" data-path="simulation-based-power-analysis.html"><a href="simulation-based-power-analysis.html#step-by-step-1"><i class="fa fa-check"></i><b>2.1</b> Step by step</a></li>
 </ul></li>
 <li class="part"><span><b>II Preparation</b></span></li>
 <li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of what?</a>
@@ -232,7 +231,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">powersim</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation-Based Power Analysis</a>
           </h1>
         </div>
 
@@ -241,17 +240,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">powersim</h1>
+<h1 class="title">Simulation-Based Power Analysis</h1>
 <p class="author"><em></em></p>
 <p class="date"><em>April 2023</em></p>
 </div>
-<div id="simulation-based-power-analysis" class="section level1 unnumbered hasAnchor">
-<h1>Simulation-Based Power Analysis<a href="index.html#simulation-based-power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses, particularly with mixed effects models in mind. It is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.</p>
-<p>While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages <a href="https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html"><code>{simr}</code></a>, <a href="https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html"><code>{longpower}</code></a>, and <a href="https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html"><code>{simglm}</code></a>), such packages abstract away the details of the simulations and thus are best used after gaining an understanding of the simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models.</p>
-<p>We are always grateful for any feedback you are willing to provide! Please email <a href="mailto:help@iq.harvard.edu" class="email">help@iq.harvard.edu</a></p>
-<div id="table-of-contents" class="section level2 unnumbered hasAnchor">
-<h2>Table of Contents<a href="index.html#table-of-contents" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="table-of-contents" class="section level1 unnumbered hasAnchor">
+<h1>Table of Contents<a href="index.html#table-of-contents" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <ol style="list-style-type: decimal">
 <li><a href="./power-analysis.html">Canned Power Analysis</a></li>
 <li><a href="./simulation-based-power-analysis.html">Simulation-based Power Analysis</a></li>
@@ -260,14 +254,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./python.html">Python Examples</a></li>
 <li><a href="./stata-1.html">Stata Examples</a></li>
 </ol>
-</div>
 <div id="contributors" class="section level2 unnumbered hasAnchor">
 <h2>Contributors<a href="index.html#contributors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The contents of these workshops are the result of a collaborative effort from members of the <a href="http://dss.iq.harvard.edu">Data Science Services</a> team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.</p>
 </div>
 <div id="sources" class="section level2 unnumbered hasAnchor">
 <h2>Sources<a href="index.html#sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We would like to acknowledge some excellent on-line and peer-reviewed material about power simulation that we have borrowed from librally.</p>
+<p>We would like to acknowledge some excellent online and peer-reviewed material about power simulation that we have borrowed from liberally in the tutorial.</p>
 <div id="r" class="section level3 unnumbered hasAnchor">
 <h3>R<a href="index.html#r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>

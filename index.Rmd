@@ -1,5 +1,5 @@
 ---
-title: "powersim"
+title: "Simulation-Based Power Analysis"
 author: ""
 date: "`r format(Sys.Date(), '%B %Y')`"
 description: "This is a tutorial for power simulation"
@@ -11,15 +11,14 @@ biblio-style: apalike
 link-citations: yes
 ---
 
-# Simulation-Based Power Analysis {-}
 
-This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses, particularly with mixed effects models in mind. It is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.
+This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses in R, Python, and Stata. We focus particularly on power for mixed effects models, but the principles employed can be repurposed for any model and study design. The tutorial is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.
 
-While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages [`{simr}`](https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html), [`{longpower}`](https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html), and [`{simglm}`](https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html)), such packages abstract away the details of the simulations and thus are best used after gaining an understanding of the simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models.
+While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages [`{simr}`](https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html), [`{longpower}`](https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html), and [`{simglm}`](https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html)), such packages abstract away the details of conducting simulations and thus are best used after gaining an understanding of the simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models.
 
-We are always grateful for any feedback you are willing to provide! Please email <help@iq.harvard.edu>
+We are always grateful for any feedback you are willing to provide about the tutorial! Please email <help@iq.harvard.edu>
 
-## Table of Contents {-}
+# Table of Contents {-}
 
 1. [Canned Power Analysis](./power-analysis.html)
 2. [Simulation-based Power Analysis](./simulation-based-power-analysis.html)
@@ -34,7 +33,7 @@ The contents of these workshops are the result of a collaborative effort from me
 
 ## Sources {-}
 
-We would like to acknowledge some excellent on-line and peer-reviewed material about power simulation that we have borrowed from librally.
+We would like to acknowledge some excellent online and peer-reviewed material about power simulation that we have borrowed from liberally in the tutorial.
 
 ### R {-}
 
