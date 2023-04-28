@@ -15,9 +15,9 @@ link-citations: yes
 
 This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses in R, Python, and Stata. We focus particularly on power for mixed effects models, but the principles employed can be repurposed for any model and study design. The tutorial is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.
 
-While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages [`{simr}`](https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html), [`{longpower}`](https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html), and [`{simglm}`](https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html)), such packages abstract away the details of conducting simulations and thus are best used after gaining an understanding of the simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models.
+While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages [`{simr}`](https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html), [`{longpower}`](https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html), and [`{simglm}`](https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html)), such packages abstract away the details of conducting simulations and thus are best used after gaining an understanding of the power simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models - and it's fun!
 
-We are always grateful for any feedback you are willing to provide about the tutorial! Please email <help@iq.harvard.edu>
+We are always grateful for any feedback you are willing to provide about our tutorials! Please email <help@iq.harvard.edu> with any thoughts.
 
 ## Table of Contents {-}
 
@@ -28,31 +28,8 @@ We are always grateful for any feedback you are willing to provide about the tut
 5. [Python Examples](./python.html)
 6. [Stata Examples](./stata-1.html)
 
+![](images/Ultimate_Power_Vol_1_5_Textless.webp)
+
 ## Contributors {-}
 
 The contents of these workshops are the result of a collaborative effort from members of the [Data Science Services](http://dss.iq.harvard.edu) team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.
-
-## Sources {-}
-
-We would like to acknowledge some excellent online and peer-reviewed material about power simulation that we have borrowed from liberally in the tutorial.
-
-### R {-}
-
-- DeBruine & Barr (2021) paper on using simulation to understand mixed effects models: <https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119>
-
-
-Julian Quandt's 4-part blog series on power analysis via simulation:
-
-1. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/>
-2. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-ii/>
-3. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iii/>
-4. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>
-
-### Stata {-}
-
-Chuck Huber's 4-part blog series on power analysis via simulation:
-
-1. <https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/>
-2. <https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/>
-3. <https://blog.stata.com/2019/08/13/calculating-power-using-monte-carlo-simulations-part-3-linear-and-logistic-regression/>
-4. <https://blog.stata.com/2019/08/20/calculating-power-using-monte-carlo-simulations-part-4-multilevel-longitudinal-models/>

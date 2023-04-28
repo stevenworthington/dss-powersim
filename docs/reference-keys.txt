@@ -17,7 +17,7 @@ mixed-effects-model
 step-1-model-specification-1
 step-2-variable-composition-1
 step-3-parameter-composition-1
-r-1
+r
 simple-linear-regression-1
 setup
 steps-4-5-simulate-and-automate
@@ -35,7 +35,7 @@ mixed-effects-model-2
 step-4-simulate-1
 step-5-automate-1
 step-6-summarize-3
-stata-1
+stata
 simple-linear-regression-3
 setup-2
 step-4-simulate-2
@@ -46,3 +46,4 @@ setup-3
 step-4-simulate-3
 step-5-automate-3
 step-6-summarize-5
+software-comparison

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Simulation-Based Power Analysis | dss-powersim</title>
+  <title>Resources | dss-powersim</title>
   <meta name="description" content="This is a tutorial for power simulation" />
   <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Simulation-Based Power Analysis | dss-powersim" />
+  <meta property="og:title" content="Resources | dss-powersim" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a tutorial for power simulation" />
   <meta name="github-repo" content="IQSS/dss-powersim" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Simulation-Based Power Analysis | dss-powersim" />
+  <meta name="twitter:title" content="Resources | dss-powersim" />
   
   <meta name="twitter:description" content="This is a tutorial for power simulation" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="software-comparison.html"/>
 
-<link rel="next" href="power-analysis.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -242,41 +242,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<!--bookdown:title:end-->
-<!--bookdown:title:start-->
-<div id="simulation-based-power-analysis" class="section level1 unnumbered hasAnchor">
-<h1>Simulation-Based Power Analysis<a href="index.html#simulation-based-power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses in R, Python, and Stata. We focus particularly on power for mixed effects models, but the principles employed can be repurposed for any model and study design. The tutorial is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.</p>
-<p>While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages <a href="https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html"><code>{simr}</code></a>, <a href="https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html"><code>{longpower}</code></a>, and <a href="https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html"><code>{simglm}</code></a>), such packages abstract away the details of conducting simulations and thus are best used after gaining an understanding of the power simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models - and it’s fun!</p>
-<p>We are always grateful for any feedback you are willing to provide about our tutorials! Please email <a href="mailto:help@iq.harvard.edu" class="email">help@iq.harvard.edu</a> with any thoughts.</p>
-<div id="table-of-contents" class="section level2 unnumbered hasAnchor">
-<h2>Table of Contents<a href="index.html#table-of-contents" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="resources" class="section level1 unnumbered hasAnchor">
+<h1>Resources<a href="resources.html#resources" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>We would like to acknowledge some excellent online and peer-reviewed material about power simulation and mixed effects models, which we have borrowed from liberally in the tutorial.</p>
+<div id="r-1" class="section level3 unnumbered hasAnchor">
+<h3>R<a href="resources.html#r-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>DeBruine &amp; Barr (2021) paper on using simulation to understand mixed effects models: <a href="https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119" class="uri">https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119</a></li>
+</ul>
+<p>Julian Quandt’s 4-part blog series on power analysis via simulation:</p>
 <ol style="list-style-type: decimal">
-<li><a href="./power-analysis.html">Canned Power Analysis</a></li>
-<li><a href="./simulation-based-power-analysis-1.html">Simulation-based Power Analysis</a></li>
-<li><a href="./power-of-what.html">Power of What?</a></li>
-<li><a href="./r-1.html">R Examples</a></li>
-<li><a href="./python.html">Python Examples</a></li>
-<li><a href="./stata-1.html">Stata Examples</a></li>
+<li><a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/</a></li>
+<li><a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-ii/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-ii/</a></li>
+<li><a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iii/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iii/</a></li>
+<li><a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a></li>
 </ol>
-<p><img src="images/Ultimate_Power_Vol_1_5_Textless.webp" /></p>
 </div>
-<div id="contributors" class="section level2 unnumbered hasAnchor">
-<h2>Contributors<a href="index.html#contributors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The contents of these workshops are the result of a collaborative effort from members of the <a href="http://dss.iq.harvard.edu">Data Science Services</a> team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.</p>
+<div id="stata-1" class="section level3 unnumbered hasAnchor">
+<h3>Stata<a href="resources.html#stata-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Chuck Huber’s 4-part blog series on power analysis via simulation:</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/" class="uri">https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/</a></li>
+<li><a href="https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/" class="uri">https://blog.stata.com/2019/01/29/calculating-power-using-monte-carlo-simulations-part-2-running-your-simulation-using-power/</a></li>
+<li><a href="https://blog.stata.com/2019/08/13/calculating-power-using-monte-carlo-simulations-part-3-linear-and-logistic-regression/" class="uri">https://blog.stata.com/2019/08/13/calculating-power-using-monte-carlo-simulations-part-3-linear-and-logistic-regression/</a></li>
+<li><a href="https://blog.stata.com/2019/08/20/calculating-power-using-monte-carlo-simulations-part-4-multilevel-longitudinal-models/" class="uri">https://blog.stata.com/2019/08/20/calculating-power-using-monte-carlo-simulations-part-4-multilevel-longitudinal-models/</a></li>
+</ol>
 
 </div>
 </div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
+<a href="software-comparison.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="power-analysis.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -307,7 +307,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/IQSS/dss-powersim/edit/master/index.Rmd",
+"link": "https://github.com/IQSS/dss-powersim/edit/master/08_resources.Rmd",
 "text": "Edit"
 },
 "history": {
