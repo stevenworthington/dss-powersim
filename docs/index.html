@@ -138,10 +138,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Simulation-Based Power Analysis</a>
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#table-of-contents"><i class="fa fa-check"></i>Table of Contents</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors-and-sources"><i class="fa fa-check"></i>Authors and Sources</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributors"><i class="fa fa-check"></i>Contributors</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i>Sources</a>
 <ul>
-<li class="chapter" data-level="0.0.1" data-path="index.html"><a href="index.html#r"><i class="fa fa-check"></i><b>0.0.1</b> R</a></li>
-<li class="chapter" data-level="0.0.2" data-path="index.html"><a href="index.html#stata"><i class="fa fa-check"></i><b>0.0.2</b> Stata</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#r"><i class="fa fa-check"></i>R</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#stata"><i class="fa fa-check"></i>Stata</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>I Concepts</b></span></li>
@@ -246,23 +247,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="simulation-based-power-analysis" class="section level1 unnumbered hasAnchor">
 <h1>Simulation-Based Power Analysis<a href="index.html#simulation-based-power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses, particularly with mixed effects models in mind. It is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.</p>
+<p>While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages <a href="https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html"><code>{simr}</code></a>, <a href="https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html"><code>{longpower}</code></a>, and <a href="https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html"><code>{simglm}</code></a>), such packages abstract away the details of the simulations and thus are best used after gaining an understanding of the simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models.</p>
+<p>We are always grateful for any feedback you are willing to provide! Please email <a href="mailto:help@iq.harvard.edu" class="email">help@iq.harvard.edu</a></p>
 <div id="table-of-contents" class="section level2 unnumbered hasAnchor">
 <h2>Table of Contents<a href="index.html#table-of-contents" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Here, we outline how the guide is organized into parts.</p>
 <ol style="list-style-type: decimal">
-<li>First, we…</li>
-<li>Second, we…</li>
-<li>Lastly, we…</li>
+<li><a href="./power-analysis.html">Canned Power Analysis</a></li>
+<li><a href="./simulation-based-power-analysis.html">Simulation-based Power Analysis</a></li>
+<li><a href="./power-of-what.html">Power of What?</a></li>
+<li><a href="./r-1.html">R Examples</a></li>
+<li><a href="./python.html">Python Examples</a></li>
+<li><a href="./stata-1.html">Stata Examples</a></li>
 </ol>
-<p><a href="https://www.rstudio.com/wp-content/uploads/2015/03/devtools-cheatsheet.pdf">Here we provide an outside link to important content</a> which puts some useful information for this tutorial/workshop at our fingertips.</p>
-<p>Here we specify where people can provide feedback! Please email <a href="mailto:help@iq.harvard.edu" class="email">help@iq.harvard.edu</a></p>
 </div>
-<div id="authors-and-sources" class="section level2 unnumbered hasAnchor">
-<h2>Authors and Sources<a href="index.html#authors-and-sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Here we acknowledge a few people who helped make this tutorial/workshop possible. We also reference any sources that material was taken from.</p>
-<div id="r" class="section level3 hasAnchor" number="0.0.1">
-<h3><span class="header-section-number">0.0.1</span> R<a href="index.html#r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>DeBruine &amp; Barr (2021) paper on using simulation to understand mixed effects models: <a href="https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119" class="uri">https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119</a></p>
+<div id="contributors" class="section level2 unnumbered hasAnchor">
+<h2>Contributors<a href="index.html#contributors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The contents of these workshops are the result of a collaborative effort from members of the <a href="http://dss.iq.harvard.edu">Data Science Services</a> team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.</p>
+</div>
+<div id="sources" class="section level2 unnumbered hasAnchor">
+<h2>Sources<a href="index.html#sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We would like to acknowledge some excellent on-line and peer-reviewed material about power simulation that we have borrowed from librally.</p>
+<div id="r" class="section level3 unnumbered hasAnchor">
+<h3>R<a href="index.html#r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>DeBruine &amp; Barr (2021) paper on using simulation to understand mixed effects models: <a href="https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119" class="uri">https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119</a></li>
+</ul>
 <p>Julian Quandt’s 4-part blog series on power analysis via simulation:</p>
 <ol style="list-style-type: decimal">
 <li><a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/</a></li>
@@ -271,8 +281,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a></li>
 </ol>
 </div>
-<div id="stata" class="section level3 hasAnchor" number="0.0.2">
-<h3><span class="header-section-number">0.0.2</span> Stata<a href="index.html#stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="stata" class="section level3 unnumbered hasAnchor">
+<h3>Stata<a href="index.html#stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Chuck Huber’s 4-part blog series on power analysis via simulation:</p>
 <ol style="list-style-type: decimal">
 <li><a href="https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/" class="uri">https://blog.stata.com/2019/01/10/calculating-power-using-monte-carlo-simulations-part-1-the-basics/</a></li>

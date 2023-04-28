@@ -13,25 +13,33 @@ link-citations: yes
 
 # Simulation-Based Power Analysis {-}
 
+This tutorial is designed to be a quick-start guide for conducting simulation-based power analyses, particularly with mixed effects models in mind. It is suitable for anyone with a intermediate understanding of mixed effects models and coding in either R, Python, or Stata.
+
+While high-level packages exist in some of these languages for conducting power analysis (e.g., the R packages [`{simr}`](https://cran.r-project.org/web/packages/simr/vignettes/fromscratch.html), [`{longpower}`](https://cran.r-project.org/web/packages/longpower/vignettes/longpower.html), and [`{simglm}`](https://cran.r-project.org/web/packages/simglm/vignettes/tidy_simulation.html)), such packages abstract away the details of the simulations and thus are best used after gaining an understanding of the simulation process. In addition, rolling your own simulations from scratch provides much more flexibility to tackle different study designs and models.
+
+We are always grateful for any feedback you are willing to provide! Please email <help@iq.harvard.edu>
+
 ## Table of Contents {-}
 
-Here, we outline how the guide is organized into parts.
+1. [Canned Power Analysis](./power-analysis.html)
+2. [Simulation-based Power Analysis](./simulation-based-power-analysis.html)
+3. [Power of What?](./power-of-what.html)
+4. [R Examples](./r-1.html)
+5. [Python Examples](./python.html)
+6. [Stata Examples](./stata-1.html)
 
-1. First, we...
-2. Second, we...
-3. Lastly, we...
+## Contributors {-}
 
-[Here we provide an outside link to important content](https://www.rstudio.com/wp-content/uploads/2015/03/devtools-cheatsheet.pdf) which puts some useful information for this tutorial/workshop at our fingertips.
+The contents of these workshops are the result of a collaborative effort from members of the [Data Science Services](http://dss.iq.harvard.edu) team at the Institute for Quantitative Social Science at Harvard University. The main contributors are Steve Worthington and Dan Yuan, with additional feedback from Jinjie Liu and Noah Greifer.
 
-Here we specify where people can provide feedback! Please email help@iq.harvard.edu
+## Sources {-}
 
-## Authors and Sources {-}
+We would like to acknowledge some excellent on-line and peer-reviewed material about power simulation that we have borrowed from librally.
 
-Here we acknowledge a few people who helped make this tutorial/workshop possible. We also reference any sources that material was taken from.
+### R {-}
 
-### R
+- DeBruine & Barr (2021) paper on using simulation to understand mixed effects models: <https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119>
 
-DeBruine & Barr (2021) paper on using simulation to understand mixed effects models: <https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119>
 
 Julian Quandt's 4-part blog series on power analysis via simulation:
 
@@ -40,7 +48,7 @@ Julian Quandt's 4-part blog series on power analysis via simulation:
 3. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iii/>
 4. <https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/>
 
-### Stata
+### Stata {-}
 
 Chuck Huber's 4-part blog series on power analysis via simulation:
 

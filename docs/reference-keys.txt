@@ -2,8 +2,6 @@ tab:param-def-glm
 tab:params-all-glm
 tab:param-def-mixed
 tab:params-all-mixed
-r
-stata
 power-analysis
 canned-routines
 step-by-step
