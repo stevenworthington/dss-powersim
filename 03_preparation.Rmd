@@ -48,7 +48,9 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
 
 ### Step 2: Variable composition
 
-Once we have the model equation, we need to specify the details of the covariates, such as the range of `age` or the proportion of females (`sex`). For example, the range of `age` might encompass the full range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].
+Once we have the model equation, we need to specify the details of the explanatory variables. In our model, we only have a single binary predictor, so the only decision to make is which coding scheme to use: dummy coding or zero sum coding. Here, we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres. 
+
+In many other situations, we might include variables such as age and sex in the model. In which case we would need to determine reasonable settings for the range of age and the proportion of females to males. For example, the range of age might encompass the full possible range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females to males could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].
 
 ### Step 3: Parameter composition
 
@@ -100,9 +102,7 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
 
 ### Step 2: Variable composition
 
-We also need to think about the covariates in our model. This is a longitudinal study, so we need to specify the starting `age`, the length of time between measurements, and the total number of measurements. We also need to consider the proportion of males and females in our study. Are we likely to sample 50% females and 50% males?
-
-Let's assume that we will measure the children's weight every 4 months for 4 years beginning at age 10. Also, let's assume that the sample will be 50% female. The interaction term (`age\*female`) is easy to calculate once we create variables for `age` and `female`. 
+We also need to think about the explanatory variables in our model. Since we only have a single binary predictor, we just need to decide which coding scheme to use: dummy coding or zero sum coding. Here, we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres.
 
 ### Step 3: Parameter composition
 

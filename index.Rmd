@@ -28,7 +28,10 @@ We are always grateful for any feedback you are willing to provide about our tut
 5. [Python Examples](./python.html)
 6. [Stata Examples](./stata-1.html)
 
-![](images/Ultimate_Power_Vol_1_5_Textless.webp)
+` `  
+` `  
+
+![](images/Ultimate_Power_Vol_1_5_Textless.png)
 
 ## Contributors {-}
 

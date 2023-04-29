@@ -1,7 +1,7 @@
 
 # Resources {-}
 
-We would like to acknowledge some excellent online and peer-reviewed material about power simulation and mixed effects models, which we have borrowed from liberally in the tutorial.
+We would like to acknowledge some excellent online and peer-reviewed material about power simulation and mixed effects models, which we have borrowed from liberally in the tutorial. These resouces represent an excellent next step in your exploration of simulation-based power analysis.
 
 ### R {-}
 
