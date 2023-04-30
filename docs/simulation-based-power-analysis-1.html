@@ -148,7 +148,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2" data-path="simulation-based-power-analysis-1.html"><a href="simulation-based-power-analysis-1.html"><i class="fa fa-check"></i><b>2</b> Simulation-Based Power Analysis</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="simulation-based-power-analysis-1.html"><a href="simulation-based-power-analysis-1.html#step-by-step-1"><i class="fa fa-check"></i><b>2.1</b> Step by step</a></li>
+<li class="chapter" data-level="2.1" data-path="simulation-based-power-analysis-1.html"><a href="simulation-based-power-analysis-1.html#customization"><i class="fa fa-check"></i><b>2.1</b> Customization</a></li>
+<li class="chapter" data-level="2.2" data-path="simulation-based-power-analysis-1.html"><a href="simulation-based-power-analysis-1.html#step-by-step-1"><i class="fa fa-check"></i><b>2.2</b> Step by step</a></li>
 </ul></li>
 <li class="part"><span><b>II Preparation</b></span></li>
 <li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of what?</a>
@@ -244,23 +245,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="simulation-based-power-analysis-1" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">2</span> Simulation-Based Power Analysis<a href="simulation-based-power-analysis-1.html#simulation-based-power-analysis-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>For some studies, formulas may not exist to calculate sample size, such as in complex study designs or when using mixed effects models for inference. In such cases, we must rely on simulation-based power analysis. The basic idea is to simulate running the study many times and calculate the proportion of times we reject the null hypothesis. This proportion provides an estimate of power. Generating a dataset and running an analysis for the hypothesis test is part of the simulation. One thing to mention is that randomness is usually introduced into the process through the dataset generation.</p>
-<p>For example, say the fixed power level is 95%, and you want to calculate the sample size using this level. You can take a “guess and check” method. With this method, firstly, you choose a sample size <span class="math inline">\(n_1\)</span> and run the simulation to estimate your power. If power is estimated to be lower than 95%, you need to select a new value <span class="math inline">\(n_2\)</span> that is larger than <span class="math inline">\(n_1\)</span> running the simulation again. Multiple procedures are repeated until the estimated power is roughly 95%.</p>
-<p>As the example shows in the previous section, for several basic statistical tests, we can use Stata’s <code>power</code> command to calculate power and/or sample size. For more complicated analyses, however, such as those involving mixed effects models, we need to use a simulation-based approach. In these scenarios, we usually use the following procedures to perform power analysis:</p>
-<div id="step-by-step-1" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Step by step<a href="simulation-based-power-analysis-1.html#step-by-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="customization" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Customization<a href="simulation-based-power-analysis-1.html#customization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Formulas often do not exist to calculate power for the effect of interest and therefore canned functions/programs/macros may not be available. For some studies, such as those involving complex study designs or those using mixed effects models for inference, we must therefore rely on simulation to provide a means of customizing estimates of power for our current situation.</p>
+<p>The basic idea is to simulate running our study many times and calculate the proportion of times we reject the null hypothesis. This proportion provides an estimate of power. Generating a dataset and running an analysis for the hypothesis test is part of the simulation. Randomness is introduced into the process during dataset generation.</p>
+<p>For example, say the desired power level is 90%, and you want to calculate the sample size required to obtain this level of power. We could use the “guess sample size and check power” method. Firstly, choose a sample size <span class="math inline">\(n_1\)</span> and run the simulation to estimate power. If power is estimated to be lower than 90%, select a new value <span class="math inline">\(n_2\)</span> that is larger than <span class="math inline">\(n_1\)</span> and run the simulation again. Simulation runs are repeated until the estimated power is roughly 90%.</p>
+</div>
+<div id="step-by-step-1" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Step by step<a href="simulation-based-power-analysis-1.html#step-by-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are two broad steps involved in conducting simulation-based power analysis: thinking and implementing.</p>
 <ul>
 <li>Think
 <ol style="list-style-type: decimal">
 <li><strong>Model specification:</strong> Write down the regression model, including all variables and parameters of interest.</li>
-<li><strong>Variable composition:</strong> Specify the details of the covariates, such as the range of age or the proportion of females.</li>
+<li><strong>Variable composition:</strong> Specify the form of the explanatory variables, such as the range of age, proportion of females/males, or the coding scheme used for categorical terms.</li>
 <li><strong>Parameter composition:</strong> Establish reasonable values for the data-generating parameters in your model.</li>
 </ol></li>
-<li>Act
+<li>Implement
 <ol start="4" style="list-style-type: decimal">
-<li><strong>Simulate:</strong> Simulate the sampling process for a single dataset, assuming the alternative hypothesis, and fit the model.</li>
-<li><strong>Automate:</strong> Write a function/program/macro to create the datasets, fit the models, test the hypotheses of interest, and calculate power. The function/program/macro should allow for iterating power calculations over a grid of parameter values.</li>
-<li><strong>Summarize:</strong> Summarize the output in tables and figures.</li>
+<li><strong>Simulate:</strong> Simulate the sampling process for a single dataset, assuming the alternative hypothesis, and fit the model of interest.</li>
+<li><strong>Automate:</strong> Write a function/program/macro to automate the process of creating datasets, fitting models, testing the hypothesis of interest, and calculating power. The function/program/macro should be flexible enough to allow for iterating power calculations over a grid of different parameter values.</li>
+<li><strong>Summarize:</strong> Summarize the relationships between power, sample size, and effect size in tables and figures.</li>
 </ol></li>
 </ul>
 

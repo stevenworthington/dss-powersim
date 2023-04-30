@@ -6,6 +6,7 @@ power-analysis
 canned-routines
 step-by-step
 simulation-based-power-analysis-1
+customization
 step-by-step-1
 power-of-what
 study-design
