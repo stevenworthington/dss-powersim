@@ -152,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="simulation.html"><a href="simulation.html#step-by-step-1"><i class="fa fa-check"></i><b>2.2</b> Step by step</a></li>
 </ul></li>
 <li class="part"><span><b>II Preparation</b></span></li>
-<li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of what?</a>
+<li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of What?</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="power-of-what.html"><a href="power-of-what.html#study-design"><i class="fa fa-check"></i><b>3.1</b> Study design</a></li>
 <li class="chapter" data-level="3.2" data-path="power-of-what.html"><a href="power-of-what.html#simple-linear-regression"><i class="fa fa-check"></i><b>3.2</b> Simple linear regression</a>
@@ -250,86 +250,86 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="setup" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Setup<a href="r.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The main library we will use is <code>stats</code> and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="r.html#cb2-1" tabindex="-1"></a><span class="co"># install.packages(&quot;pacman&quot;)</span></span>
-<span id="cb2-2"><a href="r.html#cb2-2" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
-<span id="cb2-3"><a href="r.html#cb2-3" tabindex="-1"></a>  lme4,        <span class="co"># model specification / estimation</span></span>
-<span id="cb2-4"><a href="r.html#cb2-4" tabindex="-1"></a>  lmtest,</span>
-<span id="cb2-5"><a href="r.html#cb2-5" tabindex="-1"></a>  afex,        <span class="co"># anova and deriving p-values from lmer</span></span>
-<span id="cb2-6"><a href="r.html#cb2-6" tabindex="-1"></a>  broom.mixed, <span class="co"># extracting tidy data from model fits </span></span>
-<span id="cb2-7"><a href="r.html#cb2-7" tabindex="-1"></a>  tidyverse,   <span class="co"># data wrangling and visualisation</span></span>
-<span id="cb2-8"><a href="r.html#cb2-8" tabindex="-1"></a>  gt           <span class="co"># nice tables</span></span>
-<span id="cb2-9"><a href="r.html#cb2-9" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="r.html#cb3-1" tabindex="-1"></a><span class="co"># install.packages(&quot;pacman&quot;)</span></span>
+<span id="cb3-2"><a href="r.html#cb3-2" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb3-3"><a href="r.html#cb3-3" tabindex="-1"></a>  lme4,        <span class="co"># model specification / estimation</span></span>
+<span id="cb3-4"><a href="r.html#cb3-4" tabindex="-1"></a>  lmtest,</span>
+<span id="cb3-5"><a href="r.html#cb3-5" tabindex="-1"></a>  afex,        <span class="co"># anova and deriving p-values from lmer</span></span>
+<span id="cb3-6"><a href="r.html#cb3-6" tabindex="-1"></a>  broom.mixed, <span class="co"># extracting tidy data from model fits </span></span>
+<span id="cb3-7"><a href="r.html#cb3-7" tabindex="-1"></a>  tidyverse,   <span class="co"># data wrangling and visualisation</span></span>
+<span id="cb3-8"><a href="r.html#cb3-8" tabindex="-1"></a>  gt           <span class="co"># nice tables</span></span>
+<span id="cb3-9"><a href="r.html#cb3-9" tabindex="-1"></a>  )</span></code></pre></div>
 <p>We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="r.html#cb3-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">02138</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="r.html#cb4-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">02138</span>)</span></code></pre></div>
 </div>
 <div id="steps-4-5-simulate-and-automate" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Steps 4-5: Simulate and automate<a href="r.html#steps-4-5-simulate-and-automate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, let’s write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="r.html#cb4-1" tabindex="-1"></a>sample_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>)</span>
-<span id="cb4-2"><a href="r.html#cb4-2" tabindex="-1"></a>interact_coef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.25</span>, <span class="fl">0.3</span>, <span class="fl">0.35</span>, <span class="fl">0.4</span>)</span>
-<span id="cb4-3"><a href="r.html#cb4-3" tabindex="-1"></a>repeats <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
-<span id="cb4-4"><a href="r.html#cb4-4" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="r.html#cb4-5" tabindex="-1"></a>power_list <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sample_n=</span><span class="fu">double</span>(), </span>
-<span id="cb4-6"><a href="r.html#cb4-6" tabindex="-1"></a>                         <span class="at">interact_coef=</span><span class="fu">double</span>(), </span>
-<span id="cb4-7"><a href="r.html#cb4-7" tabindex="-1"></a>                         <span class="at">power=</span><span class="fu">double</span>()</span>
-<span id="cb4-8"><a href="r.html#cb4-8" tabindex="-1"></a>                         )[<span class="sc">-</span><span class="dv">1</span>, ]</span>
-<span id="cb4-9"><a href="r.html#cb4-9" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="r.html#cb4-10" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> sample_n) {</span>
-<span id="cb4-11"><a href="r.html#cb4-11" tabindex="-1"></a>  </span>
-<span id="cb4-12"><a href="r.html#cb4-12" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> interact_coef){</span>
-<span id="cb4-13"><a href="r.html#cb4-13" tabindex="-1"></a>    </span>
-<span id="cb4-14"><a href="r.html#cb4-14" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb4-15"><a href="r.html#cb4-15" tabindex="-1"></a>    </span>
-<span id="cb4-16"><a href="r.html#cb4-16" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> repeats){</span>
-<span id="cb4-17"><a href="r.html#cb4-17" tabindex="-1"></a>      </span>
-<span id="cb4-18"><a href="r.html#cb4-18" tabindex="-1"></a>      age <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fu">runif</span>(s, <span class="dv">18</span>, <span class="dv">65</span>))</span>
-<span id="cb4-19"><a href="r.html#cb4-19" tabindex="-1"></a>      female <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(s, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
-<span id="cb4-20"><a href="r.html#cb4-20" tabindex="-1"></a>      interact <span class="ot">&lt;-</span> age <span class="sc">*</span> female</span>
-<span id="cb4-21"><a href="r.html#cb4-21" tabindex="-1"></a>      e <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="dv">20</span>)</span>
-<span id="cb4-22"><a href="r.html#cb4-22" tabindex="-1"></a>      sbp <span class="ot">&lt;-</span> <span class="dv">110</span> <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>age <span class="sc">+</span> (<span class="sc">-</span><span class="dv">20</span>)<span class="sc">*</span>female <span class="sc">+</span> i<span class="sc">*</span>interact <span class="sc">+</span> e</span>
-<span id="cb4-23"><a href="r.html#cb4-23" tabindex="-1"></a>      dataset <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(sbp, age, female, interact)</span>
-<span id="cb4-24"><a href="r.html#cb4-24" tabindex="-1"></a>      </span>
-<span id="cb4-25"><a href="r.html#cb4-25" tabindex="-1"></a>      full_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> interact, <span class="at">data=</span>dataset)</span>
-<span id="cb4-26"><a href="r.html#cb4-26" tabindex="-1"></a>      reduced_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> age <span class="sc">+</span> female, <span class="at">data=</span>dataset)</span>
-<span id="cb4-27"><a href="r.html#cb4-27" tabindex="-1"></a>      prob <span class="ot">&lt;-</span> <span class="fu">lrtest</span>(full_model, reduced_model)<span class="sc">$</span>Pr[<span class="dv">2</span>]</span>
-<span id="cb4-28"><a href="r.html#cb4-28" tabindex="-1"></a>      reject <span class="ot">&lt;-</span> <span class="fu">ifelse</span>((prob<span class="sc">&lt;=</span><span class="fl">0.05</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb4-29"><a href="r.html#cb4-29" tabindex="-1"></a>      </span>
-<span id="cb4-30"><a href="r.html#cb4-30" tabindex="-1"></a>      results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, reject)</span>
-<span id="cb4-31"><a href="r.html#cb4-31" tabindex="-1"></a>      </span>
-<span id="cb4-32"><a href="r.html#cb4-32" tabindex="-1"></a>    }</span>
-<span id="cb4-33"><a href="r.html#cb4-33" tabindex="-1"></a>    </span>
-<span id="cb4-34"><a href="r.html#cb4-34" tabindex="-1"></a>    power_list <span class="ot">&lt;-</span> <span class="fu">rbind</span>(power_list, </span>
-<span id="cb4-35"><a href="r.html#cb4-35" tabindex="-1"></a>                        <span class="fu">data.frame</span>(<span class="at">sample_n=</span>s, </span>
-<span id="cb4-36"><a href="r.html#cb4-36" tabindex="-1"></a>                                   <span class="at">interact_coef=</span>i, </span>
-<span id="cb4-37"><a href="r.html#cb4-37" tabindex="-1"></a>                                   <span class="at">power=</span><span class="fu">mean</span>(results)</span>
-<span id="cb4-38"><a href="r.html#cb4-38" tabindex="-1"></a>                                   )</span>
-<span id="cb4-39"><a href="r.html#cb4-39" tabindex="-1"></a>                        )</span>
-<span id="cb4-40"><a href="r.html#cb4-40" tabindex="-1"></a>    </span>
-<span id="cb4-41"><a href="r.html#cb4-41" tabindex="-1"></a>  }  </span>
-<span id="cb4-42"><a href="r.html#cb4-42" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="r.html#cb5-1" tabindex="-1"></a>sample_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>)</span>
+<span id="cb5-2"><a href="r.html#cb5-2" tabindex="-1"></a>interact_coef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.25</span>, <span class="fl">0.3</span>, <span class="fl">0.35</span>, <span class="fl">0.4</span>)</span>
+<span id="cb5-3"><a href="r.html#cb5-3" tabindex="-1"></a>repeats <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
+<span id="cb5-4"><a href="r.html#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="r.html#cb5-5" tabindex="-1"></a>power_list <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sample_n=</span><span class="fu">double</span>(), </span>
+<span id="cb5-6"><a href="r.html#cb5-6" tabindex="-1"></a>                         <span class="at">interact_coef=</span><span class="fu">double</span>(), </span>
+<span id="cb5-7"><a href="r.html#cb5-7" tabindex="-1"></a>                         <span class="at">power=</span><span class="fu">double</span>()</span>
+<span id="cb5-8"><a href="r.html#cb5-8" tabindex="-1"></a>                         )[<span class="sc">-</span><span class="dv">1</span>, ]</span>
+<span id="cb5-9"><a href="r.html#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="r.html#cb5-10" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> sample_n) {</span>
+<span id="cb5-11"><a href="r.html#cb5-11" tabindex="-1"></a>  </span>
+<span id="cb5-12"><a href="r.html#cb5-12" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> interact_coef){</span>
+<span id="cb5-13"><a href="r.html#cb5-13" tabindex="-1"></a>    </span>
+<span id="cb5-14"><a href="r.html#cb5-14" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb5-15"><a href="r.html#cb5-15" tabindex="-1"></a>    </span>
+<span id="cb5-16"><a href="r.html#cb5-16" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> repeats){</span>
+<span id="cb5-17"><a href="r.html#cb5-17" tabindex="-1"></a>      </span>
+<span id="cb5-18"><a href="r.html#cb5-18" tabindex="-1"></a>      age <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fu">runif</span>(s, <span class="dv">18</span>, <span class="dv">65</span>))</span>
+<span id="cb5-19"><a href="r.html#cb5-19" tabindex="-1"></a>      female <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(s, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb5-20"><a href="r.html#cb5-20" tabindex="-1"></a>      interact <span class="ot">&lt;-</span> age <span class="sc">*</span> female</span>
+<span id="cb5-21"><a href="r.html#cb5-21" tabindex="-1"></a>      e <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb5-22"><a href="r.html#cb5-22" tabindex="-1"></a>      sbp <span class="ot">&lt;-</span> <span class="dv">110</span> <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>age <span class="sc">+</span> (<span class="sc">-</span><span class="dv">20</span>)<span class="sc">*</span>female <span class="sc">+</span> i<span class="sc">*</span>interact <span class="sc">+</span> e</span>
+<span id="cb5-23"><a href="r.html#cb5-23" tabindex="-1"></a>      dataset <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(sbp, age, female, interact)</span>
+<span id="cb5-24"><a href="r.html#cb5-24" tabindex="-1"></a>      </span>
+<span id="cb5-25"><a href="r.html#cb5-25" tabindex="-1"></a>      full_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> interact, <span class="at">data=</span>dataset)</span>
+<span id="cb5-26"><a href="r.html#cb5-26" tabindex="-1"></a>      reduced_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> age <span class="sc">+</span> female, <span class="at">data=</span>dataset)</span>
+<span id="cb5-27"><a href="r.html#cb5-27" tabindex="-1"></a>      prob <span class="ot">&lt;-</span> <span class="fu">lrtest</span>(full_model, reduced_model)<span class="sc">$</span>Pr[<span class="dv">2</span>]</span>
+<span id="cb5-28"><a href="r.html#cb5-28" tabindex="-1"></a>      reject <span class="ot">&lt;-</span> <span class="fu">ifelse</span>((prob<span class="sc">&lt;=</span><span class="fl">0.05</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb5-29"><a href="r.html#cb5-29" tabindex="-1"></a>      </span>
+<span id="cb5-30"><a href="r.html#cb5-30" tabindex="-1"></a>      results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, reject)</span>
+<span id="cb5-31"><a href="r.html#cb5-31" tabindex="-1"></a>      </span>
+<span id="cb5-32"><a href="r.html#cb5-32" tabindex="-1"></a>    }</span>
+<span id="cb5-33"><a href="r.html#cb5-33" tabindex="-1"></a>    </span>
+<span id="cb5-34"><a href="r.html#cb5-34" tabindex="-1"></a>    power_list <span class="ot">&lt;-</span> <span class="fu">rbind</span>(power_list, </span>
+<span id="cb5-35"><a href="r.html#cb5-35" tabindex="-1"></a>                        <span class="fu">data.frame</span>(<span class="at">sample_n=</span>s, </span>
+<span id="cb5-36"><a href="r.html#cb5-36" tabindex="-1"></a>                                   <span class="at">interact_coef=</span>i, </span>
+<span id="cb5-37"><a href="r.html#cb5-37" tabindex="-1"></a>                                   <span class="at">power=</span><span class="fu">mean</span>(results)</span>
+<span id="cb5-38"><a href="r.html#cb5-38" tabindex="-1"></a>                                   )</span>
+<span id="cb5-39"><a href="r.html#cb5-39" tabindex="-1"></a>                        )</span>
+<span id="cb5-40"><a href="r.html#cb5-40" tabindex="-1"></a>    </span>
+<span id="cb5-41"><a href="r.html#cb5-41" tabindex="-1"></a>  }  </span>
+<span id="cb5-42"><a href="r.html#cb5-42" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="step-6-summarize" class="section level3 hasAnchor" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Step 6: Summarize<a href="r.html#step-6-summarize" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here’s the table from the simulation.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="r.html#cb5-1" tabindex="-1"></a>power_list <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="r.html#cb5-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="r.html#cb5-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title=</span><span class="st">&quot;Power values for GLM&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="r.html#cb5-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
-<span id="cb5-5"><a href="r.html#cb5-5" tabindex="-1"></a>    <span class="at">columns=</span>power,</span>
-<span id="cb5-6"><a href="r.html#cb5-6" tabindex="-1"></a>    <span class="at">colors=</span>scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
-<span id="cb5-7"><a href="r.html#cb5-7" tabindex="-1"></a>      <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
-<span id="cb5-8"><a href="r.html#cb5-8" tabindex="-1"></a>      <span class="at">domain=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb5-9"><a href="r.html#cb5-9" tabindex="-1"></a>      )</span>
-<span id="cb5-10"><a href="r.html#cb5-10" tabindex="-1"></a>  )</span></code></pre></div>
-<p>Here’s the graph from the simulation.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="r.html#cb6-1" tabindex="-1"></a>power_list <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="r.html#cb6-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_n =</span> <span class="fu">factor</span>(sample_n)) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="r.html#cb6-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>interact_coef, <span class="at">y=</span>power, </span>
-<span id="cb6-4"><a href="r.html#cb6-4" tabindex="-1"></a>             <span class="at">group=</span>sample_n, <span class="at">color=</span>sample_n)) <span class="sc">+</span> </span>
-<span id="cb6-5"><a href="r.html#cb6-5" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb6-6"><a href="r.html#cb6-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb6-7"><a href="r.html#cb6-7" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="r.html#cb6-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<span id="cb6-2"><a href="r.html#cb6-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="r.html#cb6-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title=</span><span class="st">&quot;Power values for GLM&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="r.html#cb6-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb6-5"><a href="r.html#cb6-5" tabindex="-1"></a>    <span class="at">columns=</span>power,</span>
+<span id="cb6-6"><a href="r.html#cb6-6" tabindex="-1"></a>    <span class="at">colors=</span>scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb6-7"><a href="r.html#cb6-7" tabindex="-1"></a>      <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb6-8"><a href="r.html#cb6-8" tabindex="-1"></a>      <span class="at">domain=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb6-9"><a href="r.html#cb6-9" tabindex="-1"></a>      )</span>
+<span id="cb6-10"><a href="r.html#cb6-10" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Here’s the graph from the simulation.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r.html#cb7-1" tabindex="-1"></a>power_list <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="r.html#cb7-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_n =</span> <span class="fu">factor</span>(sample_n)) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="r.html#cb7-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>interact_coef, <span class="at">y=</span>power, </span>
+<span id="cb7-4"><a href="r.html#cb7-4" tabindex="-1"></a>             <span class="at">group=</span>sample_n, <span class="at">color=</span>sample_n)) <span class="sc">+</span> </span>
+<span id="cb7-5"><a href="r.html#cb7-5" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb7-6"><a href="r.html#cb7-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb7-7"><a href="r.html#cb7-7" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="r.html#cb7-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 </div>
 </div>
 <div id="mixed-effects-model-1" class="section level2 hasAnchor" number="4.2">
@@ -338,87 +338,87 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-4-5-simulate-automate" class="section level3 hasAnchor" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Step 4-5: Simulate &amp; automate<a href="r.html#step-4-5-simulate-automate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, let’s write a function that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses a for loop to run many iterations of the function.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r.html#cb7-1" tabindex="-1"></a>sample_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>)</span>
-<span id="cb7-2"><a href="r.html#cb7-2" tabindex="-1"></a>obs_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)</span>
-<span id="cb7-3"><a href="r.html#cb7-3" tabindex="-1"></a>reps_n <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
-<span id="cb7-4"><a href="r.html#cb7-4" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="r.html#cb7-5" tabindex="-1"></a>power_list_mixed <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">obs=</span><span class="fu">integer</span>(), </span>
-<span id="cb7-6"><a href="r.html#cb7-6" tabindex="-1"></a>                               <span class="at">sample=</span><span class="fu">integer</span>(), </span>
-<span id="cb7-7"><a href="r.html#cb7-7" tabindex="-1"></a>                               <span class="at">power=</span><span class="fu">double</span>()</span>
-<span id="cb7-8"><a href="r.html#cb7-8" tabindex="-1"></a>                               )</span>
-<span id="cb7-9"><a href="r.html#cb7-9" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="r.html#cb7-10" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> sample_n){</span>
-<span id="cb7-11"><a href="r.html#cb7-11" tabindex="-1"></a>  </span>
-<span id="cb7-12"><a href="r.html#cb7-12" tabindex="-1"></a>  <span class="cf">for</span> (o <span class="cf">in</span> obs_n){</span>
-<span id="cb7-13"><a href="r.html#cb7-13" tabindex="-1"></a>    </span>
-<span id="cb7-14"><a href="r.html#cb7-14" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb7-15"><a href="r.html#cb7-15" tabindex="-1"></a>    </span>
-<span id="cb7-16"><a href="r.html#cb7-16" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> reps_n){</span>
-<span id="cb7-17"><a href="r.html#cb7-17" tabindex="-1"></a>      </span>
-<span id="cb7-18"><a href="r.html#cb7-18" tabindex="-1"></a>      <span class="fu">data.frame</span>(</span>
-<span id="cb7-19"><a href="r.html#cb7-19" tabindex="-1"></a>        <span class="at">child =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span>s), </span>
-<span id="cb7-20"><a href="r.html#cb7-20" tabindex="-1"></a>        <span class="at">female =</span> <span class="fu">rbinom</span>(s, <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
-<span id="cb7-21"><a href="r.html#cb7-21" tabindex="-1"></a>        <span class="at">u_0i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">0.8</span>),</span>
-<span id="cb7-22"><a href="r.html#cb7-22" tabindex="-1"></a>        <span class="at">u_1i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">1.7</span>)</span>
-<span id="cb7-23"><a href="r.html#cb7-23" tabindex="-1"></a>        ) <span class="ot">-&gt;</span></span>
-<span id="cb7-24"><a href="r.html#cb7-24" tabindex="-1"></a>      data_set</span>
-<span id="cb7-25"><a href="r.html#cb7-25" tabindex="-1"></a>      </span>
-<span id="cb7-26"><a href="r.html#cb7-26" tabindex="-1"></a>      data_set_expand <span class="ot">&lt;-</span> data_set[<span class="fu">rep</span>(<span class="fu">seq</span>(<span class="fu">nrow</span>(data_set)), o), <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
-<span id="cb7-27"><a href="r.html#cb7-27" tabindex="-1"></a></span>
-<span id="cb7-28"><a href="r.html#cb7-28" tabindex="-1"></a>      age <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb7-29"><a href="r.html#cb7-29" tabindex="-1"></a>      <span class="cf">for</span> (obser <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">0</span>, (o<span class="dv">-1</span>)<span class="sc">*</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)){</span>
-<span id="cb7-30"><a href="r.html#cb7-30" tabindex="-1"></a>        age <span class="ot">&lt;-</span> <span class="fu">c</span>(age, <span class="fu">rep</span>(obser, s))</span>
-<span id="cb7-31"><a href="r.html#cb7-31" tabindex="-1"></a>      }</span>
-<span id="cb7-32"><a href="r.html#cb7-32" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="r.html#cb7-33" tabindex="-1"></a>      data_set_expand <span class="sc">|&gt;</span></span>
-<span id="cb7-34"><a href="r.html#cb7-34" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">age =</span> age,</span>
-<span id="cb7-35"><a href="r.html#cb7-35" tabindex="-1"></a>               <span class="at">e_ij =</span> <span class="fu">rnorm</span>(s<span class="sc">*</span>o, <span class="dv">0</span>, <span class="fl">1.35</span>),</span>
-<span id="cb7-36"><a href="r.html#cb7-36" tabindex="-1"></a>               <span class="at">interact =</span> age <span class="sc">*</span> female,</span>
-<span id="cb7-37"><a href="r.html#cb7-37" tabindex="-1"></a>               <span class="at">weight =</span> <span class="fl">5.35</span> <span class="sc">+</span> <span class="fl">2.1</span><span class="sc">*</span>age <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.35</span>)<span class="sc">*</span>female <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.55</span>)<span class="sc">*</span>interact <span class="sc">+</span> u_0i <span class="sc">+</span> age<span class="sc">*</span>u_1i <span class="sc">+</span> e_ij</span>
-<span id="cb7-38"><a href="r.html#cb7-38" tabindex="-1"></a>               ) <span class="ot">-&gt;</span></span>
-<span id="cb7-39"><a href="r.html#cb7-39" tabindex="-1"></a>      data_set_expand</span>
-<span id="cb7-40"><a href="r.html#cb7-40" tabindex="-1"></a></span>
-<span id="cb7-41"><a href="r.html#cb7-41" tabindex="-1"></a>      full_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> interact <span class="sc">+</span> (age <span class="sc">||</span> child), </span>
-<span id="cb7-42"><a href="r.html#cb7-42" tabindex="-1"></a>                         <span class="at">data=</span>data_set_expand)</span>
-<span id="cb7-43"><a href="r.html#cb7-43" tabindex="-1"></a>      reduced_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> (age <span class="sc">||</span> child), </span>
-<span id="cb7-44"><a href="r.html#cb7-44" tabindex="-1"></a>                            <span class="at">data=</span>data_set_expand)</span>
-<span id="cb7-45"><a href="r.html#cb7-45" tabindex="-1"></a>      prob <span class="ot">&lt;-</span> <span class="fu">lrtest</span>(full_model, reduced_model)<span class="sc">$</span>Pr[<span class="dv">2</span>]</span>
-<span id="cb7-46"><a href="r.html#cb7-46" tabindex="-1"></a>      reject <span class="ot">&lt;-</span> <span class="fu">ifelse</span>((prob<span class="sc">&lt;=</span><span class="fl">0.05</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb7-47"><a href="r.html#cb7-47" tabindex="-1"></a>      results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, reject)     </span>
-<span id="cb7-48"><a href="r.html#cb7-48" tabindex="-1"></a>    }</span>
-<span id="cb7-49"><a href="r.html#cb7-49" tabindex="-1"></a>    </span>
-<span id="cb7-50"><a href="r.html#cb7-50" tabindex="-1"></a>    power_list_mixed <span class="ot">&lt;-</span> <span class="fu">rbind</span>(power_list_mixed, </span>
-<span id="cb7-51"><a href="r.html#cb7-51" tabindex="-1"></a>                              <span class="fu">data.frame</span>(<span class="at">obs=</span>o, </span>
-<span id="cb7-52"><a href="r.html#cb7-52" tabindex="-1"></a>                                         <span class="at">sample=</span>s, </span>
-<span id="cb7-53"><a href="r.html#cb7-53" tabindex="-1"></a>                                         <span class="at">power=</span><span class="fu">mean</span>(results)</span>
-<span id="cb7-54"><a href="r.html#cb7-54" tabindex="-1"></a>                                         )</span>
-<span id="cb7-55"><a href="r.html#cb7-55" tabindex="-1"></a>                              )</span>
-<span id="cb7-56"><a href="r.html#cb7-56" tabindex="-1"></a>    </span>
-<span id="cb7-57"><a href="r.html#cb7-57" tabindex="-1"></a>  }</span>
-<span id="cb7-58"><a href="r.html#cb7-58" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="r.html#cb8-1" tabindex="-1"></a>sample_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>)</span>
+<span id="cb8-2"><a href="r.html#cb8-2" tabindex="-1"></a>obs_n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)</span>
+<span id="cb8-3"><a href="r.html#cb8-3" tabindex="-1"></a>reps_n <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb8-4"><a href="r.html#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="r.html#cb8-5" tabindex="-1"></a>power_list_mixed <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">obs=</span><span class="fu">integer</span>(), </span>
+<span id="cb8-6"><a href="r.html#cb8-6" tabindex="-1"></a>                               <span class="at">sample=</span><span class="fu">integer</span>(), </span>
+<span id="cb8-7"><a href="r.html#cb8-7" tabindex="-1"></a>                               <span class="at">power=</span><span class="fu">double</span>()</span>
+<span id="cb8-8"><a href="r.html#cb8-8" tabindex="-1"></a>                               )</span>
+<span id="cb8-9"><a href="r.html#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="r.html#cb8-10" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> sample_n){</span>
+<span id="cb8-11"><a href="r.html#cb8-11" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="r.html#cb8-12" tabindex="-1"></a>  <span class="cf">for</span> (o <span class="cf">in</span> obs_n){</span>
+<span id="cb8-13"><a href="r.html#cb8-13" tabindex="-1"></a>    </span>
+<span id="cb8-14"><a href="r.html#cb8-14" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb8-15"><a href="r.html#cb8-15" tabindex="-1"></a>    </span>
+<span id="cb8-16"><a href="r.html#cb8-16" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> reps_n){</span>
+<span id="cb8-17"><a href="r.html#cb8-17" tabindex="-1"></a>      </span>
+<span id="cb8-18"><a href="r.html#cb8-18" tabindex="-1"></a>      <span class="fu">data.frame</span>(</span>
+<span id="cb8-19"><a href="r.html#cb8-19" tabindex="-1"></a>        <span class="at">child =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span>s), </span>
+<span id="cb8-20"><a href="r.html#cb8-20" tabindex="-1"></a>        <span class="at">female =</span> <span class="fu">rbinom</span>(s, <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
+<span id="cb8-21"><a href="r.html#cb8-21" tabindex="-1"></a>        <span class="at">u_0i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">0.8</span>),</span>
+<span id="cb8-22"><a href="r.html#cb8-22" tabindex="-1"></a>        <span class="at">u_1i =</span> <span class="fu">rnorm</span>(s, <span class="dv">0</span>, <span class="fl">1.7</span>)</span>
+<span id="cb8-23"><a href="r.html#cb8-23" tabindex="-1"></a>        ) <span class="ot">-&gt;</span></span>
+<span id="cb8-24"><a href="r.html#cb8-24" tabindex="-1"></a>      data_set</span>
+<span id="cb8-25"><a href="r.html#cb8-25" tabindex="-1"></a>      </span>
+<span id="cb8-26"><a href="r.html#cb8-26" tabindex="-1"></a>      data_set_expand <span class="ot">&lt;-</span> data_set[<span class="fu">rep</span>(<span class="fu">seq</span>(<span class="fu">nrow</span>(data_set)), o), <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb8-27"><a href="r.html#cb8-27" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="r.html#cb8-28" tabindex="-1"></a>      age <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb8-29"><a href="r.html#cb8-29" tabindex="-1"></a>      <span class="cf">for</span> (obser <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">0</span>, (o<span class="dv">-1</span>)<span class="sc">*</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)){</span>
+<span id="cb8-30"><a href="r.html#cb8-30" tabindex="-1"></a>        age <span class="ot">&lt;-</span> <span class="fu">c</span>(age, <span class="fu">rep</span>(obser, s))</span>
+<span id="cb8-31"><a href="r.html#cb8-31" tabindex="-1"></a>      }</span>
+<span id="cb8-32"><a href="r.html#cb8-32" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="r.html#cb8-33" tabindex="-1"></a>      data_set_expand <span class="sc">|&gt;</span></span>
+<span id="cb8-34"><a href="r.html#cb8-34" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">age =</span> age,</span>
+<span id="cb8-35"><a href="r.html#cb8-35" tabindex="-1"></a>               <span class="at">e_ij =</span> <span class="fu">rnorm</span>(s<span class="sc">*</span>o, <span class="dv">0</span>, <span class="fl">1.35</span>),</span>
+<span id="cb8-36"><a href="r.html#cb8-36" tabindex="-1"></a>               <span class="at">interact =</span> age <span class="sc">*</span> female,</span>
+<span id="cb8-37"><a href="r.html#cb8-37" tabindex="-1"></a>               <span class="at">weight =</span> <span class="fl">5.35</span> <span class="sc">+</span> <span class="fl">2.1</span><span class="sc">*</span>age <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.35</span>)<span class="sc">*</span>female <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.55</span>)<span class="sc">*</span>interact <span class="sc">+</span> u_0i <span class="sc">+</span> age<span class="sc">*</span>u_1i <span class="sc">+</span> e_ij</span>
+<span id="cb8-38"><a href="r.html#cb8-38" tabindex="-1"></a>               ) <span class="ot">-&gt;</span></span>
+<span id="cb8-39"><a href="r.html#cb8-39" tabindex="-1"></a>      data_set_expand</span>
+<span id="cb8-40"><a href="r.html#cb8-40" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="r.html#cb8-41" tabindex="-1"></a>      full_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> interact <span class="sc">+</span> (age <span class="sc">||</span> child), </span>
+<span id="cb8-42"><a href="r.html#cb8-42" tabindex="-1"></a>                         <span class="at">data=</span>data_set_expand)</span>
+<span id="cb8-43"><a href="r.html#cb8-43" tabindex="-1"></a>      reduced_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> age <span class="sc">+</span> female <span class="sc">+</span> (age <span class="sc">||</span> child), </span>
+<span id="cb8-44"><a href="r.html#cb8-44" tabindex="-1"></a>                            <span class="at">data=</span>data_set_expand)</span>
+<span id="cb8-45"><a href="r.html#cb8-45" tabindex="-1"></a>      prob <span class="ot">&lt;-</span> <span class="fu">lrtest</span>(full_model, reduced_model)<span class="sc">$</span>Pr[<span class="dv">2</span>]</span>
+<span id="cb8-46"><a href="r.html#cb8-46" tabindex="-1"></a>      reject <span class="ot">&lt;-</span> <span class="fu">ifelse</span>((prob<span class="sc">&lt;=</span><span class="fl">0.05</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-47"><a href="r.html#cb8-47" tabindex="-1"></a>      results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results, reject)     </span>
+<span id="cb8-48"><a href="r.html#cb8-48" tabindex="-1"></a>    }</span>
+<span id="cb8-49"><a href="r.html#cb8-49" tabindex="-1"></a>    </span>
+<span id="cb8-50"><a href="r.html#cb8-50" tabindex="-1"></a>    power_list_mixed <span class="ot">&lt;-</span> <span class="fu">rbind</span>(power_list_mixed, </span>
+<span id="cb8-51"><a href="r.html#cb8-51" tabindex="-1"></a>                              <span class="fu">data.frame</span>(<span class="at">obs=</span>o, </span>
+<span id="cb8-52"><a href="r.html#cb8-52" tabindex="-1"></a>                                         <span class="at">sample=</span>s, </span>
+<span id="cb8-53"><a href="r.html#cb8-53" tabindex="-1"></a>                                         <span class="at">power=</span><span class="fu">mean</span>(results)</span>
+<span id="cb8-54"><a href="r.html#cb8-54" tabindex="-1"></a>                                         )</span>
+<span id="cb8-55"><a href="r.html#cb8-55" tabindex="-1"></a>                              )</span>
+<span id="cb8-56"><a href="r.html#cb8-56" tabindex="-1"></a>    </span>
+<span id="cb8-57"><a href="r.html#cb8-57" tabindex="-1"></a>  }</span>
+<span id="cb8-58"><a href="r.html#cb8-58" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="step-6-summarize-1" class="section level3 hasAnchor" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Step 6: Summarize<a href="r.html#step-6-summarize-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The table for the mixed effects model.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="r.html#cb8-1" tabindex="-1"></a>power_list_mixed <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="r.html#cb8-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="r.html#cb8-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title=</span><span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="r.html#cb8-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
-<span id="cb8-5"><a href="r.html#cb8-5" tabindex="-1"></a>    <span class="at">columns=</span>power,</span>
-<span id="cb8-6"><a href="r.html#cb8-6" tabindex="-1"></a>    <span class="at">colors=</span>scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
-<span id="cb8-7"><a href="r.html#cb8-7" tabindex="-1"></a>      <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
-<span id="cb8-8"><a href="r.html#cb8-8" tabindex="-1"></a>      <span class="at">domain=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb8-9"><a href="r.html#cb8-9" tabindex="-1"></a>      )</span>
-<span id="cb8-10"><a href="r.html#cb8-10" tabindex="-1"></a>  )</span></code></pre></div>
-<p>The graph of the simulation result for mixed effects model.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="r.html#cb9-1" tabindex="-1"></a>power_list_mixed <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="r.html#cb9-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="fu">factor</span>(obs)) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="r.html#cb9-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sample, <span class="at">y=</span>power, </span>
-<span id="cb9-4"><a href="r.html#cb9-4" tabindex="-1"></a>             <span class="at">group=</span>obs, <span class="at">color=</span>obs)) <span class="sc">+</span> </span>
-<span id="cb9-5"><a href="r.html#cb9-5" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb9-6"><a href="r.html#cb9-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb9-7"><a href="r.html#cb9-7" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="r.html#cb9-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<span id="cb9-2"><a href="r.html#cb9-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="r.html#cb9-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title=</span><span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="r.html#cb9-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb9-5"><a href="r.html#cb9-5" tabindex="-1"></a>    <span class="at">columns=</span>power,</span>
+<span id="cb9-6"><a href="r.html#cb9-6" tabindex="-1"></a>    <span class="at">colors=</span>scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb9-7"><a href="r.html#cb9-7" tabindex="-1"></a>      <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb9-8"><a href="r.html#cb9-8" tabindex="-1"></a>      <span class="at">domain=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb9-9"><a href="r.html#cb9-9" tabindex="-1"></a>      )</span>
+<span id="cb9-10"><a href="r.html#cb9-10" tabindex="-1"></a>  )</span></code></pre></div>
+<p>The graph of the simulation result for mixed effects model.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="r.html#cb10-1" tabindex="-1"></a>power_list_mixed <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="r.html#cb10-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="fu">factor</span>(obs)) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="r.html#cb10-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sample, <span class="at">y=</span>power, </span>
+<span id="cb10-4"><a href="r.html#cb10-4" tabindex="-1"></a>             <span class="at">group=</span>obs, <span class="at">color=</span>obs)) <span class="sc">+</span> </span>
+<span id="cb10-5"><a href="r.html#cb10-5" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb10-6"><a href="r.html#cb10-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb10-7"><a href="r.html#cb10-7" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="r.html#cb10-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 
 </div>
 </div>

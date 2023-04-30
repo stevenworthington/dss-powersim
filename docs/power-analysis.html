@@ -152,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="simulation.html"><a href="simulation.html#step-by-step-1"><i class="fa fa-check"></i><b>2.2</b> Step by step</a></li>
 </ul></li>
 <li class="part"><span><b>II Preparation</b></span></li>
-<li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of what?</a>
+<li class="chapter" data-level="3" data-path="power-of-what.html"><a href="power-of-what.html"><i class="fa fa-check"></i><b>3</b> Power of What?</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="power-of-what.html"><a href="power-of-what.html#study-design"><i class="fa fa-check"></i><b>3.1</b> Study design</a></li>
 <li class="chapter" data-level="3.2" data-path="power-of-what.html"><a href="power-of-what.html#simple-linear-regression"><i class="fa fa-check"></i><b>3.2</b> Simple linear regression</a>
@@ -246,51 +246,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-analysis" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">1</span> Power Analysis<a href="power-analysis.html#power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="alert alert-success">
-<p>Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting the null hypothesis when it is false.</p>
+<p>Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting a null hypothesis when it is false.</p>
 </div>
 <div id="canned-routines" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Canned routines<a href="power-analysis.html#canned-routines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In some research designs, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.</p>
-<p>In some situations, such as a randomized controlled trial with two groups, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use an example to show how we do this. For instance, when we plan to perform a test of an hypothesis comparing the proportions of successes of tossing coins of faces in two independent populations, we would specify the following null and alternative hypotheses, respectively:
+<p>For some studies, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size, or alternatively, calculate power when sample size and effect size are fixed.</p>
+<p>In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the proportion of times that tossing a fair coin yields “heads” in two independent populations, we would specify the following null and alternative hypotheses, respectively:
 <span class="math display">\[
-H_0 :p_1 = p_2
+\textrm{H}_0 :p_1 = p_2
 \]</span></p>
 <p><span class="math display">\[
-H_1 :p_1 \neq p_2
+\textrm{H}_1 :p_1 \neq p_2
 \]</span></p>
-<p>where <span class="math inline">\(p_1 = p_2\)</span> are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes:
+<p>where <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span> are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes:
 <span class="math display">\[
-N = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{ES})^{2}
+\textrm{N} = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{\textrm{ES}})^{2}
 \]</span></p>
-<p>Where <span class="math inline">\(n_i\)</span> is the sample size required in each group (<span class="math inline">\(i=1,2\)</span>), <span class="math inline">\(\alpha\)</span> is the specific level of significance and <span class="math inline">\(z_{1-\frac{\alpha}{2}}\)</span> is the critical value corresponding to the significance level. <span class="math inline">\(1-\beta\)</span> is the selected power and <span class="math inline">\(z_{1-\beta}\)</span> is the value from the standard normal distribution holding <span class="math inline">\(1-\beta\)</span> below it. ES is the effect size, defined as follows:
+<p>Where <span class="math inline">\(n_i\)</span> is the sample size required in each group (<span class="math inline">\(i=1,2\)</span>), <span class="math inline">\(\alpha\)</span> is the specific level of significance, <span class="math inline">\(z_{1-\frac{\alpha}{2}}\)</span> is the critical value corresponding to the significance level, <span class="math inline">\(z_{1-\beta}\)</span> is the value from the standard normal distribution holding the selected power level (<span class="math inline">\(1-\beta\)</span>) below it, and <span class="math inline">\(\textrm{ES}\)</span> is the effect size, defined as follows:
 <span class="math display">\[
-ES = \frac{|p_1 = p_2|}{\sqrt{p(1-p)}}
+\textrm{ES} = \frac{|p_1 \neq p_2|}{\sqrt{p(1-p)}}
 \]</span></p>
-<p>where <span class="math inline">\(|p_1 = p_2|\)</span> is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, <span class="math inline">\(H_1\)</span>, and <span class="math inline">\(p\)</span> is the proportion by pooling the observations from the two comparison groups.</p>
-<p>In Stata, we can use the following code to calculate the sample size needed to reject the null hypothesis that <span class="math inline">\(H_0 :p_1 = p_2\)</span> (<span class="math inline">\(H_1 :p_1 \neq p_2\)</span>) given <span class="math inline">\(\hat{p_1} = 0.2, \hat{p_2} = 0.6\)</span> on different fixed power levels:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb1-1"><a href="power-analysis.html#cb1-1" tabindex="-1"></a>   power twoproportions 0.2 0.6, n(40(20)100) <span class="kw">graph</span></span></code></pre></div>
-<p><img src="https://github.com/hlmshtj-dan/pigo/blob/main/4.png?raw=true" /></p>
+<p>where <span class="math inline">\(|p_1 \neq p_2|\)</span> is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, and <span class="math inline">\(p\)</span> is the proportion by pooling the observations from the two comparison groups.</p>
+<p>For example, in R we can use the following function from the built-in <code>{stats}</code> package to calculate the sample size needed to reject the null hypothesis that <span class="math inline">\(\textrm{H}_0 :p_1 = p_2\)</span> given observed heads proportions of <span class="math inline">\(\hat{p_1} = 0.2, \hat{p_2} = 0.6\)</span> and a fixed level of power (90%):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="power-analysis.html#cb1-1" tabindex="-1"></a><span class="fu">power.prop.test</span>(<span class="at">n=</span><span class="cn">NULL</span>, <span class="at">p1=</span><span class="fl">0.2</span>, <span class="at">p2=</span><span class="fl">0.6</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>## 
+##      Two-sample comparison of proportions power calculation 
+## 
+##               n = 29.38798
+##              p1 = 0.2
+##              p2 = 0.6
+##       sig.level = 0.05
+##           power = 0.9
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
 </div>
 <div id="step-by-step" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Step by step<a href="power-analysis.html#step-by-step" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
 <li>Specify a hypothesis test.</li>
 </ol>
-<p>Usually, there are several hypotheses in a research design, but for sample size calculation, make explicit a null and alternative hypothesis.</p>
+<p>Make explicit a null and alternative hypothesis.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Specify the significance level of the test.</li>
 </ol>
-<p>Usually <span class="math inline">\(\alpha = 0.05\)</span> is used, but other values could be substituted instead.</p>
+<p>Typically <span class="math inline">\(\alpha=0.05\)</span> is used, but other values could be substituted instead.</p>
 <ol start="3" style="list-style-type: decimal">
-<li>Get the values of the parameters necessary to compute the power function.</li>
+<li>Get the values of the parameters necessary to compute power.</li>
 </ol>
-<p>To solve for sample size <span class="math inline">\(n\)</span>, we need a value for the standard deviation and other parameters. Sometimes we need to use a pilot dataset to get these values.</p>
+<p>To solve for sample size <span class="math inline">\(n\)</span>, we need value(s) for effect size(s). Sometimes we need to use a pilot dataset or look to the literature to get these values.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Specify the intended power of the test.</li>
 </ol>
 <p>The power of a test is the probability of finding significance if the alternative hypothesis is true.</p>
 <ol start="5" style="list-style-type: decimal">
-<li>Calculate the needed sample size for the fixed power level.</li>
+<li>Calculate the sample size required to obtain the power level desired.</li>
 </ol>
 
 </div>

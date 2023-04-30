@@ -1,62 +1,77 @@
 
+
+
 # (PART) Concepts {-}
 
 # Power Analysis
 
 <div class="alert alert-success">
-Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting the null hypothesis when it is false.
+Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting a null hypothesis when it is false.
 </div>
 
 ## Canned routines
 
-In some research designs, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given power level, or alternatively, calculate power when sample size is fixed.
+For some studies, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size, or alternatively, calculate power when sample size and effect size are fixed.
 
-In some situations, such as a randomized controlled trial with two groups, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use an example to show how we do this. For instance, when we plan to perform a test of an hypothesis comparing the proportions of successes of tossing coins of faces in two independent populations, we would specify the following null and alternative hypotheses, respectively: 
+In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the proportion of times that tossing a fair coin yields "heads" in two independent populations, we would specify the following null and alternative hypotheses, respectively: 
 $$
-H_0 :p_1 = p_2
+\textrm{H}_0 :p_1 = p_2
 $$ 
 
 $$
-H_1 :p_1 \neq p_2
+\textrm{H}_1 :p_1 \neq p_2
 $$
 
-where $p_1 = p_2$ are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes: 
+where $p_1$ and $p_2$ are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes: 
 $$
-N = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{ES})^{2}
+\textrm{N} = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{\textrm{ES}})^{2}
 $$
 
-Where $n_i$ is the sample size required in each group ($i=1,2$), $\alpha$ is the specific level of significance and $z_{1-\frac{\alpha}{2}}$ is the critical value corresponding to the significance level. $1-\beta$ is the selected power and $z_{1-\beta}$ is the value from the standard normal distribution holding $1-\beta$ below it. ES is the effect size, defined as follows: 
+Where $n_i$ is the sample size required in each group ($i=1,2$), $\alpha$ is the specific level of significance, $z_{1-\frac{\alpha}{2}}$ is the critical value corresponding to the significance level, $z_{1-\beta}$ is the value from the standard normal distribution holding the selected power level ($1-\beta$) below it, and $\textrm{ES}$ is the effect size, defined as follows: 
 $$
-ES = \frac{|p_1 = p_2|}{\sqrt{p(1-p)}}
+\textrm{ES} = \frac{|p_1 \neq p_2|}{\sqrt{p(1-p)}}
 $$ 
 
-where $|p_1 = p_2|$ is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, $H_1$, and $p$ is the proportion by pooling the observations from the two comparison groups.
+where $|p_1 \neq p_2|$ is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, and $p$ is the proportion by pooling the observations from the two comparison groups.
 
-In Stata, we can use the following code to calculate the sample size needed to reject the null hypothesis that $H_0 :p_1 = p_2$ ($H_1 :p_1 \neq p_2$) given $\hat{p_1} = 0.2, \hat{p_2} = 0.6$ on different fixed power levels:
+For example, in R we can use the following function from the built-in `{stats}` package to calculate the sample size needed to reject the null hypothesis that $\textrm{H}_0 :p_1 = p_2$ given observed heads proportions of $\hat{p_1} = 0.2, \hat{p_2} = 0.6$ and a fixed level of power (90%):
 
-```stata
-   power twoproportions 0.2 0.6, n(40(20)100) graph
+
+```r
+power.prop.test(n=NULL, p1=0.2, p2=0.6, sig.level=0.05, power=0.9)
 ```
 
-![](https://github.com/hlmshtj-dan/pigo/blob/main/4.png?raw=true)
+```
+## 
+##      Two-sample comparison of proportions power calculation 
+## 
+##               n = 29.38798
+##              p1 = 0.2
+##              p2 = 0.6
+##       sig.level = 0.05
+##           power = 0.9
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+```
 
 
 ## Step by step
 
 1. Specify a hypothesis test.
 
-Usually, there are several hypotheses in a research design, but for sample size calculation, make explicit a null and alternative hypothesis.
+Make explicit a null and alternative hypothesis.
 
 2. Specify the significance level of the test.
 
-Usually $\alpha = 0.05$ is used, but other values could be substituted instead.
+Typically $\alpha=0.05$ is used, but other values could be substituted instead.
 
-3. Get the values of the parameters necessary to compute the power function.
+3. Get the values of the parameters necessary to compute power.
 
-To solve for sample size $n$, we need a value for the standard deviation and other parameters. Sometimes we need to use a pilot dataset to get these values.
+To solve for sample size $n$, we need value(s) for effect size(s). Sometimes we need to use a pilot dataset or look to the literature to get these values.
 
 4. Specify the intended power of the test.
 
 The power of a test is the probability of finding significance if the alternative hypothesis is true.
 
-5. Calculate the needed sample size for the fixed power level.
+5. Calculate the sample size required to obtain the power level desired.

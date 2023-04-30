@@ -22,11 +22,13 @@ We are always grateful for any feedback you are willing to provide about our tut
 ## Table of Contents {-}
 
 1. [Canned Power Analysis](./power-analysis.html)
-2. [Simulation-based Power Analysis](./simulation-based-power-analysis-1.html)
+2. [Simulation-based Power Analysis](./simulation.html)
 3. [Power of What?](./power-of-what.html)
 4. [R Examples](./r-1.html)
 5. [Python Examples](./python.html)
 6. [Stata Examples](./stata-1.html)
+7. [Software Comparison](./software-comparison.html)
+8. [Resources](./resources.html)
 
 \  
 

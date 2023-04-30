@@ -3,7 +3,7 @@
 
 # (PART) Preparation {-}
 
-# Power of what?
+# Power of What?
 
 The initial steps of power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps, there is an even more fundamental issue to be addressed - the power of what?
 
