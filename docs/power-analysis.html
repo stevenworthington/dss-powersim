@@ -259,22 +259,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \end{align}
 \]</span></p>
 <p>We want <span class="math inline">\(\beta\)</span> (Type II error) to be small and power to be large. When designing a study, rather than calculating power when sample size and effect size are fixed, researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size.</p>
-<p>In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the average height of people in two populations, we would specify the following null and alternative hypotheses, respectively:
+<p>In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the cholesterol levels of people in two populations, one with a diet comprising low oat consumption and the other with high oat consumption, we would specify the following null and alternative hypotheses, respectively:
 <span class="math display">\[
 \begin{align}
-\textrm{H}_0 : \mu_1 &amp;= \mu_2 \\
-\textrm{H}_1 : \mu_1 &amp;\neq \mu_2
+\textrm{H}_0 : \mu_1 - \mu_2 &amp;= 0 \\
+\textrm{H}_1 : \mu_1 - \mu_2 &amp;\neq 0
 \end{align}
 \]</span></p>
-<p>where <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are the mean heights in the two populations being compared. To make sure the test has a specific power, we can use the following formula to determine the sample sizes:
-<span class="math display">\[
-\textrm{N} = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{\textrm{ES}})^{2}
+<p>where <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are the mean cholesterol levels in the two populations being compared. We can use a formula to determine the sample sizes required so that the test has a specific power. We will need the following inputs to the formula:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\alpha\)</span> (Type I error): typically, this is set to <span class="math inline">\(0.05\)</span> in most studies.</li>
+<li><span class="math inline">\(1 - \beta\)</span> (power): often this is set to <span class="math inline">\(0.8\)</span> or <span class="math inline">\(0.9\)</span>.</li>
+<li><span class="math inline">\(\sigma\)</span> (population standard deviation): we need to estimate/guess this.</li>
+<li><span class="math inline">\(\delta\)</span> (alternative hypothesis): ideally the smallest difference <span class="math inline">\(\delta = \mu_1 - \mu_2\)</span> that has scientific or clinical importance.</li>
+</ol>
+<p>Given <span class="math inline">\(\alpha\)</span>, <span class="math inline">\((1 - \beta)\)</span>, <span class="math inline">\(\sigma\)</span>, and <span class="math inline">\(\delta\)</span>, we can calculate <span class="math inline">\(n_g\)</span> the sample size in each group. To simplify things a little, we will use the normal distribution as an approximation to the <span class="math inline">\(t\)</span> distribution (which should be fine when <span class="math inline">\(n_g \geq 30\)</span>). Here is the formula for this approximate two-sample <span class="math inline">\(t\)</span>-test:</p>
+<p><span class="math display">\[
+n_g \approx 2(z_{\alpha / 2} + z_\beta)^2 \left( \frac{\sigma}{\mu_1 - \mu_2} \right)^2
 \]</span></p>
-<p>Where <span class="math inline">\(n_i\)</span> is the sample size required in each group (<span class="math inline">\(i=1,2\)</span>), <span class="math inline">\(\alpha\)</span> is the specific level of significance, <span class="math inline">\(z_{1-\frac{\alpha}{2}}\)</span> is the critical value corresponding to the significance level, <span class="math inline">\(z_{1-\beta}\)</span> is the value from the standard normal distribution holding the selected power level (<span class="math inline">\(1-\beta\)</span>) below it, and <span class="math inline">\(\textrm{ES}\)</span> is the effect size, defined as follows:
-<span class="math display">\[
-\textrm{ES} = \frac{|p_1 \neq p_2|}{\sqrt{p(1-p)}}
+<p>Where <span class="math inline">\(n_g\)</span> is the sample size required in each group, <span class="math inline">\(z_{\alpha/2}\)</span> is the Type I error level, <span class="math inline">\(z_\beta\)</span> is the value from the standard normal distribution holding the selected power level (<span class="math inline">\(1-\beta\)</span>) below it, and <span class="math inline">\(\mu_1 - \mu_2\)</span> is the effect size (difference in population averages of cholesterol), and <span class="math inline">\(\sigma\)</span> is the pooled population standard deviation (during study planning we typically assume equal variances in the two groups). Typically, we set our input values to:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\alpha = 0.05\)</span>, so <span class="math inline">\(Z_{\alpha / 2} = 1.960\)</span>.</li>
+<li><span class="math inline">\(1 - \beta = 0.8\)</span>, so <span class="math inline">\(\beta = 0.2\)</span>, so <span class="math inline">\(Z_\beta = 0.8416\)</span>.</li>
+<li><span class="math inline">\(\sigma = 1\)</span>; from previous studies, this is our best guess.</li>
+<li><span class="math inline">\(\delta = 0.7\)</span>, that is, from previous studies our best guess is that mean differences of 0.7 mmol/L or greater should be considered as biologically important.</li>
+</ol>
+<p><span class="math display">\[
+n_g \approx 2(1.960 + 0.8416)^2 \left( \frac{1}{0.7} \right)^2 = 32.036
 \]</span></p>
-<p>where <span class="math inline">\(|p_1 \neq p_2|\)</span> is the absolute value of the difference in proportions between the two groups under the alternative hypothesis, and <span class="math inline">\(p\)</span> is the proportion by pooling the observations from the two comparison groups.</p>
+<p>We always round up to a whole number for sample size, so for this study we need 33 subjects per group, or <span class="math inline">\(n=66\)</span> in total.</p>
 <p>For example, in R we can use the following function from the built-in <code>{stats}</code> package to calculate the sample size needed to reject the null hypothesis that <span class="math inline">\(\textrm{H}_0 :p_1 = p_2\)</span> given observed heads proportions of <span class="math inline">\(\hat{p_1} = 0.2, \hat{p_2} = 0.6\)</span> and a fixed level of power (90%):</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="power-analysis.html#cb1-1" tabindex="-1"></a><span class="fu">power.prop.test</span>(<span class="at">n=</span><span class="cn">NULL</span>, <span class="at">p1=</span><span class="fl">0.2</span>, <span class="at">p2=</span><span class="fl">0.6</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.9</span>)</span></code></pre></div>
 <pre><code>## 
