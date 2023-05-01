@@ -64,7 +64,7 @@ $$
 
 We always round up to a whole number for sample size, so for this study we need 33 subjects per group, or $n=66$ in total.
 
-In practice, we will often rely on software to perform the calculation for us. In R we can use the `power.t.test()` function from the built-in `{stats}` package to calculate the sample size needed to reject the null hypothesis that $\textrm{H}_0 : \mu_1 - \mu_2 &= 0$. We just need to pass the $n$ parameter as `NULL` to tell R that we'd like to calculate sample size based on the values of the other parameters:
+In practice, we will often rely on software to perform the calculation for us. In R we can use the `power.t.test()` function from the built-in `{stats}` package to calculate the sample size needed to reject the null hypothesis that $\textrm{H}_0 : \mu_1 - \mu_2 = 0$. We just need to pass the $n$ parameter as `NULL` to tell R that we'd like to calculate sample size based on the values of the other parameters:
 
 ```{r}
 power.t.test(n=NULL, delta=0.7, sd=1, sig.level=0.05, power=0.8, alternative="two.sided")
@@ -79,7 +79,7 @@ Make explicit a null and alternative hypothesis.
 
 **2. Specify Type I and Type II error levels for the test.**
 
-Typically, the Type I error level (significance level / false positive level) is set to $\alpha=0.05$ and Type I error level (false negative level) $\beta=0.2$, which yields a power level of $1-\beta=0.8$, but other values could be substituted instead.
+Typically, the Type I error level (significance level / false positive level) is set to $\alpha=0.05$ and Type I error level (false negative level) $\beta=0.2$, which yields a power level of $1 - \beta = 0.8$, but other values could be substituted instead.
 
 **3. Specify the estimated effect size level for the test.**
 
