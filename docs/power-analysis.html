@@ -246,19 +246,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-analysis" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">1</span> Power Analysis<a href="power-analysis.html#power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="alert alert-success">
-<p>Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting a null hypothesis when it is false.</p>
+<p>Statistical power is the probability of rejecting a null hypothesis when it is false, or equivalently, of detecting an effect if such an effect exists.</p>
 </div>
 <div id="canned-routines" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Canned routines<a href="power-analysis.html#canned-routines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>For some studies, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size, or alternatively, calculate power when sample size and effect size are fixed.</p>
-<p>In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the proportion of times that tossing a fair coin yields “heads” in two independent populations, we would specify the following null and alternative hypotheses, respectively:
+<p>For some studies, it can be an important step to calculate <em>a priori</em> statistical power. We use statistical power to determine the probability of rejecting a null hypothesis when it is false, or equivalently, of detecting an effect if such an effect exists.
 <span class="math display">\[
-\textrm{H}_0 :p_1 = p_2
+\begin{align}
+\textrm{Power} &amp;= \textrm{Pr}(\textrm{reject} H_0 \, | \, H_0 \textrm{is false}) \\
+               &amp;= 1 - \textrm{Pr}(\textrm{fail to reject} H_0 \, | \, H_0 \textrm{is false}) \\
+               &amp;= 1 - \beta
+\end{align}
 \]</span></p>
-<p><span class="math display">\[
-\textrm{H}_1 :p_1 \neq p_2
+<p>We want <span class="math inline">\(\beta\)</span> (Type II error) to be small and power to be large. When designing a study, rather than calculating power when sample size and effect size are fixed, researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size.</p>
+<p>In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the average height of people in two populations, we would specify the following null and alternative hypotheses, respectively:
+<span class="math display">\[
+\begin{align}
+\textrm{H}_0 : \mu_1 &amp;= \mu_2 \\
+\textrm{H}_1 : \mu_1 &amp;\neq \mu_2
+\end{align}
 \]</span></p>
-<p>where <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span> are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes:
+<p>where <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are the mean heights in the two populations being compared. To make sure the test has a specific power, we can use the following formula to determine the sample sizes:
 <span class="math display">\[
 \textrm{N} = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{\textrm{ES}})^{2}
 \]</span></p>

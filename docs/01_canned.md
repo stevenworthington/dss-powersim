@@ -6,23 +6,31 @@
 # Power Analysis
 
 <div class="alert alert-success">
-Statistical power is the probability of detecting an effect of a given size, if such an effect exists. Or, equivalently, the probability of rejecting a null hypothesis when it is false.
+Statistical power is the probability of rejecting a null hypothesis when it is false, or equivalently, of detecting an effect if such an effect exists.
 </div>
 
 ## Canned routines
 
-For some studies, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability we can detect an effect of a given size, if such an effect does in fact exist. Or, equivalently, the probability of rejecting the null hypothesis when it is false. Researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size, or alternatively, calculate power when sample size and effect size are fixed.
-
-In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the proportion of times that tossing a fair coin yields "heads" in two independent populations, we would specify the following null and alternative hypotheses, respectively: 
+For some studies, it can be an important step to calculate *a priori* statistical power. We use statistical power to determine the probability of rejecting a null hypothesis when it is false, or equivalently, of detecting an effect if such an effect exists. 
 $$
-\textrm{H}_0 :p_1 = p_2
+\begin{align}
+\textrm{Power} &= \textrm{Pr}(\textrm{reject} H_0 \, | \, H_0 \textrm{is false}) \\
+               &= 1 - \textrm{Pr}(\textrm{fail to reject} H_0 \, | \, H_0 \textrm{is false}) \\
+               &= 1 - \beta
+\end{align}
+$$
+
+We want $\beta$ (Type II error) to be small and power to be large. When designing a study, rather than calculating power when sample size and effect size are fixed, researchers typically want to know the sample size required to reject a null hypothesis at a given level of power and effect size.
+
+In some situations, where the study design and/or model of interest is fairly simple, we can use a formula to calculate the sample size required to reject a null hypothesis. We will use a simple example to show the process involved. For instance, if we plan to perform a test of an hypothesis comparing the average height of people in two populations, we would specify the following null and alternative hypotheses, respectively: 
+$$
+\begin{align}
+\textrm{H}_0 : \mu_1 &= \mu_2 \\
+\textrm{H}_1 : \mu_1 &\neq \mu_2
+\end{align}
 $$ 
 
-$$
-\textrm{H}_1 :p_1 \neq p_2
-$$
-
-where $p_1$ and $p_2$ are the proportions in the two populations for comparison. To make sure the test has a specific power, we can use the following formula to determine the sample sizes: 
+where $\mu_1$ and $\mu_2$ are the mean heights in the two populations being compared. To make sure the test has a specific power, we can use the following formula to determine the sample sizes: 
 $$
 \textrm{N} = 2(\frac{z_{1-\frac{\alpha}{2}}+z_{1-\beta}}{\textrm{ES}})^{2}
 $$

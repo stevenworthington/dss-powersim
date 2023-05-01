@@ -1,7 +1,7 @@
 ---
 title: ""
 author: ""
-date: "April 2023"
+date: "May 2023"
 description: "This is a tutorial for power simulation"
 github-repo: "IQSS/dss-powersim"
 site: "bookdown::bookdown_site"
