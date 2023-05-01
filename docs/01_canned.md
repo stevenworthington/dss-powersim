@@ -45,7 +45,7 @@ $$
 n_g \approx 2(z_{\alpha / 2} + z_\beta)^2 \left( \frac{\sigma}{\mu_1 - \mu_2} \right)^2
 $$
 
-where $n_g$ is the sample size required in each group, $z_{\alpha/2}$ is the value from the standard normal distribution holding half the selected $\alpha$ level below it (because this is a two-tailed test), $z_\beta$ is the value from the standard normal distribution holding the ($\beta$) level below it, and $\mu_1 - \mu_2$ is the effect size (difference in population averages of cholesterol), and $\sigma$ is the pooled population standard deviation (during study planning we typically assume equal variances in the two groups). Typically, we would set our $\alpha$ and $\beta$ input values to the following and rely on previous studies or pilot data to obtain resonable values for $\sigma$ and $\delta$:
+where $n_g$ is the sample size required in each group, $z_{\alpha/2}$ is the value from the standard normal distribution holding half the selected $\alpha$ level below it (because this is a two-tailed test), $z_\beta$ is the value from the standard normal distribution holding the $\beta$ level below it, and $\mu_1 - \mu_2$ is the effect size (difference in population averages of cholesterol), and $\sigma$ is the pooled population standard deviation (during study planning we typically assume equal variances in the two groups). Typically, we would set our $\alpha$ and $\beta$ input values to the following and rely on previous studies or pilot data to obtain resonable values for $\sigma$ and $\delta$:
 
 1. $\alpha = 0.05$, so $z_{\alpha / 2} = 1.960$.
 2. $1 - \beta = 0.8$, so $\beta = 0.2$, so $z_\beta = 0.8416$.
