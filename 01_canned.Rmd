@@ -53,7 +53,7 @@ where $n_g$ is the sample size required in each group, $z_{\alpha/2}$ is the val
 
 1. $\alpha = 0.05$, so $z_{\alpha / 2} = 1.960$.
 2. $1 - \beta = 0.8$, so $\beta = 0.2$, so $z_\beta = 0.8416$.
-3. $\sigma = 1$; this is our best guess based on previous studies.
+3. $\sigma = 1$; this could be our best guess based on previous studies.
 4. $\delta = 0.7$, our best guess based on previous studies is that mean differences of 0.7 mmol/L or greater should be considered biologically important.
 
 We can then plug these input values into our formula:
@@ -79,7 +79,7 @@ Make explicit a null and alternative hypothesis.
 
 **2. Specify Type I and Type II error levels for the test.**
 
-Typically, the Type I error level (significance level / false positive level) is set to $\alpha=0.05$ and Type I error level (false negative level) $\beta=0.2$, which yields a power level of $1 - \beta = 0.8$, but other values could be substituted instead.
+Typically, the Type I error level (significance level / false positive level) is set to $\alpha=0.05$ and Type II error level (false negative level) $\beta=0.2$, which yields a power level of $1 - \beta = 0.8$, but other values could be substituted instead.
 
 **3. Specify the estimated effect size level for the test.**
 
