@@ -247,18 +247,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">2</span> Simulation<a href="simulation.html#simulation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="customization" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Customization<a href="simulation.html#customization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Formulas often do not exist to calculate power for the effect of interest and therefore canned functions/programs/macros may not be available. For some studies, such as those involving complex study designs or those using mixed effects models for inference, we must therefore rely on simulation to provide a means of generating customized estimates of power for our current situation.</p>
+<p>Formulas often do not exist to calculate power for the effect of interest and therefore canned functions/programs/macros may not be available. For some studies, such as those involving complex study designs or those using mixed effects models for inference, we must therefore rely on simulation to provide a means of generating estimates of power that are customized for our current situation.</p>
 <p>The basic idea is to simulate running our study many times and calculate the proportion of times we reject the null hypothesis. This proportion provides an estimate of power. Generating a dataset and running an analysis for the hypothesis test is part of the simulation. Randomness is introduced into the process during dataset generation.</p>
 <p>For example, say the desired power level is 90%, and you want to calculate the sample size required to obtain this level of power. We could use the “guess sample size and check power” method. Firstly, choose a sample size <span class="math inline">\(n_1\)</span> and run the simulation to estimate power. If power is estimated to be lower than 90%, select a new value <span class="math inline">\(n_2\)</span> that is larger than <span class="math inline">\(n_1\)</span> and run the simulation again. Simulation runs are repeated until the estimated power is roughly 90%.</p>
 </div>
 <div id="step-by-step-1" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Step by step<a href="simulation.html#step-by-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>There are two broad steps involved in conducting simulation-based power analysis: thinking and implementing.</p>
+<p>There are two broad steps involved in conducting simulation-based power analysis: 1) thinking and, 2) implementing.</p>
 <ul>
 <li>Think
 <ol style="list-style-type: decimal">
 <li><strong>Model specification:</strong> Write down the regression model, including all variables and parameters of interest.</li>
-<li><strong>Variable composition:</strong> Specify the form of the explanatory variables, such as the range of age, proportion of females/males, or the coding scheme used for categorical terms.</li>
+<li><strong>Variable composition:</strong> Specify the form of the explanatory variables, such as the range of age or BMI, proportion of females/males, or the coding scheme used for categorical terms.</li>
 <li><strong>Parameter composition:</strong> Establish reasonable values for the data-generating parameters in your model.</li>
 </ol></li>
 <li>Implement

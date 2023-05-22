@@ -45,7 +45,7 @@ $$
 n_g \approx 2(z_{\alpha / 2} + z_\beta)^2 \left( \frac{\sigma}{\delta} \right)^2
 $$
 
-where $n_g$ is the sample size required in each group, $z_{\alpha/2}$ is the value from the standard normal distribution holding half the selected $\alpha$ level below it (because this is a two-tailed test), $z_\beta$ is the value from the standard normal distribution holding the $\beta$ level below it, $\delta$ is the effect size (the difference in population averages $\mu_1 - \mu_2$ of cholesterol), and $\sigma$ is the pooled population standard deviation (during study planning we usually assume equal variances in the two groups). Typically, we would set $\alpha$ and $\beta$ to the following input values and rely on previous studies or pilot data to obtain reasonable values for $\sigma$ and $\delta$:
+where $n_g$ is the sample size required in each group, $z_{\alpha/2}$ is the value from the standard normal distribution holding half the selected $\alpha$ level below it (because this is a two-tailed test), $z_\beta$ is the value from the standard normal distribution holding the $\beta$ level below it, $\delta$ is the effect size (the difference in population averages $\mu_1 - \mu_2$ of cholesterol), and $\sigma$ is the pooled population standard deviation (during study planning we usually assume equal variances in the two groups). Typically, we would set $\alpha$ and $\beta$ to the following values and rely on previous studies or pilot data to obtain reasonable values for $\sigma$ and $\delta$:
 
 1. $\alpha = 0.05$, so $z_{\alpha / 2} = 1.960$.
 2. $1 - \beta = 0.8$, so $\beta = 0.2$, so $z_\beta = 0.8416$.
@@ -84,7 +84,7 @@ power.t.test(n=NULL, delta=0.7, sd=1, sig.level=0.05, power=0.8, alternative="tw
 
 ## Step by step
 
-Here are the generalized set of steps required to implement a power analysis for most study designs:
+Here are the general set of steps required to implement a power analysis for most study designs:
 
 **1. Specify a hypothesis test.**
 

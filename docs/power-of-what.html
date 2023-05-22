@@ -314,12 +314,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="step-2-variable-composition" class="section level3 hasAnchor" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Step 2: Variable composition<a href="power-of-what.html#step-2-variable-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Once we have the model equation, we need to specify the details of the explanatory variables. In our model, we only have a single binary predictor, so the only decision to make is which coding scheme to use: dummy coding or zero sum coding. Here, we chose dummy coding, since our primary interest is in the difference between the “rock” and “pop” genres.</p>
+<p>Once we have the model equation, we need to specify the details of the explanatory variables. In our model, we only have a single binary predictor, so the only decision to make is which coding scheme to use: dummy coding, zero sum coding, or something else. Here, we chose dummy coding, since our primary interest is in the difference between the “rock” and “pop” genres.</p>
 <p>In many other situations, we might include variables such as age and sex in the model. In which case we would need to determine reasonable settings for the range of age and the proportion of females to males. For example, the range of age might encompass the full possible range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females to males could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].</p>
 </div>
 <div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
+<p>Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
 <caption>
 <span id="tab:params-all-glm">Table 3.2: </span>
 </caption>
@@ -356,14 +356,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="mixed-effects-model" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Mixed effects model<a href="power-of-what.html#mixed-effects-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Our mixed effects model example will follow the same steps as the simple linear regression, but this time incorporate some model machinery to account for by-subject clustering in the data.</p>
+<p>Our mixed effects model example will follow the same steps as the simple linear regression, but this time incorporate some additional model machinery to account for by-subject clustering in the data.</p>
 <div id="step-1-model-specification-1" class="section level3 hasAnchor" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Once again, we first write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
-\textrm{liking}_{ij} = \beta_0 + U_{0j} + (\beta_1 + U_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+\textrm{liking}_{ij} = \beta_0 + b_{0j} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 \]</span></p>
-<p>where the subscript <span class="math inline">\(i\)</span> denotes an individual song and <span class="math inline">\(j\)</span> a participant, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(U_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(U_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
+<p>where the subscripts <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> denote individual songs and participants, respectively, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(\\textrm{b_{0j}} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(\\textrm{b_{1j}} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
 <caption>
 <span id="tab:param-def-mixed">Table 3.3: </span>
 </caption>
@@ -420,13 +420,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">standard deviation of residuals</td>
 </tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(U_{0j}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{U_0j}\)</span></td>
+<td align="left"><span class="math inline">\(\textrm{b_{0j}}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{b_0j}\)</span></td>
 <td align="left">random intercept for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="even">
-<td align="left"><span class="math inline">\(U_{1j}\)</span></td>
-<td align="left"><span class="math inline">\(\texttt{U_1j}\)</span></td>
+<td align="left"><span class="math inline">\(\textrm{b_{1j}}\)</span></td>
+<td align="left"><span class="math inline">\(\texttt{b_1j}\)</span></td>
 <td align="left">random slope for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="odd">
@@ -439,11 +439,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="step-2-variable-composition-1" class="section level3 hasAnchor" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> Step 2: Variable composition<a href="power-of-what.html#step-2-variable-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We also need to think about the explanatory variables in our model. Since we only have a single binary predictor, we just need to decide which coding scheme to use: dummy coding or zero sum coding. Here, we chose dummy coding, since our primary interest is in the difference between the “rock” and “pop” genres.</p>
+<p>We also need to think about the explanatory variables in our model. Since we only have a single binary predictor, we just need to decide which coding scheme to use: dummy coding, zero sum coding, or something else. Once again, here we chose dummy coding, since our primary interest is in the difference between the “rock” and “pop” genres.</p>
 </div>
 <div id="step-3-parameter-composition-1" class="section level3 hasAnchor" number="3.3.3">
 <h3><span class="header-section-number">3.3.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects. Table 3.4 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
+<p>Finally, we need to establish the data-generating parameters in the model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you’re studying or by referencing the literature for studies that report similar effects. Table 3.4 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
 <caption>
 <span id="tab:params-all-mixed">Table 3.4: </span>
 </caption>
@@ -535,7 +535,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/IQSS/dss-powersim/edit/master/03_preparation.Rmd",
+"link": "https://github.com/IQSS/dss-powersim/edit/master/03_power_of_what.Rmd",
 "text": "Edit"
 },
 "history": {

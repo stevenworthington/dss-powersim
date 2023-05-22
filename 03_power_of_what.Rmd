@@ -48,13 +48,13 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
 
 ### Step 2: Variable composition
 
-Once we have the model equation, we need to specify the details of the explanatory variables. In our model, we only have a single binary predictor, so the only decision to make is which coding scheme to use: dummy coding or zero sum coding. Here, we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres. 
+Once we have the model equation, we need to specify the details of the explanatory variables. In our model, we only have a single binary predictor, so the only decision to make is which coding scheme to use: dummy coding, zero sum coding, or something else. Here, we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres. 
 
 In many other situations, we might include variables such as age and sex in the model. In which case we would need to determine reasonable settings for the range of age and the proportion of females to males. For example, the range of age might encompass the full possible range of human longevity (e.g., 0 to 120 years) or could be more focused on non-retired adults (e.g., 18 to 65 years). The proportion of females to males could theoretically vary anywhere in the interval (0, 1), but practically is rarely outside of the interval [0.45, 0.55].
 
 ### Step 3: Parameter composition
 
-Finally, we need to establish the data-generating parameters in your model. You may draw on your own, or your colleague's, substantive expertise about the phenomenom you're studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.
+Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague's, substantive expertise about the phenomenom you're studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.
 
 ```{r params-all-glm, echo=FALSE, results="asis"}
 tibble::tribble(~`code`, ~`value`, ~`description`,
@@ -69,17 +69,17 @@ tibble::tribble(~`code`, ~`value`, ~`description`,
 
 ## Mixed effects model
 
-Our mixed effects model example will follow the same steps as the simple linear regression, but this time incorporate some model machinery to account for by-subject clustering in the data.
+Our mixed effects model example will follow the same steps as the simple linear regression, but this time incorporate some additional model machinery to account for by-subject clustering in the data.
 
 ### Step 1: model specification
 
 Once again, we first write down the regression model of interest, including all variables and parameters:
 
 $$
-\textrm{liking}_{ij} = \beta_0 + U_{0j} + (\beta_1 + U_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+\textrm{liking}_{ij} = \beta_0 + b_{0j} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 $$
 
-where the subscript $i$ denotes an individual song and $j$ a participant, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $U_{0j} \sim \mathcal{N}(0, \tau_0)$, $U_{1j} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model. 
+where the subscripts $i$ and $j$ denote individual songs and participants, respectively, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $\\textrm{b_{0j}} \sim \mathcal{N}(0, \tau_0)$, $\\textrm{b_{1j}} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model. 
 
 ```{r param-def-mixed, echo=FALSE, results="asis"}
 tibble::tribble(~`model`, ~`code`, ~`description`,
@@ -91,8 +91,8 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
         "$\\tau_1$", "$\\texttt{tau_1}$", "standard deviation of by-subject random slopes",        
         "$\\rho$", "$\\texttt{rho}$", "correlation between by-subject random intercepts and slopes",
         "$\\sigma$", "$\\texttt{sigma}$", "standard deviation of residuals",
-        "$U_{0j}$", "$\\texttt{U_0j}$", "random intercept for subject $j$",
-        "$U_{1j}$", "$\\texttt{U_1j}$", "random slope for subject $j$",
+        "$\\textrm{b_{0j}}$", "$\\texttt{b_0j}$", "random intercept for subject $j$",
+        "$\\textrm{b_{1j}}$", "$\\texttt{b_1j}$", "random slope for subject $j$",
         "$e_{ij}$", "$\\texttt{e_ij}$", "residual of song $i$ for participant $j$") %>%
   apa_table(align = c("l", "l", "l"),
             caption = "Variables in the data-generating model and associated code-based names.",
@@ -102,11 +102,11 @@ tibble::tribble(~`model`, ~`code`, ~`description`,
 
 ### Step 2: Variable composition
 
-We also need to think about the explanatory variables in our model. Since we only have a single binary predictor, we just need to decide which coding scheme to use: dummy coding or zero sum coding. Here, we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres.
+We also need to think about the explanatory variables in our model. Since we only have a single binary predictor, we just need to decide which coding scheme to use: dummy coding, zero sum coding, or something else. Once again, here we chose dummy coding, since our primary interest is in the difference between the "rock" and "pop" genres.
 
 ### Step 3: Parameter composition
 
-Finally, we need to establish the data-generating parameters in your model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you're studying or by referencing the literature for studies that report similar effects. Table 3.4 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.
+Finally, we need to establish the data-generating parameters in the model. As before, you may determine what paramater values are plausible by drawing on substantive expertise about the phenomenom you're studying or by referencing the literature for studies that report similar effects. Table 3.4 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.
 
 ```{r params-all-mixed, echo=FALSE, results="asis"}
 tibble::tribble(~`code`, ~`value`, ~`description`,
