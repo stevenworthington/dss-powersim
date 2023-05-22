@@ -16,11 +16,10 @@ knitr::opts_chunk$set(eval=FALSE, results=TRUE, echo=TRUE, message=FALSE, warnin
 The main library we will use is `stats` and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path. 
 
 ```{r}
-# uncomment the line below to install the {pacman} library on your computer for the first time
 # install.packages("pacman")
 pacman::p_load(
   lme4,        # model specification / estimation
-  lmtest,      # likelihood ratio tests
+  lmtest,
   afex,        # anova and deriving p-values from lmer
   broom.mixed, # extracting tidy data from model fits 
   tidyverse,   # data wrangling and visualisation
@@ -35,17 +34,6 @@ set.seed(02138)
 ```
 
 ### Steps 4-5: Simulate and automate
-
-Next, let's write a function that creates datasets under the alternative hypothesis.
-
-```{r}
-
-```
-
-
-
-
-
 
 Next, let's write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.
 
