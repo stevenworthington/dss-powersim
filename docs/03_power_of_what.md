@@ -76,7 +76,7 @@ $$
 \textrm{liking}_{ij} = \beta_0 + b_{0j} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 $$
 
-where the subscripts $i$ and $j$ denote individual songs and participants, respectively, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $\\textrm{b_{0j}} \sim \mathcal{N}(0, \tau_0)$, $\\textrm{b_{1j}} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model. 
+where the subscripts $i$ and $j$ denote individual songs and participants, respectively, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $b_{0j} \sim \mathcal{N}(0, \tau_0)$, $b_{1j} \sim \mathcal{N}(0, \tau_1)$, $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model. 
 
 <caption>(\#tab:param-def-mixed)</caption>
 
@@ -93,8 +93,8 @@ $\tau_0$                 $\texttt{tau_0}$       standard deviation of by-subject
 $\tau_1$                 $\texttt{tau_1}$       standard deviation of by-subject random slopes                  
 $\rho$                   $\texttt{rho}$         correlation between by-subject random intercepts and slopes     
 $\sigma$                 $\texttt{sigma}$       standard deviation of residuals                                 
-$\textrm{b_{0j}}$        $\texttt{b_0j}$        random intercept for subject $j$                                
-$\textrm{b_{1j}}$        $\texttt{b_1j}$        random slope for subject $j$                                    
+$b_{0j}$                 $\texttt{b_0j}$        random intercept for subject $j$                                
+$b_{1j}$                 $\texttt{b_1j}$        random slope for subject $j$                                    
 $e_{ij}$                 $\texttt{e_ij}$        residual of song $i$ for participant $j$                        
 
 ### Step 2: Variable composition

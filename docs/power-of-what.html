@@ -363,7 +363,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[
 \textrm{liking}_{ij} = \beta_0 + b_{0j} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 \]</span></p>
-<p>where the subscripts <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> denote individual songs and participants, respectively, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(\\textrm{b_{0j}} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(\\textrm{b_{1j}} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
+<p>where the subscripts <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> denote individual songs and participants, respectively, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(b_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(b_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.3 lists all of the variables and parameters in the model.</p>
 <caption>
 <span id="tab:param-def-mixed">Table 3.3: </span>
 </caption>
@@ -420,12 +420,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">standard deviation of residuals</td>
 </tr>
 <tr class="odd">
-<td align="left"><span class="math inline">\(\textrm{b_{0j}}\)</span></td>
+<td align="left"><span class="math inline">\(b_{0j}\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{b_0j}\)</span></td>
 <td align="left">random intercept for subject <span class="math inline">\(j\)</span></td>
 </tr>
 <tr class="even">
-<td align="left"><span class="math inline">\(\textrm{b_{1j}}\)</span></td>
+<td align="left"><span class="math inline">\(b_{1j}\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{b_1j}\)</span></td>
 <td align="left">random slope for subject <span class="math inline">\(j\)</span></td>
 </tr>
