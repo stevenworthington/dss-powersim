@@ -9,15 +9,13 @@ knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning
 
 # R 
 
-## Simple linear regression
 
-
-### Setup
+## Setup
 
 The main library we will use is `stats` and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path. 
 
 ```{r}
-# uncomment the line below to install the {pacman} library on your computer for the first time
+# uncomment the line below to install the {pacman} library on your computer
 # install.packages("pacman")
 pacman::p_load(
   lme4,        # model specification / estimation
@@ -36,11 +34,11 @@ We will also set the pseudo-random number generator seed to 02138 to make the st
 set.seed(02138)
 ```
 
-### Data simulation step by step
+## Data simulation step by step
 
 Let's write some code that creates datasets under the alternative hypothesis.
 
-#### Establish the data-generating parameters
+### Establish the data-generating parameters
 
 ```{r params-all}
 # set all data-generating parameters
@@ -52,7 +50,7 @@ rho     <-   0.2 # correlation between intercept and slope
 sigma   <- 200   # residual (error) sd
 ```
 
-#### Simulate the sampling process
+### Simulate the sampling process
 
 ```{r sampling}
 # set number of subjects and items
@@ -61,7 +59,7 @@ n_pop  <-  25 # number of songs in pop category
 n_rock <-  25 # number of songs in rock category
 ```
 
-#### Simulate the sampling of songs
+### Simulate the sampling of songs
 
 ```{r}
 # simulate a sample of songs
@@ -72,7 +70,7 @@ songs <- tibble(
 )
 ```
 
-#### Simulate the sampling of subjects
+### Simulate the sampling of subjects
 
 We will use the function `faux::rnorm_multi()`, which generates a table of `n` simulated values from a multivariate normal distribution by specifying the means (`mu`) and standard deviations (`sd`) of each variable, plus the correlations (`r`), which can be either a single value (applied to all pairs), a correlation matrix, or a vector of the values in the upper right triangle of the correlation matrix.
 
@@ -90,7 +88,7 @@ subjects <- faux::rnorm_multi(
   mutate(subj_id = seq_len(n_subj)) # add subject IDs
 ```
 
-#### Check your values
+### Check the simulated values
 
 ```{r}
 tibble(
@@ -104,7 +102,7 @@ tibble(
 )
 ```
 
-#### Simulate trials
+### Simulate trials
 
 ```{r}
 # cross subject and song IDs; add an error term
@@ -112,7 +110,7 @@ trials <- crossing(subjects, songs) |>
   mutate(e_ij = rnorm(n(), mean = 0, sd = sigma))
 ```
 
-#### Calculate response values
+### Calculate response values
 
 ```{r}
 dat_sim <- trials |>
@@ -120,7 +118,7 @@ dat_sim <- trials |>
   select(subj_id, category, genre_i, liking_ij)
 ```
 
-#### Plot the data
+### Plot the data
 
 ```{r}
 dat_sim |>
@@ -138,7 +136,7 @@ ggplot(aes(category, liking_ij, color = category)) +
   theme_bw()
 ```
 
-#### Analyze the simulated data
+### Analyze the simulated data
 
 ```{r}
 # fit a linear mixed-effects model to data
@@ -161,7 +159,7 @@ broom.mixed::tidy(mod_sim) |>
   knitr::kable()
 ```
 
-### Data simulation using a function
+## Data simulation automated
 
 Once you've tested your data generating code above, put it into a function so you can run it repeatedly.
 
@@ -203,7 +201,7 @@ crossing(subjects, songs) |>
 }
 ```
 
-### Calculate power
+## Calculate power
 
 We can wrap the data generating function and analysis code in a new function (`power_run()`) that returns a tidy table of the analysis results, and optionally saves this info to a file if you set a filename.
 
@@ -227,7 +225,7 @@ power_run()
 power_run(n_pop = 50, n_rock = 45, beta_1 = 20)
 ```
 
-### Automate the power calculation
+## Power calculation automated
 
 To get an accurate estimation of power, we need to run the simulation many times. We use 100 here as an example, but the results will be more accurate the more replications you run. This will depend on the specifics of your analysis, but we recommend at least 1000 replications.
 
@@ -251,7 +249,7 @@ sims |>
   )
 ```
 
-#### Check false positive rate
+### Check false positive rate
 
 Set the effect of `genre_ij` to 0 to calculate the false positive rate. This is the probability of concluding there is an effect when there is no actual effect in your population.
 
@@ -340,8 +338,6 @@ summary(lmer_bivnorm)
 
 Next, let's write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.
 
-
-
 ### Step 6: Summarize
 
 Here's the table from the simulation.
@@ -366,45 +362,6 @@ power_list |>
   mutate(sample_n = factor(sample_n)) |>
   ggplot(aes(x=interact_coef, y=power, 
              group=sample_n, color=sample_n)) + 
-  geom_line() + 
-  geom_point(size=4) + 
-  ylim(0, 1) +
-  theme_bw()
-```
-
-## Mixed effects model
-
-For the mixed effects model example, we will continue to use the same R libraries and pseudo-random number generator seed as previously.
-
-### Step 4-5: Simulate & automate
-
-Next, let's write a function that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses a for loop to run many iterations of the function. 
-
-
-### Step 6: Summarize
-
-The table for the mixed effects model.
-
-```{r, eval=FALSE}
-power_list_mixed |>
-  gt() |>
-  tab_header(title="Power values for mixed effects model") |>
-  data_color(
-    columns=power,
-    colors=scales::col_numeric(
-      palette=c("red", "green"),
-      domain=c(0, 1)
-      )
-  )
-```
-
-The graph of the simulation result for mixed effects model.
-
-```{r, eval=FALSE}
-power_list_mixed |>
-  mutate(obs = factor(obs)) |>
-  ggplot(aes(x=sample, y=power, 
-             group=obs, color=obs)) + 
   geom_line() + 
   geom_point(size=4) + 
   ylim(0, 1) +
