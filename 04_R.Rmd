@@ -77,7 +77,7 @@ We will use the function `faux::rnorm_multi()`, which generates a table of `n` s
 ```{r}
 # simulate a sample of subjects
 
-# sample from a multivariate random distribution
+# sample from a multivariate normal distribution
 subjects <- faux::rnorm_multi(
     n = n_subj,
     mu = 0, # means for random effects are always 0
@@ -161,7 +161,7 @@ broom.mixed::tidy(mod_sim) |>
 
 ## Data simulation automated
 
-Once you've tested your data generating code above, put it into a function so you can run it repeatedly.
+Now that we've tested the data generating code, we can put it into a function so that it's easy to run it repeatedly.
 
 ```{r}
 # set up the custom data simulation function
@@ -201,9 +201,9 @@ crossing(subjects, songs) |>
 }
 ```
 
-## Calculate power
+## Power calculation (single run)
 
-We can wrap the data generating function and analysis code in a new function (`power_run()`) that returns a tidy table of the analysis results, and optionally saves this info to a file if you set a filename.
+We can wrap the data generating function and analysis code in a new function (`power_run()`) that returns a tidy table of the analysis results.
 
 ```{r}
 # set up the power function
@@ -268,77 +268,18 @@ sims_fp |>
 
 Ideally, the false positive rate will be equal to alpha, which we set here at `r alpha`. 
 
+## Power for different effect sizes
+
+In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes.
 
 
 
 
 
-### Steps 4-5: Simulate and automate
-
-Next, let's write a function that creates datasets under the alternative hypothesis.
-
-```{r, eval=FALSE}
-generate_design_matrix <- function(
-  n_participants,
-  n_songs,
-  genres = c("rock", "pop")
-  )
-{
-  crossing(
-    participant = 1:n_participants,
-    genre = genres,
-    song = 1:n_songs
-    ) |>
-  mutate(song = paste(genre, song, sep = "_"))
-}
-```
-
-```{r, eval=FALSE}
-data1 <- generate_design_matrix(1000, 2, 1)
-
-group_means <- c(rock = 75, pop = 75) # define means of both genres in a vector
-rock_sd <- 7.5 # define sd of rock music
-pop_sd <- 7.5 # define sd of pop music
-correlation <- 0.2 # define their correlation
-
-sigma <- matrix(c(
-  rock_sd^2, rock_sd*pop_sd*correlation,
-  rock_sd*pop_sd*correlation, pop_sd^2),
-  ncol = 2) # define variance-covariance matrix
-
-set.seed(123)
-bivnorm <- data.frame(mvrnorm(nrow(data1)/2, group_means, sigma)) # simulate bivariate normal (we use nrow(data1)/2, the number of rows from the data-set above to simulate 10 observations per group)
-par(mfrow=c(1,2))
-hist(bivnorm$rock, main = "liking of rock music", xlab = "")
-hist(bivnorm$pop, main = "liking of pop music", xlab = "")
-```
-
-A matrix containing the variances of both groups (rock and pop) and their covariance (i.e. $\textrm{rock_sd}^2 = 56.25$ and $\textrm{pop_sd}^2 = 56.25$ and the covariances between the groups $\textrm{rock_sd} \times \textrm{pop_sd} \times \textrm{correlation} = 11.25$) that looks like this:
-
-$$
-\begin{bmatrix}
-56.25 & 11.25 \\
-11.25 & 56.25
-\end{bmatrix}
-$$
 
 
 
-```{r, eval=FALSE}
-bivnorm_dat <- data.frame(cbind(liking = c(bivnorm$rock, bivnorm$pop), genre = c(rep("rock", (nrow(data1)/2)), rep("pop", (nrow(data1)/2))), participant = rep(1:(nrow(data1)/2), 2))) # this just converts bivnorm to long format and adds the genre variable
-
-bivnorm_dat$liking <- as.numeric(bivnorm_dat$liking) # variable was converted to character for some reason in cbind so lets make it numerical again
-
-bivnorm_dat$genre_f <- factor(bivnorm_dat$genre) # make genre a factor
-
-lmer_bivnorm <- lmer(liking ~ genre_f + (1 | participant), bivnorm_dat)
-summary(lmer_bivnorm)
-```
-
-
-Next, let's write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.
-
-### Step 6: Summarize
+### Summarize
 
 Here's the table from the simulation.
 
