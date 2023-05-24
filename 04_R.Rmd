@@ -372,6 +372,6 @@ sims_table |>
   labs(x = "Effect size (rock genre - pop genre)",
        y = "Power",
        title = "Power analysis via simulation",
-       color = "Sample size")
+       color = "Sample size") +
   theme_bw()
 ```
