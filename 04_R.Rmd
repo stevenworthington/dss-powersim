@@ -9,7 +9,6 @@ knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning
 
 # R 
 
-
 ## Setup
 
 The main library we will use is `stats` and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path. 
@@ -51,7 +50,7 @@ Let's write some code that creates datasets under the alternative hypothesis.
 ```{r params-all}
 # set all data-generating parameters
 beta_0  <-  65   # intercept; i.e., the grand mean
-beta_1  <-  15   # slope; i.e, effect of category
+beta_1  <-   5   # slope; i.e, effect of category
 tau_0   <-   7   # by-subject random intercept sd
 tau_1   <-   4   # by-subject random slope sd
 rho     <-   0.2 # correlation between intercept and slope
@@ -62,9 +61,9 @@ sigma   <-   8   # residual (error) sd
 
 ```{r sampling}
 # set number of subjects and items
-n_subj <- 100 # number of subjects
-n_pop  <-  25 # number of songs in pop category
-n_rock <-  25 # number of songs in rock category
+n_subj <-  50 # number of subjects
+n_pop  <-  20 # number of songs in pop category
+n_rock <-  20 # number of songs in rock category
 ```
 
 ### Simulate the sampling of songs
@@ -174,11 +173,11 @@ Now that we've tested the data generating code, we can put it into a function so
 ```{r}
 # set up the custom data simulation function
 sim_data <- function(
-  n_subj     = 100,   # number of subjects
-  n_pop      =  25,   # number of pop songs
-  n_rock     =  25,   # number of rock songs
+  n_subj     =  50,   # number of subjects
+  n_pop      =  20,   # number of pop songs
+  n_rock     =  20,   # number of rock songs
   beta_0     =  65,   # mean for pop genre
-  beta_1     =  15,   # effect of genre
+  beta_1     =   5,   # effect of genre
   tau_0      =   7,   # by-subject random intercept sd
   tau_1      =   4,   # by-subject random slope sd
   rho        =   0.2, # correlation between intercept and slope
@@ -233,7 +232,7 @@ power_run()
 
 ```{r}
 # run one model with new parameters
-power_run(n_pop = 50, n_rock = 25, beta_1 = 5)
+power_run(n_pop = 50, n_rock = 25, beta_1 = 2)
 ```
 
 ## Power calculation automated
@@ -286,9 +285,9 @@ In real life, we will not know the effect size of our quantity of interest and s
 ```{r}
 # grid of paramater values
 pgrid <- crossing(
-  n_subj = c(10, 25, 50, 100),
-  n_pop = c(10, 50),
-  n_rock = c(10, 50),
+  n_subj = c(10, 25, 50),
+  n_pop = c(10, 20),
+  n_rock = c(10, 20),
   beta_1 = 1:5 
 )
 

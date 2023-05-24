@@ -13,6 +13,8 @@ For example, say the desired power level is 90%, and you want to calculate the s
 
 There are two broad steps involved in conducting simulation-based power analysis: 1) thinking and, 2) implementing. 
 
+![](images/powersim.png)
+
 - Think 
     1. **Model specification:** Write down the regression model, including all variables and parameters of interest.
     2. **Variable composition:** Specify the form of the explanatory variables, such as the range of age or BMI, proportion of females/males, or the coding scheme used for categorical terms.
