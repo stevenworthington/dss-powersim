@@ -27,6 +27,8 @@ pacman::p_load(
   tidyverse,    # data wrangling and visualisation
   gt            # nice tables
   )
+
+faux_options(verbose = FALSE)
 ```
 
 We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible. 
@@ -43,7 +45,18 @@ plan(multisession)
 
 ## Data simulation step by step
 
-Let's write some code that creates datasets under the alternative hypothesis.
+To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see [Power of What?](./power-of-what.html) for design details), fit a model to the simulated data, recover the parameter values we put in from the model output, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. First, let's write some code that creates datasets under the alternative hypothesis.
+
+
+### Establish the simulation parameters
+
+```{r}
+# number of simulation replicates
+reps <- 100
+
+# specified alpha for power calculation
+alpha <- 0.05
+```
 
 ### Establish the data-generating parameters
 
@@ -51,6 +64,7 @@ Let's write some code that creates datasets under the alternative hypothesis.
 # set all data-generating parameters
 beta_0  <-  65   # intercept; i.e., the grand mean
 beta_1  <-   5   # slope; i.e, effect of category
+omega_0 <-   3   # by-song random intercept sd
 tau_0   <-   7   # by-subject random intercept sd
 tau_1   <-   4   # by-subject random slope sd
 rho     <-   0.2 # correlation between intercept and slope
@@ -60,7 +74,7 @@ sigma   <-   8   # residual (error) sd
 ### Simulate the sampling process
 
 ```{r sampling}
-# set number of subjects and items
+# set number of subjects and songs
 n_subj <-  50 # number of subjects
 n_pop  <-  20 # number of songs in pop category
 n_rock <-  20 # number of songs in rock category
@@ -73,7 +87,8 @@ n_rock <-  20 # number of songs in rock category
 songs <- tibble(
   song_id = seq_len(n_pop + n_rock),
   category = rep(c("pop", "rock"), c(n_pop, n_rock)),
-  genre_i = rep(c(0, 1), c(n_pop, n_rock))
+  genre_i = rep(c(0, 1), c(n_pop, n_rock)),
+  O_0i = rnorm(n = n_pop + n_rock, mean = 0, sd = omega_0)
 )
 ```
 
@@ -99,9 +114,10 @@ subjects <- faux::rnorm_multi(
 
 ```{r}
 tibble(
-  parameter = c("tau_0", "tau_1", "rho"),
-  value = c(tau_0, tau_1, rho),
+  parameter = c("omega_0", "tau_0", "tau_1", "rho"),
+  value = c(omega_0, tau_0, tau_1, rho),
   simulated = c(
+    sd(songs$O_0i),
     sd(subjects$b_0j),
     sd(subjects$b_1j),
     cor(subjects$b_0j, subjects$b_1j)
@@ -121,8 +137,8 @@ trials <- crossing(subjects, songs) |>
 
 ```{r}
 dat_sim <- trials |>
-  mutate(liking_ij = beta_0 + b_0j + (beta_1 + b_1j) * genre_i + e_ij) %>%
-  select(subj_id, category, genre_i, liking_ij)
+  mutate(liking_ij = beta_0 + b_0j + O_0i + (beta_1 + b_1j) * genre_i + e_ij) %>%
+  select(subj_id, song_id, category, genre_i, liking_ij)
 ```
 
 ### Plot the data
@@ -147,7 +163,7 @@ ggplot(aes(category, liking_ij, color = category)) +
 
 ```{r}
 # fit a linear mixed-effects model to data
-mod_sim <- lmer(liking_ij ~ 1 + genre_i + (1 + genre_i | subj_id), data = dat_sim)
+mod_sim <- lmer(liking_ij ~ 1 + genre_i + (1 | song_id) + (1 + genre_i | subj_id), data = dat_sim)
 
 summary(mod_sim, corr = FALSE)
 ```
@@ -157,10 +173,10 @@ Use `broom.mixed::tidy(mod_sim)` to get a tidy table of the results. Below, we a
 ```{r}
 # get a tidy table of results
 broom.mixed::tidy(mod_sim) |>
-  mutate_if(is.numeric, round, 3) |>
+  mutate(across(is.numeric, round, 3)) |>
   mutate(
-    parameter = c("beta_0", "beta_1", "tau_0", "rho", "tau_1", "sigma"),
-    value = c(beta_0, beta_1, tau_0, rho, tau_1, sigma),
+    parameter = c("beta_0", "beta_1", "tau_0", "rho", "tau_1", "omega_0", "sigma"),
+    value = c(beta_0, beta_1, tau_0, rho, tau_1, omega_0, sigma),
   ) |>
   select(term, parameter, value, estimate) |>
   knitr::kable()
@@ -178,6 +194,7 @@ sim_data <- function(
   n_rock     =  20,   # number of rock songs
   beta_0     =  65,   # mean for pop genre
   beta_1     =   5,   # effect of genre
+  omega_0    =   3,   # by-song random intercept sd
   tau_0      =   7,   # by-subject random intercept sd
   tau_1      =   4,   # by-subject random slope sd
   rho        =   0.2, # correlation between intercept and slope
@@ -188,7 +205,8 @@ sim_data <- function(
   songs <- tibble(
     song_id = seq_len(n_pop + n_rock),
     category = rep(c("pop", "rock"), c(n_pop, n_rock)),
-    genre_i = rep(c(0, 1), c(n_pop, n_rock))
+    genre_i = rep(c(0, 1), c(n_pop, n_rock)),
+    O_0i = rnorm(n = n_pop + n_rock, mean = 0, sd = omega_0)
   )
 
   # simulate a sample of subjects
@@ -204,8 +222,8 @@ sim_data <- function(
 # cross subject and song IDs
 crossing(subjects, songs) |>
   mutate(e_ij = rnorm(n(), mean = 0, sd = sigma),
-         liking_ij = beta_0 + b_0j + (beta_1 + b_1j) * genre_i + e_ij) |>
-  select(subj_id, category, genre_i, liking_ij)
+         liking_ij = beta_0 + b_0j + O_0i + (beta_1 + b_1j) * genre_i + e_ij) |>
+  select(subj_id, song_id, category, genre_i, liking_ij)
 }
 ```
 
@@ -218,8 +236,8 @@ We can wrap the data generating function and analysis code in a new function (`p
 power_run <- function(...) {
   # ... is a shortcut that forwards any additional arguments to sim_data()
   dat_sim <- sim_data(...)
-  mod_sim <- suppressWarnings({ suppressMessages({
-    lmerTest::lmer(liking_ij ~ 1 + genre_i + (1 + genre_i | subj_id), data = dat_sim)
+  mod_sim <- suppressWarnings({ suppressMessages({ # suppress singularity messages
+    lmerTest::lmer(liking_ij ~ 1 + genre_i + (1 | song_id) + (1 + genre_i | subj_id), data = dat_sim)
   })})
   broom.mixed::tidy(mod_sim)
 }
@@ -240,14 +258,11 @@ power_run(n_pop = 50, n_rock = 25, beta_1 = 2)
 To get an accurate estimation of power, we need to run the simulation many times. We use 100 here as an example, but the results will be more accurate the more replications you run. This will depend on the specifics of your analysis, but we recommend at least 1000 replications.
 
 ```{r}
-reps <- 100
 sims <- map_df(1:reps, ~ power_run())
 ```
 
 ```{r}
 # calculate mean estimates and power for specified alpha
-alpha <- 0.05
-
 sims |>
   filter(term == "genre_i") |>
   group_by(term) |>
@@ -265,12 +280,9 @@ Set the effect of `genre_ij` to 0 to calculate the false positive rate. This is 
 
 ```{r}
 # run simulations and calculate the false positive rate
-reps <- 100
 sims_fp <- map_df(1:reps, ~ power_run(beta_1 = 0))
 
 # calculate mean estimates and power for specified alpha
-alpha <- 0.05
-
 sims_fp |>
   filter(term == "genre_i") |>
   summarise(power = mean(p.value < alpha))
@@ -283,9 +295,9 @@ Ideally, the false positive rate will be equal to alpha, which we set here at `r
 In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes.
 
 ```{r}
-# grid of paramater values
+# grid of paramater values of interest
 pgrid <- crossing(
-  n_subj = c(10, 25, 50),
+  n_subj = c(10, 25, 50, 75),
   n_pop = c(10, 20),
   n_rock = c(10, 20),
   beta_1 = 1:5 
@@ -294,8 +306,8 @@ pgrid <- crossing(
 # fit the models over the parameters
 parameter_search <- function(params = pgrid){
   future_pmap_dfr(
-    .l = params,
-    .f = ~ power_run(n_subj = ..1, 
+    .l = params, # iterate over the grid of parameter values
+    .f = ~ power_run(n_subj = ..1, # plug each row of parameter values into power_run()
                      n_pop  = ..2, 
                      n_rock = ..3,
                      beta_1 = ..4),
@@ -308,28 +320,22 @@ parameter_search <- function(params = pgrid){
 Fair warning, this will take some time!
 
 ```{r}
-# replicate parameter search 100 times
-reps <- 100
-
-# replicate each row of the parameter grid to match the dimensions of the model outputs
+# replicate the parameter grid to match the dimensions of the model outputs
 pgrid_expand <- pgrid |> 
-  slice(rep(1:n(), each = 6)) |> # expand by 6 parameters
-  map_df(rep.int, times = reps) # expand by number of reps
+  slice(rep(1:n(), each = 7)) |> # replicate each row by 7 parameters
+  map_df(rep.int, times = reps) # replicate the whole grid by number of reps
 
 sims_params <- future_replicate(
     n = reps, 
     expr = parameter_search(), 
     simplify = FALSE
     ) |>
-  imap( ~ mutate(.x, rep = .y, .before = "effect")) |>
-  bind_rows() |>
+  imap( ~ mutate(.x, rep = .y, .before = "effect")) |> # include rep ID
+  bind_rows() |> # combine into a single tibble
   mutate(pgrid_expand, .before = "effect") # add in the parameter grid
 ```
 
 ```{r}
-# calculate mean estimates and power for specified alpha
-alpha <- 0.05
-
 sims_table <- sims_params |>
   filter(term == "genre_i") |>
   group_by(term, n_subj, n_pop, n_rock, beta_1) |>
@@ -338,21 +344,6 @@ sims_table <- sims_params |>
     mean_se = mean(std.error),
     power = mean(p.value < alpha),
     .groups = "drop"
-  )
-```
-
-Here's the table from the simulation.
-
-```{r}
-sims_table |>
-  gt() |>
-  tab_header(title = "Power values for mixed effects model") |>
-  data_color(
-    columns = power,
-    colors = scales::col_numeric(
-      palette = c("red", "green"),
-      domain = c(0, 1)
-      )
   )
 ```
 
@@ -365,6 +356,8 @@ sims_table |>
          n_rock = paste0("n_rock: ", n_rock)) |>
   ggplot(aes(x = mean_estimate, y = power,
              group = n_subj, color = n_subj)) +
+  geom_hline(yintercept = 0.8, linetype = "dashed", 
+             color = "grey50", linewidth =  0.5) +
   geom_line() +
   geom_point(size = 2) +
   facet_grid(n_pop ~ n_rock) +
@@ -374,4 +367,19 @@ sims_table |>
        title = "Power analysis via simulation",
        color = "Sample size") +
   theme_bw()
+```
+
+Here's the table from the simulation.
+
+```{r}
+sims_table |>
+  gt() |>
+  tab_header(title = "Power values for mixed effects model") |>
+  data_color(
+    columns = power,
+    fn = scales::col_numeric(
+      palette = c("red", "green"),
+      domain = c(0, 1)
+      )
+  )
 ```

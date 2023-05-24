@@ -1,5 +1,5 @@
-tab:param-def-mixed
-tab:params-all-mixed
+tab:param-def
+tab:param-all
 power-analysis
 canned-routines
 step-by-step
@@ -15,6 +15,7 @@ step-3-parameter-composition
 r
 setup
 data-simulation-step-by-step
+establish-the-simulation-parameters
 establish-the-data-generating-parameters
 simulate-the-sampling-process
 simulate-the-sampling-of-songs

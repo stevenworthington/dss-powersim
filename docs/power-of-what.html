@@ -168,15 +168,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.1" data-path="r.html"><a href="r.html#setup"><i class="fa fa-check"></i><b>4.1</b> Setup</a></li>
 <li class="chapter" data-level="4.2" data-path="r.html"><a href="r.html#data-simulation-step-by-step"><i class="fa fa-check"></i><b>4.2</b> Data simulation step by step</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="r.html"><a href="r.html#establish-the-data-generating-parameters"><i class="fa fa-check"></i><b>4.2.1</b> Establish the data-generating parameters</a></li>
-<li class="chapter" data-level="4.2.2" data-path="r.html"><a href="r.html#simulate-the-sampling-process"><i class="fa fa-check"></i><b>4.2.2</b> Simulate the sampling process</a></li>
-<li class="chapter" data-level="4.2.3" data-path="r.html"><a href="r.html#simulate-the-sampling-of-songs"><i class="fa fa-check"></i><b>4.2.3</b> Simulate the sampling of songs</a></li>
-<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#simulate-the-sampling-of-subjects"><i class="fa fa-check"></i><b>4.2.4</b> Simulate the sampling of subjects</a></li>
-<li class="chapter" data-level="4.2.5" data-path="r.html"><a href="r.html#check-the-simulated-values"><i class="fa fa-check"></i><b>4.2.5</b> Check the simulated values</a></li>
-<li class="chapter" data-level="4.2.6" data-path="r.html"><a href="r.html#simulate-trials"><i class="fa fa-check"></i><b>4.2.6</b> Simulate trials</a></li>
-<li class="chapter" data-level="4.2.7" data-path="r.html"><a href="r.html#calculate-response-values"><i class="fa fa-check"></i><b>4.2.7</b> Calculate response values</a></li>
-<li class="chapter" data-level="4.2.8" data-path="r.html"><a href="r.html#plot-the-data"><i class="fa fa-check"></i><b>4.2.8</b> Plot the data</a></li>
-<li class="chapter" data-level="4.2.9" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.9</b> Analyze the simulated data</a></li>
+<li class="chapter" data-level="4.2.1" data-path="r.html"><a href="r.html#establish-the-simulation-parameters"><i class="fa fa-check"></i><b>4.2.1</b> Establish the simulation parameters</a></li>
+<li class="chapter" data-level="4.2.2" data-path="r.html"><a href="r.html#establish-the-data-generating-parameters"><i class="fa fa-check"></i><b>4.2.2</b> Establish the data-generating parameters</a></li>
+<li class="chapter" data-level="4.2.3" data-path="r.html"><a href="r.html#simulate-the-sampling-process"><i class="fa fa-check"></i><b>4.2.3</b> Simulate the sampling process</a></li>
+<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#simulate-the-sampling-of-songs"><i class="fa fa-check"></i><b>4.2.4</b> Simulate the sampling of songs</a></li>
+<li class="chapter" data-level="4.2.5" data-path="r.html"><a href="r.html#simulate-the-sampling-of-subjects"><i class="fa fa-check"></i><b>4.2.5</b> Simulate the sampling of subjects</a></li>
+<li class="chapter" data-level="4.2.6" data-path="r.html"><a href="r.html#check-the-simulated-values"><i class="fa fa-check"></i><b>4.2.6</b> Check the simulated values</a></li>
+<li class="chapter" data-level="4.2.7" data-path="r.html"><a href="r.html#simulate-trials"><i class="fa fa-check"></i><b>4.2.7</b> Simulate trials</a></li>
+<li class="chapter" data-level="4.2.8" data-path="r.html"><a href="r.html#calculate-response-values"><i class="fa fa-check"></i><b>4.2.8</b> Calculate response values</a></li>
+<li class="chapter" data-level="4.2.9" data-path="r.html"><a href="r.html#plot-the-data"><i class="fa fa-check"></i><b>4.2.9</b> Plot the data</a></li>
+<li class="chapter" data-level="4.2.10" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.10</b> Analyze the simulated data</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="r.html"><a href="r.html#data-simulation-automated"><i class="fa fa-check"></i><b>4.3</b> Data simulation automated</a></li>
 <li class="chapter" data-level="4.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>4.4</b> Power calculation (single run)</a></li>
@@ -265,11 +266,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">3.2.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first step in simulation-based power analysis is to write down the regression model of interest, including all variables and parameters:</p>
 <p><span class="math display">\[
-\textrm{liking}_{ij} = \beta_0 + b_{0j} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+\textrm{liking}_{ij} = \beta_0 + b_{0j} + O_{0i} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 \]</span></p>
-<p>where the subscripts <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> denote individual songs and participants, respectively, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(b_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(b_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.1 lists all of the variables and parameters in the model.</p>
+<p>where the subscripts <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> denote individual songs and participants, respectively, <code>liking</code> is an integer-based rating of a given song on the interval [0, 100], <code>genre</code> is a dummy coded binary variable indicating whether the song is classified as “rock” or “pop”, and we assume <span class="math inline">\(b_{0j} \sim \mathcal{N}(0, \tau_0)\)</span>, <span class="math inline">\(b_{1j} \sim \mathcal{N}(0, \tau_1)\)</span>, <span class="math inline">\(O_{0i} \sim \mathcal{N}(0, \omega_0)\)</span>, and <span class="math inline">\(\epsilon_{ij} \sim \mathcal{N}(0, \sigma)\)</span>. The parameter of interest is <span class="math inline">\(\beta_1\)</span> - the average (within-subject) difference in the rating of songs between the two genres. Table 3.1 lists all of the variables and parameters in the model.</p>
 <caption>
-<span id="tab:param-def-mixed">Table 3.1: </span>
+<span id="tab:param-def">Table 3.1: </span>
 </caption>
 <div custom-style="Table Caption">
 <em>Variables in the data-generating model and associated code-based names.</em>
@@ -319,19 +320,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">correlation between by-subject random intercepts and slopes</td>
 </tr>
 <tr class="even">
+<td align="left"><span class="math inline">\(\omega_0\)</span></td>
+<td align="left"></td>
+<td align="left">standard deviation of by-song random intercepts</td>
+</tr>
+<tr class="odd">
 <td align="left"><span class="math inline">\(\sigma\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
 <td align="left">standard deviation of residuals</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><span class="math inline">\(b_{0j}\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{b_0j}\)</span></td>
 <td align="left">random intercept for subject <span class="math inline">\(j\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><span class="math inline">\(b_{1j}\)</span></td>
 <td align="left"><span class="math inline">\(\texttt{b_1j}\)</span></td>
 <td align="left">random slope for subject <span class="math inline">\(j\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(O_{0i}\)</span></td>
+<td align="left"></td>
+<td align="left">random intercept for song <span class="math inline">\(i\)</span></td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(e_{ij}\)</span></td>
@@ -350,7 +361,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">3.2.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
 <caption>
-<span id="tab:params-all-mixed">Table 3.2: </span>
+<span id="tab:param-all">Table 3.2: </span>
 </caption>
 <div custom-style="Table Caption">
 <em>Settings for all data-generating parameters.</em>
@@ -371,7 +382,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\texttt{beta_1}\)</span></td>
-<td align="left">15</td>
+<td align="left">5</td>
 <td align="left">slope; i.e, mean difference btw ‘pop’ and ‘rock’ song ratings</td>
 </tr>
 <tr class="odd">
@@ -381,7 +392,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\texttt{tau_1}\)</span></td>
-<td align="left">3</td>
+<td align="left">4</td>
 <td align="left">by-subject random slope sd</td>
 </tr>
 <tr class="odd">
@@ -390,8 +401,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">correlation between intercept and slope</td>
 </tr>
 <tr class="even">
+<td align="left"><span class="math inline">\(\texttt{omega_0}\)</span></td>
+<td align="left">3</td>
+<td align="left">by-song random intercept sd</td>
+</tr>
+<tr class="odd">
 <td align="left"><span class="math inline">\(\texttt{sigma}\)</span></td>
-<td align="left">5</td>
+<td align="left">8</td>
 <td align="left">residual (error) sd</td>
 </tr>
 </tbody>
