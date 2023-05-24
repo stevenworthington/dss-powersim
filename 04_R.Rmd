@@ -105,7 +105,7 @@ subjects <- faux::rnorm_multi(
     mu = 0, # means for random effects are always 0
     sd = c(tau_0, tau_1), # set SDs
     r = rho, # set correlation, see ?rnorm_multi
-    varnames = c("b_0j", "b_1j")
+    varnames = c("T_0j", "T_1j")
   ) |>
   mutate(subj_id = seq_len(n_subj)) # add subject IDs
 ```
@@ -118,9 +118,9 @@ tibble(
   value = c(omega_0, tau_0, tau_1, rho),
   simulated = c(
     sd(songs$O_0i),
-    sd(subjects$b_0j),
-    sd(subjects$b_1j),
-    cor(subjects$b_0j, subjects$b_1j)
+    sd(subjects$T_0j),
+    sd(subjects$T_1j),
+    cor(subjects$T_0j, subjects$T_1j)
   )
 )
 ```
@@ -137,7 +137,7 @@ trials <- crossing(subjects, songs) |>
 
 ```{r}
 dat_sim <- trials |>
-  mutate(liking_ij = beta_0 + b_0j + O_0i + (beta_1 + b_1j) * genre_i + e_ij) %>%
+  mutate(liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j) * genre_i + e_ij) %>%
   select(subj_id, song_id, category, genre_i, liking_ij)
 ```
 
@@ -215,14 +215,14 @@ sim_data <- function(
     mu = 0,
     sd = c(tau_0, tau_1),
     r = rho,
-    varnames = c("b_0j", "b_1j")
+    varnames = c("T_0j", "T_1j")
   ) |>
   mutate(subj_id = seq_len(n_subj))
 
 # cross subject and song IDs
 crossing(subjects, songs) |>
   mutate(e_ij = rnorm(n(), mean = 0, sd = sigma),
-         liking_ij = beta_0 + b_0j + O_0i + (beta_1 + b_1j) * genre_i + e_ij) |>
+         liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j) * genre_i + e_ij) |>
   select(subj_id, song_id, category, genre_i, liking_ij)
 }
 ```
@@ -297,9 +297,9 @@ In real life, we will not know the effect size of our quantity of interest and s
 ```{r}
 # grid of paramater values of interest
 pgrid <- crossing(
-  n_subj = c(10, 25, 50, 75),
-  n_pop = c(10, 20),
-  n_rock = c(10, 20),
+  n_subj = c(10, 25, 50),
+  n_pop = c(10, 30),
+  n_rock = c(10, 30),
   beta_1 = 1:5 
 )
 

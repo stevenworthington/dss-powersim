@@ -27,10 +27,10 @@ While the outcome in this example is bounded on the interval [0, 100], we will n
 The first step in simulation-based power analysis is to write down the regression model of interest, including all variables and parameters:
 
 $$
-\textrm{liking}_{ij} = \beta_0 + b_{0j} + O_{0i} + (\beta_1 + b_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
+\textrm{liking}_{ij} = \beta_0 + T_{0j} + O_{0i} + (\beta_1 + T_{1j}) \times \textrm{genre}_i + \epsilon_{ij}
 $$
 
-where the subscripts $i$ and $j$ denote individual songs and participants, respectively, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $b_{0j} \sim \mathcal{N}(0, \tau_0)$, $b_{1j} \sim \mathcal{N}(0, \tau_1)$, $O_{0i} \sim \mathcal{N}(0, \omega_0)$, and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.1 lists all of the variables and parameters in the model. 
+where the subscripts $i$ and $j$ denote individual songs and participants, respectively, `liking` is an integer-based rating of a given song on the interval [0, 100], `genre` is a dummy coded binary variable indicating whether the song is classified as "rock" or "pop", and we assume $T_{0j} \sim \mathcal{N}(0, \tau_0)$, $T_{1j} \sim \mathcal{N}(0, \tau_1)$, $O_{0i} \sim \mathcal{N}(0, \omega_0)$, and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma)$. The parameter of interest is $\beta_1$ - the average (within-subject) difference in the rating of songs between the two genres. Table 3.1 lists all of the variables and parameters in the model. 
 
 <caption>(\#tab:param-def)</caption>
 
@@ -46,11 +46,11 @@ $\beta_1$                $\texttt{beta_1}$      slope; mean difference btw 'pop'
 $\tau_0$                 $\texttt{tau_0}$       standard deviation of by-subject random intercepts              
 $\tau_1$                 $\texttt{tau_1}$       standard deviation of by-subject random slopes                  
 $\rho$                   $\texttt{rho}$         correlation between by-subject random intercepts and slopes     
-$\omega_0$               \texttt{omega_0}       standard deviation of by-song random intercepts                 
+$\omega_0$               $\texttt{omega_0}$     standard deviation of by-song random intercepts                 
 $\sigma$                 $\texttt{sigma}$       standard deviation of residuals                                 
-$b_{0j}$                 $\texttt{b_0j}$        random intercept for subject $j$                                
-$b_{1j}$                 $\texttt{b_1j}$        random slope for subject $j$                                    
-$O_{0i}$                 \texttt{O_0i}          random intercept for song $i$                                   
+$T_{0j}$                 $\texttt{T_0j}$        random intercept for subject $j$                                
+$T_{1j}$                 $\texttt{T_1j}$        random slope for subject $j$                                    
+$O_{0i}$                 $\texttt{O_0i}$        random intercept for song $i$                                   
 $e_{ij}$                 $\texttt{e_ij}$        residual of song $i$ for participant $j$                        
 
 ### Step 2: Variable composition
