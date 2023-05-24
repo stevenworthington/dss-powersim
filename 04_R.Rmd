@@ -346,7 +346,7 @@ Here's the table from the simulation.
 ```{r}
 sims_table |>
   gt() |>
-  tab_header(title = "Power values for GLM") |>
+  tab_header(title = "Power values for mixed effects model") |>
   data_color(
     columns = power,
     colors = scales::col_numeric(
@@ -360,12 +360,18 @@ Here's the graph from the simulation.
 
 ```{r}
 sims_table |>
-  mutate(across(n_subj:beta_1, as.factor)) |>
+  mutate(across(n_subj:beta_1, as.factor),
+         n_pop = paste0("n_pop: ", n_pop),
+         n_rock = paste0("n_rock: ", n_rock)) |>
   ggplot(aes(x = mean_estimate, y = power,
              group = n_subj, color = n_subj)) +
   geom_line() +
   geom_point(size = 2) +
   facet_grid(n_pop ~ n_rock) +
   ylim(0, 1) +
+  labs(x = "Effect size (rock genre - pop genre)",
+       y = "Power",
+       title = "Power analysis via simulation",
+       color = "Sample size")
   theme_bw()
 ```

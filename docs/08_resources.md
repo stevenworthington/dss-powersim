@@ -7,6 +7,8 @@ We would like to acknowledge some excellent online and peer-reviewed material ab
 
 - DeBruine & Barr (2021) paper on using simulation to understand mixed effects models: <https://journals.sagepub.com/doi/epdf/10.1177/2515245920965119>
 
+- Kumle et al. (2021) paper on estimating power in GLMMs:
+<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8613146/>
 
 Julian Quandt's 4-part blog series on power analysis via simulation:
 
