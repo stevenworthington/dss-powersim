@@ -29,7 +29,6 @@ power-calculation-single-run
 power-calculation-automated
 check-false-positive-rate
 power-for-different-effect-sizes
-summarize
 python
 simple-linear-regression
 setup-1
