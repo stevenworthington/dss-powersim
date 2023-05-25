@@ -209,8 +209,8 @@ We can use the `broom.mixed::tidy()` function to get a tidy table of the results
 broom.mixed::tidy(mod_sim) |>
   mutate(across(is.numeric, round, 3)) |>
   mutate(
-    parameter = c("beta_0", "beta_1", "tau_0", "rho", "tau_1", "omega_0", "sigma"),
-    value = c(beta_0, beta_1, tau_0, rho, tau_1, omega_0, sigma),
+    parameter = c("beta_0", "beta_1", "omega_0", "tau_0", "rho", "tau_1", "sigma"),
+    value = c(beta_0, beta_1, omega_0, tau_0, rho, tau_1, sigma),
   ) |>
   select(term, parameter, value, estimate) |>
   knitr::kable()

@@ -426,8 +426,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-2"><a href="r.html#cb19-2" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim) <span class="sc">|&gt;</span></span>
 <span id="cb19-3"><a href="r.html#cb19-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(is.numeric, round, <span class="dv">3</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb19-4"><a href="r.html#cb19-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb19-5"><a href="r.html#cb19-5" tabindex="-1"></a>    <span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">&quot;beta_0&quot;</span>, <span class="st">&quot;beta_1&quot;</span>, <span class="st">&quot;tau_0&quot;</span>, <span class="st">&quot;rho&quot;</span>, <span class="st">&quot;tau_1&quot;</span>, <span class="st">&quot;omega_0&quot;</span>, <span class="st">&quot;sigma&quot;</span>),</span>
-<span id="cb19-6"><a href="r.html#cb19-6" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">c</span>(beta_0, beta_1, tau_0, rho, tau_1, omega_0, sigma),</span>
+<span id="cb19-5"><a href="r.html#cb19-5" tabindex="-1"></a>    <span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">&quot;beta_0&quot;</span>, <span class="st">&quot;beta_1&quot;</span>, <span class="st">&quot;omega_0&quot;</span>, <span class="st">&quot;tau_0&quot;</span>, <span class="st">&quot;rho&quot;</span>, <span class="st">&quot;tau_1&quot;</span>, <span class="st">&quot;sigma&quot;</span>),</span>
+<span id="cb19-6"><a href="r.html#cb19-6" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">c</span>(beta_0, beta_1, omega_0, tau_0, rho, tau_1, sigma),</span>
 <span id="cb19-7"><a href="r.html#cb19-7" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb19-8"><a href="r.html#cb19-8" tabindex="-1"></a>  <span class="fu">select</span>(term, parameter, value, estimate) <span class="sc">|&gt;</span></span>
 <span id="cb19-9"><a href="r.html#cb19-9" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
@@ -455,26 +455,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="odd">
 <td align="left">sd__(Intercept)</td>
-<td align="left">tau_0</td>
-<td align="right">7.0</td>
+<td align="left">omega_0</td>
+<td align="right">3.0</td>
 <td align="right">3.550</td>
 </tr>
 <tr class="even">
 <td align="left">sd__(Intercept)</td>
-<td align="left">rho</td>
-<td align="right">0.2</td>
+<td align="left">tau_0</td>
+<td align="right">7.0</td>
 <td align="right">7.562</td>
 </tr>
 <tr class="odd">
 <td align="left">cor__(Intercept).genre_i</td>
-<td align="left">tau_1</td>
-<td align="right">4.0</td>
+<td align="left">rho</td>
+<td align="right">0.2</td>
 <td align="right">0.451</td>
 </tr>
 <tr class="even">
 <td align="left">sd__genre_i</td>
-<td align="left">omega_0</td>
-<td align="right">3.0</td>
+<td align="left">tau_1</td>
+<td align="right">4.0</td>
 <td align="right">4.793</td>
 </tr>
 <tr class="odd">
@@ -585,7 +585,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          5.02    1.47  0.92</code></pre>
+## 1 genre_i          5.01    1.46  0.92</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of <code>genre_ij</code> (<code>beta_1</code>) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
@@ -599,7 +599,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.08</code></pre>
+## 1  0.02</code></pre>
 <p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set at 0.05.</p>
 </div>
 </div>
