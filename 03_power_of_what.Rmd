@@ -10,7 +10,7 @@ knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=FALSE, message=FALSE, warnin
 
 The initial steps of power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps, there is an even more fundamental issue to be addressed - the power of what?
 
-What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question: "power of what?"
+What quantity within our model do we wish to calculate power for? Overall model goodness-of-fit, individual parameters, or combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that we must answer the question: "power of what?"
 
 ## Study design
 
@@ -20,7 +20,7 @@ The study design we will use as an example throughout this tutorial comes from J
 
 ## Mixed effects model
 
-Canned routines exist to perform power analysis for some simple general linear models (GLMs), however, for generalized linear mixed effects models (GLMMs) we must rely on simulation. We will walk through the process of calculating power for a GLMM in a step by step manner, which will serve as scaffolding to build intuition about the process of conducting power simulation more generally. Once we have the workflow down, we can automate the simulation process using functions. 
+Canned routines exist to perform power analysis for some simple general linear models (GLMs), however, for generalized linear mixed effects models (GLMMs) we must rely on simulation. We will walk through the process of simulating data for a GLMM in a step-by-step manner, which will serve as scaffolding to build intuition about how to conduct power simulation. Once we have the workflow down, we can automate the simulation process using functions. 
 
 While the outcome in this example is bounded on the interval [0, 100], we will not concern ourselves with the issue of using a linear model with such an outcome. 
 
@@ -64,7 +64,7 @@ In many other situations, we might include variables such as age and sex in the 
 
 ### Step 3: Parameter composition
 
-Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague's, substantive expertise about the phenomenom you're studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.
+Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague's, substantive expertise about the phenomenom you're studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try using some alternative values and compare power for each.
 
 ```{r param-all, echo=FALSE, results="asis"}
 tibble::tribble(~`code`, ~`value`, ~`description`,

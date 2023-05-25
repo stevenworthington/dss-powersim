@@ -171,13 +171,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.1" data-path="r.html"><a href="r.html#establish-the-simulation-parameters"><i class="fa fa-check"></i><b>4.2.1</b> Establish the simulation parameters</a></li>
 <li class="chapter" data-level="4.2.2" data-path="r.html"><a href="r.html#establish-the-data-generating-parameters"><i class="fa fa-check"></i><b>4.2.2</b> Establish the data-generating parameters</a></li>
 <li class="chapter" data-level="4.2.3" data-path="r.html"><a href="r.html#simulate-the-sampling-process"><i class="fa fa-check"></i><b>4.2.3</b> Simulate the sampling process</a></li>
-<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#simulate-the-sampling-of-songs"><i class="fa fa-check"></i><b>4.2.4</b> Simulate the sampling of songs</a></li>
-<li class="chapter" data-level="4.2.5" data-path="r.html"><a href="r.html#simulate-the-sampling-of-subjects"><i class="fa fa-check"></i><b>4.2.5</b> Simulate the sampling of subjects</a></li>
-<li class="chapter" data-level="4.2.6" data-path="r.html"><a href="r.html#check-the-simulated-values"><i class="fa fa-check"></i><b>4.2.6</b> Check the simulated values</a></li>
-<li class="chapter" data-level="4.2.7" data-path="r.html"><a href="r.html#simulate-trials"><i class="fa fa-check"></i><b>4.2.7</b> Simulate trials</a></li>
-<li class="chapter" data-level="4.2.8" data-path="r.html"><a href="r.html#calculate-response-values"><i class="fa fa-check"></i><b>4.2.8</b> Calculate response values</a></li>
-<li class="chapter" data-level="4.2.9" data-path="r.html"><a href="r.html#plot-the-data"><i class="fa fa-check"></i><b>4.2.9</b> Plot the data</a></li>
-<li class="chapter" data-level="4.2.10" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.10</b> Analyze the simulated data</a></li>
+<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.4</b> Analyze the simulated data</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="r.html"><a href="r.html#data-simulation-automated"><i class="fa fa-check"></i><b>4.3</b> Data simulation automated</a></li>
 <li class="chapter" data-level="4.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>4.4</b> Power calculation (single run)</a></li>
@@ -251,33 +245,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">4</span> R<a href="r.html#r" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="setup" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Setup<a href="r.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The main library we will use is <code>stats</code> and comes bundled with base R. However, we also need to install a few additional libraries onto our machine and then load them into our search path.</p>
+<p>We will need to use several R packages to optimize our workflow and fit mixed effects models. We can use the <code>p_load()</code> function from the <code>{pacman}</code> library to automate installing these packages onto our machine and then load them into our search path.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="r.html#cb3-1" tabindex="-1"></a><span class="co"># uncomment the line below to install the {pacman} library on your computer</span></span>
 <span id="cb3-2"><a href="r.html#cb3-2" tabindex="-1"></a><span class="co"># install.packages(&quot;pacman&quot;)</span></span>
-<span id="cb3-3"><a href="r.html#cb3-3" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
-<span id="cb3-4"><a href="r.html#cb3-4" tabindex="-1"></a>  lme4,         <span class="co"># model specification / estimation</span></span>
-<span id="cb3-5"><a href="r.html#cb3-5" tabindex="-1"></a>  lmerTest,     <span class="co"># provides p-values in the model output</span></span>
-<span id="cb3-6"><a href="r.html#cb3-6" tabindex="-1"></a>  future,       <span class="co"># parallelization</span></span>
-<span id="cb3-7"><a href="r.html#cb3-7" tabindex="-1"></a>  future.apply, <span class="co"># fast automation</span></span>
-<span id="cb3-8"><a href="r.html#cb3-8" tabindex="-1"></a>  furrr,        <span class="co"># fast functional programming</span></span>
-<span id="cb3-9"><a href="r.html#cb3-9" tabindex="-1"></a>  faux,         <span class="co"># simulate from multivariate normal distribution</span></span>
-<span id="cb3-10"><a href="r.html#cb3-10" tabindex="-1"></a>  broom.mixed,  <span class="co"># extracting tidy data from model fits</span></span>
-<span id="cb3-11"><a href="r.html#cb3-11" tabindex="-1"></a>  tidyverse,    <span class="co"># data wrangling and visualisation</span></span>
-<span id="cb3-12"><a href="r.html#cb3-12" tabindex="-1"></a>  gt            <span class="co"># nice tables</span></span>
-<span id="cb3-13"><a href="r.html#cb3-13" tabindex="-1"></a>  )</span>
-<span id="cb3-14"><a href="r.html#cb3-14" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="r.html#cb3-15" tabindex="-1"></a><span class="fu">faux_options</span>(<span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p>We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.</p>
+<span id="cb3-3"><a href="r.html#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="r.html#cb3-4" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb3-5"><a href="r.html#cb3-5" tabindex="-1"></a>  lme4,         <span class="co"># model specification / estimation</span></span>
+<span id="cb3-6"><a href="r.html#cb3-6" tabindex="-1"></a>  lmerTest,     <span class="co"># provides p-values in the model output</span></span>
+<span id="cb3-7"><a href="r.html#cb3-7" tabindex="-1"></a>  future,       <span class="co"># parallelization</span></span>
+<span id="cb3-8"><a href="r.html#cb3-8" tabindex="-1"></a>  future.apply, <span class="co"># fast automation</span></span>
+<span id="cb3-9"><a href="r.html#cb3-9" tabindex="-1"></a>  furrr,        <span class="co"># fast functional programming</span></span>
+<span id="cb3-10"><a href="r.html#cb3-10" tabindex="-1"></a>  faux,         <span class="co"># simulate from multivariate normal distribution</span></span>
+<span id="cb3-11"><a href="r.html#cb3-11" tabindex="-1"></a>  broom.mixed,  <span class="co"># extracting tidy data from model fits</span></span>
+<span id="cb3-12"><a href="r.html#cb3-12" tabindex="-1"></a>  tidyverse,    <span class="co"># data wrangling and visualisation</span></span>
+<span id="cb3-13"><a href="r.html#cb3-13" tabindex="-1"></a>  gt            <span class="co"># nice tables</span></span>
+<span id="cb3-14"><a href="r.html#cb3-14" tabindex="-1"></a>  )</span>
+<span id="cb3-15"><a href="r.html#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="r.html#cb3-16" tabindex="-1"></a><span class="fu">faux_options</span>(<span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>We will also set the pseudo-random number generator seed to <code>02138</code> to make the stochastic components of our simulations reproducible.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="r.html#cb4-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">02138</span>)</span></code></pre></div>
-<p>Finally, let’s take advantage of background parallelization to speed-up R processes.</p>
+<p>Finally, let’s take advantage of background parallelization to speed-up iterative processes.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="r.html#cb5-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code></pre></div>
 </div>
 <div id="data-simulation-step-by-step" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Data simulation step by step<a href="r.html#data-simulation-step-by-step" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see <a href="./power-of-what.html">Power of What?</a> for design details), fit a model to the simulated data, recover the parameter values we put in from the model output, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. First, let’s write some code that creates datasets under the alternative hypothesis.</p>
+<p>To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see <a href="./power-of-what.html">Power of What?</a> for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. Much of the general workflow here is borrowed from <a href="https://journals.sagepub.com/doi/full/10.1177/2515245920965119">DeBruine &amp; Dale (2021) Understanding Mixed-Effects Models through Simulation</a>. We’ll start by writing code that simulates datasets under the alternative hypothesis.</p>
 <div id="establish-the-simulation-parameters" class="section level3 hasAnchor" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Establish the simulation parameters<a href="r.html#establish-the-simulation-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="r.html#cb6-1" tabindex="-1"></a><span class="co"># number of simulation replicates</span></span>
+<p>Before we start, let’s set some global parameters for our power simulations. Since simulations can take a long time to run, we’ll use 100 replications here as an example, but we recommend increasing this number to at least 1000 replications for a more accurate final power calculation.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="r.html#cb6-1" tabindex="-1"></a><span class="co"># number of simulation replicates for power calculation</span></span>
 <span id="cb6-2"><a href="r.html#cb6-2" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb6-3"><a href="r.html#cb6-3" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="r.html#cb6-4" tabindex="-1"></a><span class="co"># specified alpha for power calculation</span></span>
@@ -285,6 +281,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="establish-the-data-generating-parameters" class="section level3 hasAnchor" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Establish the data-generating parameters<a href="r.html#establish-the-data-generating-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the <em>data-generating process</em>, or DGP. We previously decided upon the the data-generating parameters (see <a href="./power-of-what.html">Power of What?</a>), so we just need to code them here.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r.html#cb7-1" tabindex="-1"></a><span class="co"># set all data-generating parameters</span></span>
 <span id="cb7-2"><a href="r.html#cb7-2" tabindex="-1"></a>beta_0  <span class="ot">&lt;-</span>  <span class="dv">60</span>   <span class="co"># intercept; i.e., the grand mean</span></span>
 <span id="cb7-3"><a href="r.html#cb7-3" tabindex="-1"></a>beta_1  <span class="ot">&lt;-</span>   <span class="dv">5</span>   <span class="co"># slope; i.e, effect of category</span></span>
@@ -296,13 +293,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="simulate-the-sampling-process" class="section level3 hasAnchor" number="4.2.3">
 <h3><span class="header-section-number">4.2.3</span> Simulate the sampling process<a href="r.html#simulate-the-sampling-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Next, we will simulate the sampling process for the data. First, let’s define parameters related to the number of observations.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="r.html#cb8-1" tabindex="-1"></a><span class="co"># set number of subjects and songs</span></span>
 <span id="cb8-2"><a href="r.html#cb8-2" tabindex="-1"></a>n_subj <span class="ot">&lt;-</span>  <span class="dv">25</span> <span class="co"># number of subjects</span></span>
 <span id="cb8-3"><a href="r.html#cb8-3" tabindex="-1"></a>n_pop  <span class="ot">&lt;-</span>  <span class="dv">15</span> <span class="co"># number of songs in pop category</span></span>
 <span id="cb8-4"><a href="r.html#cb8-4" tabindex="-1"></a>n_rock <span class="ot">&lt;-</span>  <span class="dv">15</span> <span class="co"># number of songs in rock category</span></span></code></pre></div>
-</div>
-<div id="simulate-the-sampling-of-songs" class="section level3 hasAnchor" number="4.2.4">
-<h3><span class="header-section-number">4.2.4</span> Simulate the sampling of songs<a href="r.html#simulate-the-sampling-of-songs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="simulate-the-sampling-of-songs" class="section level4 hasAnchor" number="4.2.3.1">
+<h4><span class="header-section-number">4.2.3.1</span> Simulate the sampling of songs<a href="r.html#simulate-the-sampling-of-songs" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We need to create a table listing each song <span class="math inline">\(i\)</span>, which category it is in (<code>rock</code> or <code>pop</code>), and its random effect <span class="math inline">\(O_{0i}\)</span>. The latter is sampled from a univariate normal distribution using the function <code>rnorm()</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="r.html#cb9-1" tabindex="-1"></a><span class="co"># simulate a sample of songs</span></span>
 <span id="cb9-2"><a href="r.html#cb9-2" tabindex="-1"></a>songs <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="cb9-3"><a href="r.html#cb9-3" tabindex="-1"></a>  <span class="at">song_id =</span> <span class="fu">seq_len</span>(n_pop <span class="sc">+</span> n_rock),</span>
@@ -311,8 +309,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-6"><a href="r.html#cb9-6" tabindex="-1"></a>  <span class="at">O_0i =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n_pop <span class="sc">+</span> n_rock, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> omega_0)</span>
 <span id="cb9-7"><a href="r.html#cb9-7" tabindex="-1"></a>)</span></code></pre></div>
 </div>
-<div id="simulate-the-sampling-of-subjects" class="section level3 hasAnchor" number="4.2.5">
-<h3><span class="header-section-number">4.2.5</span> Simulate the sampling of subjects<a href="r.html#simulate-the-sampling-of-subjects" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="simulate-the-sampling-of-subjects" class="section level4 hasAnchor" number="4.2.3.2">
+<h4><span class="header-section-number">4.2.3.2</span> Simulate the sampling of subjects<a href="r.html#simulate-the-sampling-of-subjects" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Now we simulate the sampling of participants, which results in table listing each individual and their two correlated random effects (a random intercept and random slope). To do this, we must sample <span class="math inline">\({T_{0j}, T_{1j}}\)</span> pairs - one for each subject - from a bivariate normal distribution.</p>
 <p>We will use the function <code>faux::rnorm_multi()</code>, which generates a table of <code>n</code> simulated values from a multivariate normal distribution by specifying the means (<code>mu</code>) and standard deviations (<code>sd</code>) of each variable, plus the correlations (<code>r</code>), which can be either a single value (applied to all pairs), a correlation matrix, or a vector of the values in the upper right triangle of the correlation matrix.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="r.html#cb10-1" tabindex="-1"></a><span class="co"># simulate a sample of subjects</span></span>
 <span id="cb10-2"><a href="r.html#cb10-2" tabindex="-1"></a></span>
@@ -321,13 +320,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-5"><a href="r.html#cb10-5" tabindex="-1"></a>    <span class="at">n =</span> n_subj,</span>
 <span id="cb10-6"><a href="r.html#cb10-6" tabindex="-1"></a>    <span class="at">mu =</span> <span class="dv">0</span>, <span class="co"># means for random effects are always 0</span></span>
 <span id="cb10-7"><a href="r.html#cb10-7" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">c</span>(tau_0, tau_1), <span class="co"># set SDs</span></span>
-<span id="cb10-8"><a href="r.html#cb10-8" tabindex="-1"></a>    <span class="at">r =</span> rho, <span class="co"># set correlation, see ?rnorm_multi</span></span>
+<span id="cb10-8"><a href="r.html#cb10-8" tabindex="-1"></a>    <span class="at">r =</span> rho, <span class="co"># set correlation</span></span>
 <span id="cb10-9"><a href="r.html#cb10-9" tabindex="-1"></a>    <span class="at">varnames =</span> <span class="fu">c</span>(<span class="st">&quot;T_0j&quot;</span>, <span class="st">&quot;T_1j&quot;</span>)</span>
 <span id="cb10-10"><a href="r.html#cb10-10" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb10-11"><a href="r.html#cb10-11" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">subj_id =</span> <span class="fu">seq_len</span>(n_subj)) <span class="co"># add subject IDs</span></span></code></pre></div>
 </div>
-<div id="check-the-simulated-values" class="section level3 hasAnchor" number="4.2.6">
-<h3><span class="header-section-number">4.2.6</span> Check the simulated values<a href="r.html#check-the-simulated-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="check-the-simulated-values" class="section level4 hasAnchor" number="4.2.3.3">
+<h4><span class="header-section-number">4.2.3.3</span> Check the simulated values<a href="r.html#check-the-simulated-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let’s do a quick sanity check by comparing our simulated values to the parameters we used as inputs. Because the sampling process is stochastic, we shouldn’t expect that these will exactly match for any given run of the simulation.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="r.html#cb11-1" tabindex="-1"></a><span class="fu">tibble</span>(</span>
 <span id="cb11-2"><a href="r.html#cb11-2" tabindex="-1"></a>  <span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">&quot;omega_0&quot;</span>, <span class="st">&quot;tau_0&quot;</span>, <span class="st">&quot;tau_1&quot;</span>, <span class="st">&quot;rho&quot;</span>),</span>
 <span id="cb11-3"><a href="r.html#cb11-3" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(omega_0, tau_0, tau_1, rho),</span>
@@ -346,20 +346,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3 tau_1       4       4.05 
 ## 4 rho         0.2     0.495</code></pre>
 </div>
-<div id="simulate-trials" class="section level3 hasAnchor" number="4.2.7">
-<h3><span class="header-section-number">4.2.7</span> Simulate trials<a href="r.html#simulate-trials" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="simulate-trials" class="section level4 hasAnchor" number="4.2.3.4">
+<h4><span class="header-section-number">4.2.3.4</span> Simulate trials<a href="r.html#simulate-trials" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials by including every possible combination of the rows in the <code>subjects</code> and <code>songs</code> tables. Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unkown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of <code>sigma</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="r.html#cb13-1" tabindex="-1"></a><span class="co"># cross subject and song IDs; add an error term</span></span>
 <span id="cb13-2"><a href="r.html#cb13-2" tabindex="-1"></a>trials <span class="ot">&lt;-</span> <span class="fu">crossing</span>(subjects, songs) <span class="sc">|&gt;</span></span>
 <span id="cb13-3"><a href="r.html#cb13-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">e_ij =</span> <span class="fu">rnorm</span>(<span class="fu">n</span>(), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma))</span></code></pre></div>
 </div>
-<div id="calculate-response-values" class="section level3 hasAnchor" number="4.2.8">
-<h3><span class="header-section-number">4.2.8</span> Calculate response values<a href="r.html#calculate-response-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="calculate-response-values" class="section level4 hasAnchor" number="4.2.3.5">
+<h4><span class="header-section-number">4.2.3.5</span> Calculate response values<a href="r.html#calculate-response-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>With this resulting <code>trials</code> table, in combination with the constants <code>beta_0</code> and <code>beta_1</code>, we have the full set of values that we need to compute the response variable <code>liking_ij</code> according the linear model we defined previously (see <a href="./power-of-what.html">Power of What?</a>).</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="r.html#cb14-1" tabindex="-1"></a>dat_sim <span class="ot">&lt;-</span> trials <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="r.html#cb14-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">liking_ij =</span> beta_0 <span class="sc">+</span> T_0j <span class="sc">+</span> O_0i <span class="sc">+</span> (beta_1 <span class="sc">+</span> T_1j) <span class="sc">*</span> genre_i <span class="sc">+</span> e_ij) <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="r.html#cb14-3" tabindex="-1"></a>  <span class="fu">select</span>(subj_id, song_id, category, genre_i, liking_ij)</span></code></pre></div>
 </div>
-<div id="plot-the-data" class="section level3 hasAnchor" number="4.2.9">
-<h3><span class="header-section-number">4.2.9</span> Plot the data<a href="r.html#plot-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="plot-the-data" class="section level4 hasAnchor" number="4.2.3.6">
+<h4><span class="header-section-number">4.2.3.6</span> Plot the data<a href="r.html#plot-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let’s visualize the distribution of the response variable for each of the two song genres and superimpose the simulated parameter estimates for the means of these two groups.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="r.html#cb15-1" tabindex="-1"></a>dat_sim <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="r.html#cb15-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(category, liking_ij, <span class="at">color =</span> category)) <span class="sc">+</span></span>
 <span id="cb15-3"><a href="r.html#cb15-3" tabindex="-1"></a>  <span class="co"># predicted means</span></span>
@@ -375,8 +378,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-13"><a href="r.html#cb15-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="figures/unnamed-chunk-10-1.png" width="768" /></p>
 </div>
-<div id="analyze-the-simulated-data" class="section level3 hasAnchor" number="4.2.10">
-<h3><span class="header-section-number">4.2.10</span> Analyze the simulated data<a href="r.html#analyze-the-simulated-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="analyze-the-simulated-data" class="section level3 hasAnchor" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Analyze the simulated data<a href="r.html#analyze-the-simulated-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now we can analyze our simulated data in a linear mixed effects model using the function <code>lmer()</code> from the <code>{lmerTest}</code> package (which is a wrapper around the <code>lmer()</code> function from the <code>{lme4}</code> package that additionally provides <span class="math inline">\(p\)</span>-values). The model formula in <code>lmer()</code> maps onto how we calculated our <code>liking_ij</code> outcome variable above.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="r.html#cb16-1" tabindex="-1"></a><span class="co"># fit a linear mixed-effects model to data</span></span>
 <span id="cb16-2"><a href="r.html#cb16-2" tabindex="-1"></a>mod_sim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(liking_ij <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> song_id) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">|</span> subj_id), <span class="at">data =</span> dat_sim)</span>
 <span id="cb16-3"><a href="r.html#cb16-3" tabindex="-1"></a></span>
@@ -406,7 +411,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## genre_i        7.501      1.713 40.857   4.379 8.09e-05 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>Use <code>broom.mixed::tidy(mod_sim)</code> to get a tidy table of the results. Below, we added column “parameter” and “value”, so you can compare the estimate from the model to the parameters you used to simulate the data.</p>
+<p>The terms in this R formula are as follows:</p>
+<ul>
+<li><code>liking_ij</code> is the response.</li>
+<li><code>1</code> is the intercept (<code>beta_0</code>), which is the mean of the response for the pop genre of songs (because we used dummy coding for the <code>genre_i</code> term).</li>
+<li><code>genre_i</code> is the dummy coded variable identifying whether song <span class="math inline">\(i\)</span> belongs to the pop or rock genre.</li>
+<li><code>(1 | song_id)</code> specifies a song-specific random intercept (<code>O_0i</code>).</li>
+<li><code>(1 + genre_i | subj_id)</code> specifies a subject-specific random intercept (<code>T_0j</code>) plus the subject specific random slope of the genre category (<code>T_1j</code>).</li>
+</ul>
+<p>We can use the <code>broom.mixed::tidy()</code> function to get a tidy table of the results. This will prove to be super useful later when we need to combine the output from hundreds of simulations to calculate power. We will added columns for <code>parameter</code> and <code>value</code>, so we can compare the estimate from the model to the parameters we used to simulate the data.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="r.html#cb18-1" tabindex="-1"></a><span class="co"># get a tidy table of results</span></span>
 <span id="cb18-2"><a href="r.html#cb18-2" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim) <span class="sc">|&gt;</span></span>
 <span id="cb18-3"><a href="r.html#cb18-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(is.numeric, round, <span class="dv">3</span>)) <span class="sc">|&gt;</span></span>
@@ -516,9 +529,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="power-calculation-single-run" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Power calculation (single run)<a href="r.html#power-calculation-single-run" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We can wrap the data generating function and analysis code in a new function (<code>power_run()</code>) that returns a tidy table of the analysis results.</p>
+<p>We can wrap the data generating function and modeling code in a new function <code>power_one_run()</code> that returns a tidy table of the analysis results for a single simulation run. We’ll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="r.html#cb20-1" tabindex="-1"></a><span class="co"># set up the power function</span></span>
-<span id="cb20-2"><a href="r.html#cb20-2" tabindex="-1"></a>power_run <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb20-2"><a href="r.html#cb20-2" tabindex="-1"></a>power_one_run <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
 <span id="cb20-3"><a href="r.html#cb20-3" tabindex="-1"></a>  <span class="co"># ... is a shortcut that forwards any additional arguments to sim_data()</span></span>
 <span id="cb20-4"><a href="r.html#cb20-4" tabindex="-1"></a>  dat_sim <span class="ot">&lt;-</span> <span class="fu">sim_data</span>(...)</span>
 <span id="cb20-5"><a href="r.html#cb20-5" tabindex="-1"></a>  mod_sim <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>({ <span class="fu">suppressMessages</span>({ <span class="co"># suppress singularity messages</span></span>
@@ -526,8 +539,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb20-7"><a href="r.html#cb20-7" tabindex="-1"></a>  })})</span>
 <span id="cb20-8"><a href="r.html#cb20-8" tabindex="-1"></a>  broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim)</span>
 <span id="cb20-9"><a href="r.html#cb20-9" tabindex="-1"></a>}</span></code></pre></div>
+<p>Let’s test that our new <code>power_one_run()</code> function performs as expected.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="r.html#cb21-1" tabindex="-1"></a><span class="co"># run one model with default parameters</span></span>
-<span id="cb21-2"><a href="r.html#cb21-2" tabindex="-1"></a><span class="fu">power_run</span>()</span></code></pre></div>
+<span id="cb21-2"><a href="r.html#cb21-2" tabindex="-1"></a><span class="fu">power_one_run</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 8
 ##   effect   group    term            estimate std.error statistic    df   p.value
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
@@ -539,7 +553,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 6 ran_pars subj_id  sd__genre_i        4.37      NA        NA     NA   NA       
 ## 7 ran_pars Residual sd__Observation    7.73      NA        NA     NA   NA</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="r.html#cb23-1" tabindex="-1"></a><span class="co"># run one model with new parameters</span></span>
-<span id="cb23-2"><a href="r.html#cb23-2" tabindex="-1"></a><span class="fu">power_run</span>(<span class="at">n_pop =</span> <span class="dv">10</span>, <span class="at">n_rock =</span> <span class="dv">50</span>, <span class="at">beta_1 =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb23-2"><a href="r.html#cb23-2" tabindex="-1"></a><span class="fu">power_one_run</span>(<span class="at">n_pop =</span> <span class="dv">10</span>, <span class="at">n_rock =</span> <span class="dv">50</span>, <span class="at">beta_1 =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 8
 ##   effect   group    term            estimate std.error statistic    df   p.value
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
@@ -553,8 +567,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="power-calculation-automated" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Power calculation automated<a href="r.html#power-calculation-automated" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To get an accurate estimation of power, we need to run the simulation many times. We use 100 here as an example, but the results will be more accurate the more replications you run. This will depend on the specifics of your analysis, but we recommend at least 1000 replications.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="r.html#cb25-1" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_run</span>())</span></code></pre></div>
+<p>To get an accurate estimation of power, we need to run the simulation many times. Here we use the <code>future_map_dfr()</code> function to iterate over a sequence of integers denoting the replications we want to perform.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="r.html#cb25-1" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_one_run</span>())</span></code></pre></div>
+<p>We can finally calculate power for our parameter of interest <code>beta_1</code>(denoted in the tidy model output table as the term <code>genre_i</code>) by filtering to keep only that term and the calculating the proportion of times the <span class="math inline">\(p\)</span>-value is below the <code>alpha</code> (0.05) threshold.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="r.html#cb26-1" tabindex="-1"></a><span class="co"># calculate mean estimates and power for specified alpha</span></span>
 <span id="cb26-2"><a href="r.html#cb26-2" tabindex="-1"></a>sims <span class="sc">|&gt;</span></span>
 <span id="cb26-3"><a href="r.html#cb26-3" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
@@ -568,12 +583,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          4.96    1.48  0.88</code></pre>
+## 1 genre_i          4.99    1.47  0.85</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Set the effect of <code>genre_ij</code> to 0 to calculate the false positive rate. This is the probability of concluding there is an effect when there is no actual effect in your population.</p>
+<p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of <code>genre_ij</code> (<code>beta_1</code>) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="r.html#cb28-1" tabindex="-1"></a><span class="co"># run simulations and calculate the false positive rate</span></span>
-<span id="cb28-2"><a href="r.html#cb28-2" tabindex="-1"></a>sims_fp <span class="ot">&lt;-</span> <span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_run</span>(<span class="at">beta_1 =</span> <span class="dv">0</span>))</span>
+<span id="cb28-2"><a href="r.html#cb28-2" tabindex="-1"></a>sims_fp <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_one_run</span>(<span class="at">beta_1 =</span> <span class="dv">0</span>))</span>
 <span id="cb28-3"><a href="r.html#cb28-3" tabindex="-1"></a></span>
 <span id="cb28-4"><a href="r.html#cb28-4" tabindex="-1"></a><span class="co"># calculate mean estimates and power for specified alpha</span></span>
 <span id="cb28-5"><a href="r.html#cb28-5" tabindex="-1"></a>sims_fp <span class="sc">|&gt;</span></span>
@@ -582,103 +597,123 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.04</code></pre>
-<p>Ideally, the false positive rate will be equal to alpha, which we set here at 0.05.</p>
+## 1  0.08</code></pre>
+<p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set here at 0.05.</p>
 </div>
 </div>
 <div id="power-for-different-effect-sizes" class="section level2 hasAnchor" number="4.6">
 <h2><span class="header-section-number">4.6</span> Power for different effect sizes<a href="r.html#power-for-different-effect-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes.</p>
+<p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="r.html#cb30-1" tabindex="-1"></a><span class="co"># grid of paramater values of interest</span></span>
 <span id="cb30-2"><a href="r.html#cb30-2" tabindex="-1"></a>pgrid <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
 <span id="cb30-3"><a href="r.html#cb30-3" tabindex="-1"></a>  <span class="at">n_subj =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>),</span>
 <span id="cb30-4"><a href="r.html#cb30-4" tabindex="-1"></a>  <span class="at">n_pop =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
 <span id="cb30-5"><a href="r.html#cb30-5" tabindex="-1"></a>  <span class="at">n_rock =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
 <span id="cb30-6"><a href="r.html#cb30-6" tabindex="-1"></a>  <span class="at">beta_1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span> </span>
-<span id="cb30-7"><a href="r.html#cb30-7" tabindex="-1"></a>)</span>
-<span id="cb30-8"><a href="r.html#cb30-8" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="r.html#cb30-9" tabindex="-1"></a><span class="co"># fit the models over the parameters</span></span>
-<span id="cb30-10"><a href="r.html#cb30-10" tabindex="-1"></a>parameter_search <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">params =</span> pgrid){</span>
-<span id="cb30-11"><a href="r.html#cb30-11" tabindex="-1"></a>  <span class="fu">future_pmap_dfr</span>(</span>
-<span id="cb30-12"><a href="r.html#cb30-12" tabindex="-1"></a>    <span class="at">.l =</span> params, <span class="co"># iterate over the grid of parameter values</span></span>
-<span id="cb30-13"><a href="r.html#cb30-13" tabindex="-1"></a>    <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">power_run</span>(<span class="at">n_subj =</span> ..<span class="dv">1</span>, <span class="co"># plug each row of parameter values into power_run()</span></span>
-<span id="cb30-14"><a href="r.html#cb30-14" tabindex="-1"></a>                     <span class="at">n_pop  =</span> ..<span class="dv">2</span>, </span>
-<span id="cb30-15"><a href="r.html#cb30-15" tabindex="-1"></a>                     <span class="at">n_rock =</span> ..<span class="dv">3</span>,</span>
-<span id="cb30-16"><a href="r.html#cb30-16" tabindex="-1"></a>                     <span class="at">beta_1 =</span> ..<span class="dv">4</span>),</span>
-<span id="cb30-17"><a href="r.html#cb30-17" tabindex="-1"></a>    <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-18"><a href="r.html#cb30-18" tabindex="-1"></a>    <span class="at">.progress =</span> <span class="cn">TRUE</span></span>
-<span id="cb30-19"><a href="r.html#cb30-19" tabindex="-1"></a>  )</span>
-<span id="cb30-20"><a href="r.html#cb30-20" tabindex="-1"></a>}</span></code></pre></div>
-<p>Fair warning, this will take some time!</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="r.html#cb31-1" tabindex="-1"></a><span class="co"># replicate the parameter grid to match the dimensions of the model outputs</span></span>
-<span id="cb31-2"><a href="r.html#cb31-2" tabindex="-1"></a>pgrid_expand <span class="ot">&lt;-</span> pgrid <span class="sc">|&gt;</span> </span>
-<span id="cb31-3"><a href="r.html#cb31-3" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>(), <span class="at">each =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span> <span class="co"># replicate each row by 7 parameters</span></span>
-<span id="cb31-4"><a href="r.html#cb31-4" tabindex="-1"></a>  <span class="fu">map_df</span>(rep.int, <span class="at">times =</span> reps) <span class="co"># replicate the whole grid by number of reps</span></span>
-<span id="cb31-5"><a href="r.html#cb31-5" tabindex="-1"></a></span>
-<span id="cb31-6"><a href="r.html#cb31-6" tabindex="-1"></a>sims_params <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(</span>
-<span id="cb31-7"><a href="r.html#cb31-7" tabindex="-1"></a>    <span class="at">n =</span> reps, </span>
-<span id="cb31-8"><a href="r.html#cb31-8" tabindex="-1"></a>    <span class="at">expr =</span> <span class="fu">parameter_search</span>(), </span>
-<span id="cb31-9"><a href="r.html#cb31-9" tabindex="-1"></a>    <span class="at">simplify =</span> <span class="cn">FALSE</span></span>
-<span id="cb31-10"><a href="r.html#cb31-10" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb31-11"><a href="r.html#cb31-11" tabindex="-1"></a>  <span class="fu">imap</span>( <span class="sc">~</span> <span class="fu">mutate</span>(.x, <span class="at">rep =</span> .y, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># include rep ID</span></span>
-<span id="cb31-12"><a href="r.html#cb31-12" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> <span class="co"># combine into a single tibble</span></span>
-<span id="cb31-13"><a href="r.html#cb31-13" tabindex="-1"></a>  <span class="fu">mutate</span>(pgrid_expand, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>) <span class="co"># add in the parameter grid</span></span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="r.html#cb32-1" tabindex="-1"></a>sims_table <span class="ot">&lt;-</span> sims_params <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="r.html#cb32-2" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-3"><a href="r.html#cb32-3" tabindex="-1"></a>  <span class="fu">group_by</span>(term, n_subj, n_pop, n_rock, beta_1) <span class="sc">|&gt;</span></span>
-<span id="cb32-4"><a href="r.html#cb32-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb32-5"><a href="r.html#cb32-5" tabindex="-1"></a>    <span class="at">mean_estimate =</span> <span class="fu">mean</span>(estimate),</span>
-<span id="cb32-6"><a href="r.html#cb32-6" tabindex="-1"></a>    <span class="at">mean_se =</span> <span class="fu">mean</span>(std.error),</span>
-<span id="cb32-7"><a href="r.html#cb32-7" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha),</span>
-<span id="cb32-8"><a href="r.html#cb32-8" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
-<span id="cb32-9"><a href="r.html#cb32-9" tabindex="-1"></a>  )</span></code></pre></div>
-<p>Here’s the graph from the simulation.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="r.html#cb33-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="r.html#cb33-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(n_subj<span class="sc">:</span>beta_1, as.factor),</span>
-<span id="cb33-3"><a href="r.html#cb33-3" tabindex="-1"></a>         <span class="at">n_pop =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_pop: &quot;</span>, n_pop),</span>
-<span id="cb33-4"><a href="r.html#cb33-4" tabindex="-1"></a>         <span class="at">n_rock =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_rock: &quot;</span>, n_rock)) <span class="sc">|&gt;</span></span>
-<span id="cb33-5"><a href="r.html#cb33-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> mean_estimate, <span class="at">y =</span> power,</span>
-<span id="cb33-6"><a href="r.html#cb33-6" tabindex="-1"></a>             <span class="at">group =</span> n_subj, <span class="at">color =</span> n_subj)) <span class="sc">+</span></span>
-<span id="cb33-7"><a href="r.html#cb33-7" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
-<span id="cb33-8"><a href="r.html#cb33-8" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">linewidth =</span>  <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb33-9"><a href="r.html#cb33-9" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb33-10"><a href="r.html#cb33-10" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb33-11"><a href="r.html#cb33-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(n_pop <span class="sc">~</span> n_rock) <span class="sc">+</span></span>
-<span id="cb33-12"><a href="r.html#cb33-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb33-13"><a href="r.html#cb33-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Effect size (rock genre - pop genre)&quot;</span>,</span>
-<span id="cb33-14"><a href="r.html#cb33-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Power&quot;</span>,</span>
-<span id="cb33-15"><a href="r.html#cb33-15" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Power analysis via simulation&quot;</span>,</span>
-<span id="cb33-16"><a href="r.html#cb33-16" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Sample size&quot;</span>) <span class="sc">+</span></span>
-<span id="cb33-17"><a href="r.html#cb33-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="figures/unnamed-chunk-23-1.png" width="768" /></p>
-<p>Here’s the table from the simulation.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="r.html#cb34-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="r.html#cb34-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb34-3"><a href="r.html#cb34-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-4"><a href="r.html#cb34-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
-<span id="cb34-5"><a href="r.html#cb34-5" tabindex="-1"></a>    <span class="at">columns =</span> power,</span>
-<span id="cb34-6"><a href="r.html#cb34-6" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
-<span id="cb34-7"><a href="r.html#cb34-7" tabindex="-1"></a>      <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
-<span id="cb34-8"><a href="r.html#cb34-8" tabindex="-1"></a>      <span class="at">domain =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb34-9"><a href="r.html#cb34-9" tabindex="-1"></a>      )</span>
-<span id="cb34-10"><a href="r.html#cb34-10" tabindex="-1"></a>  )</span></code></pre></div>
-<div id="eiyfpptxwg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eiyfpptxwg table {
+<span id="cb30-7"><a href="r.html#cb30-7" tabindex="-1"></a>)</span></code></pre></div>
+<p>We can now wrap our <code>power_one_run()</code> function within a more general function <code>parameter_search()</code> that takes the grid of parameter values as input and uses the <code>future_pmap_dfr()</code> function to iterate over each row of parameter values in <code>pgrid</code> and feed them into <code>power_one_run()</code>.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="r.html#cb31-1" tabindex="-1"></a><span class="co"># fit the models over the parameters</span></span>
+<span id="cb31-2"><a href="r.html#cb31-2" tabindex="-1"></a>parameter_search <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">params =</span> pgrid){</span>
+<span id="cb31-3"><a href="r.html#cb31-3" tabindex="-1"></a>  <span class="fu">future_pmap_dfr</span>(</span>
+<span id="cb31-4"><a href="r.html#cb31-4" tabindex="-1"></a>    <span class="at">.l =</span> params, <span class="co"># iterate over the grid of parameter values</span></span>
+<span id="cb31-5"><a href="r.html#cb31-5" tabindex="-1"></a>    <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">power_one_run</span>(</span>
+<span id="cb31-6"><a href="r.html#cb31-6" tabindex="-1"></a>             <span class="at">n_subj =</span> ..<span class="dv">1</span>, <span class="co"># plug each row of parameter values into power_one_run()</span></span>
+<span id="cb31-7"><a href="r.html#cb31-7" tabindex="-1"></a>             <span class="at">n_pop  =</span> ..<span class="dv">2</span>, </span>
+<span id="cb31-8"><a href="r.html#cb31-8" tabindex="-1"></a>             <span class="at">n_rock =</span> ..<span class="dv">3</span>,</span>
+<span id="cb31-9"><a href="r.html#cb31-9" tabindex="-1"></a>             <span class="at">beta_1 =</span> ..<span class="dv">4</span></span>
+<span id="cb31-10"><a href="r.html#cb31-10" tabindex="-1"></a>             ),</span>
+<span id="cb31-11"><a href="r.html#cb31-11" tabindex="-1"></a>    <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb31-12"><a href="r.html#cb31-12" tabindex="-1"></a>    <span class="at">.progress =</span> <span class="cn">TRUE</span></span>
+<span id="cb31-13"><a href="r.html#cb31-13" tabindex="-1"></a>  )</span>
+<span id="cb31-14"><a href="r.html#cb31-14" tabindex="-1"></a>}</span></code></pre></div>
+<p>If we call <code>parameter_search()</code> it will return a single replications worth of simulations for each combination of parameter values in <code>pgrid</code>.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="r.html#cb32-1" tabindex="-1"></a><span class="fu">parameter_search</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 420 × 8
+##    effect   group    term           estimate std.error statistic    df   p.value
+##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+##  1 fixed    &lt;NA&gt;     (Intercept)      58.3        2.97    19.7    10.4  1.42e- 9
+##  2 fixed    &lt;NA&gt;     genre_i          -0.383      1.98    -0.194  12.9  8.49e- 1
+##  3 ran_pars song_id  sd__(Intercep…    2.62      NA       NA      NA   NA       
+##  4 ran_pars subj_id  sd__(Intercep…    8.58      NA       NA      NA   NA       
+##  5 ran_pars subj_id  cor__(Interce…   -0.708     NA       NA      NA   NA       
+##  6 ran_pars subj_id  sd__genre_i       3.24      NA       NA      NA   NA       
+##  7 ran_pars Residual sd__Observati…    8.62      NA       NA      NA   NA       
+##  8 fixed    &lt;NA&gt;     (Intercept)      62.8        2.15    29.1    14.6  2.36e-14
+##  9 fixed    &lt;NA&gt;     genre_i           1.75       2.13     0.820  16.8  4.24e- 1
+## 10 ran_pars song_id  sd__(Intercep…    3.52      NA       NA      NA   NA       
+## # ℹ 410 more rows</code></pre>
+<p>To run multiple replications of <code>parameter_search()</code>, we can use the <code>future_replicate()</code> function, which just repeatedly calls <code>parameter_search()</code> for the number of times specified by <code>reps</code>. Fair warning, this will take some time if you have set a high number of replications!</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="r.html#cb34-1" tabindex="-1"></a><span class="co"># replicate the parameter grid to match the dimensions of the model outputs</span></span>
+<span id="cb34-2"><a href="r.html#cb34-2" tabindex="-1"></a>pgrid_expand <span class="ot">&lt;-</span> pgrid <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="r.html#cb34-3" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>(), <span class="at">each =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span> <span class="co"># replicate each row by 7 parameters</span></span>
+<span id="cb34-4"><a href="r.html#cb34-4" tabindex="-1"></a>  <span class="fu">map_df</span>(rep.int, <span class="at">times =</span> reps) <span class="co"># replicate the whole grid by number of reps</span></span>
+<span id="cb34-5"><a href="r.html#cb34-5" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="r.html#cb34-6" tabindex="-1"></a><span class="co"># replicate the parameter search many times</span></span>
+<span id="cb34-7"><a href="r.html#cb34-7" tabindex="-1"></a>sims_params <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(</span>
+<span id="cb34-8"><a href="r.html#cb34-8" tabindex="-1"></a>    <span class="at">n =</span> reps, </span>
+<span id="cb34-9"><a href="r.html#cb34-9" tabindex="-1"></a>    <span class="at">expr =</span> <span class="fu">parameter_search</span>(), </span>
+<span id="cb34-10"><a href="r.html#cb34-10" tabindex="-1"></a>    <span class="at">simplify =</span> <span class="cn">FALSE</span></span>
+<span id="cb34-11"><a href="r.html#cb34-11" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb34-12"><a href="r.html#cb34-12" tabindex="-1"></a>  <span class="fu">imap</span>( <span class="sc">~</span> <span class="fu">mutate</span>(.x, <span class="at">rep =</span> .y, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># include rep ID</span></span>
+<span id="cb34-13"><a href="r.html#cb34-13" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> <span class="co"># combine into a single tibble</span></span>
+<span id="cb34-14"><a href="r.html#cb34-14" tabindex="-1"></a>  <span class="fu">mutate</span>(pgrid_expand, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>) <span class="co"># add in the parameter grid values</span></span></code></pre></div>
+<p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in <code>pgrid</code>.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="r.html#cb35-1" tabindex="-1"></a>sims_table <span class="ot">&lt;-</span> sims_params <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="r.html#cb35-2" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="r.html#cb35-3" tabindex="-1"></a>  <span class="fu">group_by</span>(term, n_subj, n_pop, n_rock, beta_1) <span class="sc">|&gt;</span></span>
+<span id="cb35-4"><a href="r.html#cb35-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb35-5"><a href="r.html#cb35-5" tabindex="-1"></a>    <span class="at">mean_estimate =</span> <span class="fu">mean</span>(estimate),</span>
+<span id="cb35-6"><a href="r.html#cb35-6" tabindex="-1"></a>    <span class="at">mean_se =</span> <span class="fu">mean</span>(std.error),</span>
+<span id="cb35-7"><a href="r.html#cb35-7" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha),</span>
+<span id="cb35-8"><a href="r.html#cb35-8" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb35-9"><a href="r.html#cb35-9" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Here’s a graph that visualizes the output of the power simulation.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="r.html#cb36-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="r.html#cb36-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(n_subj<span class="sc">:</span>beta_1, as.factor),</span>
+<span id="cb36-3"><a href="r.html#cb36-3" tabindex="-1"></a>         <span class="at">n_pop =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_pop: &quot;</span>, n_pop),</span>
+<span id="cb36-4"><a href="r.html#cb36-4" tabindex="-1"></a>         <span class="at">n_rock =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_rock: &quot;</span>, n_rock)) <span class="sc">|&gt;</span></span>
+<span id="cb36-5"><a href="r.html#cb36-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> mean_estimate, <span class="at">y =</span> power,</span>
+<span id="cb36-6"><a href="r.html#cb36-6" tabindex="-1"></a>             <span class="at">group =</span> n_subj, <span class="at">color =</span> n_subj)) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="r.html#cb36-7" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
+<span id="cb36-8"><a href="r.html#cb36-8" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">linewidth =</span>  <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb36-9"><a href="r.html#cb36-9" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb36-10"><a href="r.html#cb36-10" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb36-11"><a href="r.html#cb36-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(n_pop <span class="sc">~</span> n_rock) <span class="sc">+</span></span>
+<span id="cb36-12"><a href="r.html#cb36-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb36-13"><a href="r.html#cb36-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Effect size (rock genre - pop genre)&quot;</span>,</span>
+<span id="cb36-14"><a href="r.html#cb36-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Power&quot;</span>,</span>
+<span id="cb36-15"><a href="r.html#cb36-15" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Power analysis via simulation&quot;</span>,</span>
+<span id="cb36-16"><a href="r.html#cb36-16" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Sample size&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-17"><a href="r.html#cb36-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="figures/unnamed-chunk-25-1.png" width="768" /></p>
+<p>Here’s a table that summarizes the output from the power simulation.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="r.html#cb37-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="r.html#cb37-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="r.html#cb37-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="r.html#cb37-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb37-5"><a href="r.html#cb37-5" tabindex="-1"></a>    <span class="at">columns =</span> power,</span>
+<span id="cb37-6"><a href="r.html#cb37-6" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb37-7"><a href="r.html#cb37-7" tabindex="-1"></a>      <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb37-8"><a href="r.html#cb37-8" tabindex="-1"></a>      <span class="at">domain =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb37-9"><a href="r.html#cb37-9" tabindex="-1"></a>      )</span>
+<span id="cb37-10"><a href="r.html#cb37-10" tabindex="-1"></a>  )</span></code></pre></div>
+<div id="peypicwoph" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#peypicwoph table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eiyfpptxwg thead, #eiyfpptxwg tbody, #eiyfpptxwg tfoot, #eiyfpptxwg tr, #eiyfpptxwg td, #eiyfpptxwg th {
+#peypicwoph thead, #peypicwoph tbody, #peypicwoph tfoot, #peypicwoph tr, #peypicwoph td, #peypicwoph th {
   border-style: none;
 }
 
-#eiyfpptxwg p {
+#peypicwoph p {
   margin: 0;
   padding: 0;
 }
 
-#eiyfpptxwg .gt_table {
+#peypicwoph .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -704,12 +739,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_caption {
+#peypicwoph .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eiyfpptxwg .gt_title {
+#peypicwoph .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -721,7 +756,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#eiyfpptxwg .gt_subtitle {
+#peypicwoph .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -733,7 +768,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#eiyfpptxwg .gt_heading {
+#peypicwoph .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -745,13 +780,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_bottom_border {
+#peypicwoph .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_col_headings {
+#peypicwoph .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -766,7 +801,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_col_heading {
+#peypicwoph .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -786,7 +821,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#eiyfpptxwg .gt_column_spanner_outer {
+#peypicwoph .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -798,15 +833,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#eiyfpptxwg .gt_column_spanner_outer:first-child {
+#peypicwoph .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eiyfpptxwg .gt_column_spanner_outer:last-child {
+#peypicwoph .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eiyfpptxwg .gt_column_spanner {
+#peypicwoph .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -818,11 +853,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#eiyfpptxwg .gt_spanner_row {
+#peypicwoph .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eiyfpptxwg .gt_group_heading {
+#peypicwoph .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -848,7 +883,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#eiyfpptxwg .gt_empty_group_heading {
+#peypicwoph .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -863,15 +898,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#eiyfpptxwg .gt_from_md > :first-child {
+#peypicwoph .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eiyfpptxwg .gt_from_md > :last-child {
+#peypicwoph .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eiyfpptxwg .gt_row {
+#peypicwoph .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -890,7 +925,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#eiyfpptxwg .gt_stub {
+#peypicwoph .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -903,7 +938,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eiyfpptxwg .gt_stub_row_group {
+#peypicwoph .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -917,15 +952,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#eiyfpptxwg .gt_row_group_first td {
+#peypicwoph .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eiyfpptxwg .gt_row_group_first th {
+#peypicwoph .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eiyfpptxwg .gt_summary_row {
+#peypicwoph .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -935,16 +970,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eiyfpptxwg .gt_first_summary_row {
+#peypicwoph .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_first_summary_row.thick {
+#peypicwoph .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eiyfpptxwg .gt_last_summary_row {
+#peypicwoph .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -954,7 +989,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_grand_summary_row {
+#peypicwoph .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -964,7 +999,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eiyfpptxwg .gt_first_grand_summary_row {
+#peypicwoph .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -974,7 +1009,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_last_grand_summary_row_top {
+#peypicwoph .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -984,11 +1019,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_striped {
+#peypicwoph .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eiyfpptxwg .gt_table_body {
+#peypicwoph .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -997,7 +1032,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_footnotes {
+#peypicwoph .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1011,7 +1046,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_footnote {
+#peypicwoph .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1020,7 +1055,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eiyfpptxwg .gt_sourcenotes {
+#peypicwoph .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1034,7 +1069,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eiyfpptxwg .gt_sourcenote {
+#peypicwoph .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1042,63 +1077,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eiyfpptxwg .gt_left {
+#peypicwoph .gt_left {
   text-align: left;
 }
 
-#eiyfpptxwg .gt_center {
+#peypicwoph .gt_center {
   text-align: center;
 }
 
-#eiyfpptxwg .gt_right {
+#peypicwoph .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eiyfpptxwg .gt_font_normal {
+#peypicwoph .gt_font_normal {
   font-weight: normal;
 }
 
-#eiyfpptxwg .gt_font_bold {
+#peypicwoph .gt_font_bold {
   font-weight: bold;
 }
 
-#eiyfpptxwg .gt_font_italic {
+#peypicwoph .gt_font_italic {
   font-style: italic;
 }
 
-#eiyfpptxwg .gt_super {
+#peypicwoph .gt_super {
   font-size: 65%;
 }
 
-#eiyfpptxwg .gt_footnote_marks {
+#peypicwoph .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eiyfpptxwg .gt_asterisk {
+#peypicwoph .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eiyfpptxwg .gt_indent_1 {
+#peypicwoph .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eiyfpptxwg .gt_indent_2 {
+#peypicwoph .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eiyfpptxwg .gt_indent_3 {
+#peypicwoph .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eiyfpptxwg .gt_indent_4 {
+#peypicwoph .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eiyfpptxwg .gt_indent_5 {
+#peypicwoph .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1125,480 +1160,480 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.2886415</td>
-<td headers="mean_se" class="gt_row gt_right">2.2051926</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.6821340</td>
+<td headers="mean_se" class="gt_row gt_right">2.1433713</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.2995193</td>
-<td headers="mean_se" class="gt_row gt_right">2.1978048</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F06100; color: #FFFFFF;">0.17</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.7274589</td>
+<td headers="mean_se" class="gt_row gt_right">2.1428328</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F45500; color: #FFFFFF;">0.13</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.3051960</td>
-<td headers="mean_se" class="gt_row gt_right">2.1870553</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.7482126</td>
+<td headers="mean_se" class="gt_row gt_right">2.1406312</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #ED6A00; color: #FFFFFF;">0.20</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.6963509</td>
+<td headers="mean_se" class="gt_row gt_right">2.1395978</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E38200; color: #FFFFFF;">0.30</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.6922276</td>
+<td headers="mean_se" class="gt_row gt_right">2.1399928</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CCA700; color: #000000;">0.48</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.7216763</td>
+<td headers="mean_se" class="gt_row gt_right">1.8288706</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #FA3900; color: #FFFFFF;">0.06</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.7059291</td>
+<td headers="mean_se" class="gt_row gt_right">1.8322465</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.6756674</td>
+<td headers="mean_se" class="gt_row gt_right">1.8421354</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #E57E00; color: #FFFFFF;">0.28</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.3064995</td>
-<td headers="mean_se" class="gt_row gt_right">2.1859357</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #D49C00; color: #000000;">0.42</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.2980658</td>
-<td headers="mean_se" class="gt_row gt_right">2.1916204</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C5AF00; color: #000000;">0.52</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.9504992</td>
-<td headers="mean_se" class="gt_row gt_right">1.8476274</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.9560039</td>
-<td headers="mean_se" class="gt_row gt_right">1.8404321</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F25B00; color: #FFFFFF;">0.15</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.9363111</td>
-<td headers="mean_se" class="gt_row gt_right">1.8437168</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E48000; color: #FFFFFF;">0.29</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.9538652</td>
-<td headers="mean_se" class="gt_row gt_right">1.8365045</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C2B200; color: #000000;">0.54</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.7319609</td>
+<td headers="mean_se" class="gt_row gt_right">1.8460860</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CCA700; color: #000000;">0.48</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.9815307</td>
-<td headers="mean_se" class="gt_row gt_right">1.8329912</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #9AD500; color: #000000;">0.74</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.7424011</td>
+<td headers="mean_se" class="gt_row gt_right">1.8396712</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.8972998</td>
-<td headers="mean_se" class="gt_row gt_right">1.8730572</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #FB3300; color: #FFFFFF;">0.05</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.8245941</td>
+<td headers="mean_se" class="gt_row gt_right">1.8332649</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #FA3900; color: #FFFFFF;">0.06</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.9288786</td>
-<td headers="mean_se" class="gt_row gt_right">1.8813209</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.9615486</td>
-<td headers="mean_se" class="gt_row gt_right">1.8853713</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E38200; color: #FFFFFF;">0.30</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.9411311</td>
-<td headers="mean_se" class="gt_row gt_right">1.8819500</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.9069115</td>
-<td headers="mean_se" class="gt_row gt_right">1.8832601</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #9AD500; color: #000000;">0.74</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.2218135</td>
-<td headers="mean_se" class="gt_row gt_right">1.5382892</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.8476570</td>
+<td headers="mean_se" class="gt_row gt_right">1.8308934</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F35800; color: #FFFFFF;">0.14</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1995445</td>
-<td headers="mean_se" class="gt_row gt_right">1.5369176</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.8841097</td>
+<td headers="mean_se" class="gt_row gt_right">1.8234947</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #E57E00; color: #FFFFFF;">0.28</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.9163802</td>
+<td headers="mean_se" class="gt_row gt_right">1.8294477</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #C4B100; color: #000000;">0.53</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.9206879</td>
+<td headers="mean_se" class="gt_row gt_right">1.8285285</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.1213453</td>
+<td headers="mean_se" class="gt_row gt_right">1.4790172</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.1427686</td>
+<td headers="mean_se" class="gt_row gt_right">1.4853951</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E77900; color: #FFFFFF;">0.26</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1428056</td>
-<td headers="mean_se" class="gt_row gt_right">1.5342389</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #D1A000; color: #000000;">0.44</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.1372541</td>
+<td headers="mean_se" class="gt_row gt_right">1.4847795</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1413103</td>
-<td headers="mean_se" class="gt_row gt_right">1.5303200</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #AEC600; color: #000000;">0.65</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.1692116</td>
+<td headers="mean_se" class="gt_row gt_right">1.4875177</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #98D700; color: #000000;">0.75</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0898503</td>
-<td headers="mean_se" class="gt_row gt_right">1.5304581</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #84E200; color: #000000;">0.82</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">5.1915115</td>
+<td headers="mean_se" class="gt_row gt_right">1.4906076</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #6EEC00; color: #000000;">0.88</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.9010020</td>
-<td headers="mean_se" class="gt_row gt_right">1.7053380</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.6206088</td>
+<td headers="mean_se" class="gt_row gt_right">1.7168699</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #FB3300; color: #FFFFFF;">0.05</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.9115412</td>
-<td headers="mean_se" class="gt_row gt_right">1.6999440</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #EF6400; color: #FFFFFF;">0.18</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.6084364</td>
+<td headers="mean_se" class="gt_row gt_right">1.7200867</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F15E00; color: #FFFFFF;">0.16</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.8576675</td>
-<td headers="mean_se" class="gt_row gt_right">1.7003355</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #DE8B00; color: #FFFFFF;">0.34</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.8647335</td>
-<td headers="mean_se" class="gt_row gt_right">1.6991640</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #BDB800; color: #000000;">0.57</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.8511643</td>
-<td headers="mean_se" class="gt_row gt_right">1.6958735</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #87E100; color: #000000;">0.81</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.1839103</td>
-<td headers="mean_se" class="gt_row gt_right">1.4401973</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1873078</td>
-<td headers="mean_se" class="gt_row gt_right">1.4406353</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.6187355</td>
+<td headers="mean_se" class="gt_row gt_right">1.7234279</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #E08700; color: #FFFFFF;">0.32</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.6035387</td>
+<td headers="mean_se" class="gt_row gt_right">1.7198478</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.5822773</td>
+<td headers="mean_se" class="gt_row gt_right">1.7152229</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #98D700; color: #000000;">0.75</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.9055907</td>
+<td headers="mean_se" class="gt_row gt_right">1.4495982</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.8898537</td>
+<td headers="mean_se" class="gt_row gt_right">1.4482419</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #EC6C00; color: #FFFFFF;">0.21</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1806765</td>
-<td headers="mean_se" class="gt_row gt_right">1.4424616</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #BBBA00; color: #000000;">0.58</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.8874405</td>
+<td headers="mean_se" class="gt_row gt_right">1.4451119</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #C9AB00; color: #000000;">0.50</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1595173</td>
-<td headers="mean_se" class="gt_row gt_right">1.4434819</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #8ADF00; color: #000000;">0.80</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.9016062</td>
+<td headers="mean_se" class="gt_row gt_right">1.4461335</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #95D800; color: #000000;">0.76</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1404194</td>
-<td headers="mean_se" class="gt_row gt_right">1.4436587</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #50F600; color: #000000;">0.94</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.8689765</td>
+<td headers="mean_se" class="gt_row gt_right">1.4454742</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #65EF00; color: #000000;">0.90</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0324710</td>
-<td headers="mean_se" class="gt_row gt_right">1.4209199</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.0219424</td>
+<td headers="mean_se" class="gt_row gt_right">1.4336253</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F45500; color: #FFFFFF;">0.13</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0190181</td>
-<td headers="mean_se" class="gt_row gt_right">1.4226040</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E97400; color: #FFFFFF;">0.24</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.0103972</td>
+<td headers="mean_se" class="gt_row gt_right">1.4328662</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E57E00; color: #FFFFFF;">0.28</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0263586</td>
-<td headers="mean_se" class="gt_row gt_right">1.4243192</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C4B100; color: #000000;">0.53</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0436168</td>
-<td headers="mean_se" class="gt_row gt_right">1.4232637</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #87E100; color: #000000;">0.81</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0682301</td>
-<td headers="mean_se" class="gt_row gt_right">1.4260783</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #5BF200; color: #000000;">0.92</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0273661</td>
-<td headers="mean_se" class="gt_row gt_right">1.0713724</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">40</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0305613</td>
-<td headers="mean_se" class="gt_row gt_right">1.0704567</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.9942518</td>
+<td headers="mean_se" class="gt_row gt_right">1.4348602</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #CAA900; color: #000000;">0.49</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.0128924</td>
+<td headers="mean_se" class="gt_row gt_right">1.4346163</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #92DA00; color: #000000;">0.77</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.0216769</td>
+<td headers="mean_se" class="gt_row gt_right">1.4367684</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #38FA00; color: #000000;">0.97</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.9529641</td>
+<td headers="mean_se" class="gt_row gt_right">1.0960443</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F06100; color: #FFFFFF;">0.17</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.9357289</td>
+<td headers="mean_se" class="gt_row gt_right">1.0964069</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #D49C00; color: #000000;">0.42</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0194512</td>
-<td headers="mean_se" class="gt_row gt_right">1.0699520</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #8DDD00; color: #000000;">0.79</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.9554635</td>
+<td headers="mean_se" class="gt_row gt_right">1.0980187</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0329333</td>
-<td headers="mean_se" class="gt_row gt_right">1.0713592</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #41F900; color: #000000;">0.96</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.9530592</td>
+<td headers="mean_se" class="gt_row gt_right">1.0980973</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #65EF00; color: #000000;">0.90</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0415911</td>
-<td headers="mean_se" class="gt_row gt_right">1.0712682</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.9797585</td>
+<td headers="mean_se" class="gt_row gt_right">1.0980008</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #1FFD00; color: #000000;">0.99</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.9763592</td>
-<td headers="mean_se" class="gt_row gt_right">1.5100534</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F74A00; color: #FFFFFF;">0.10</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.8935373</td>
+<td headers="mean_se" class="gt_row gt_right">1.5072281</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F45500; color: #FFFFFF;">0.13</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0011045</td>
-<td headers="mean_se" class="gt_row gt_right">1.5062776</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E67B00; color: #FFFFFF;">0.27</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.8989927</td>
+<td headers="mean_se" class="gt_row gt_right">1.5076409</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #ED6A00; color: #FFFFFF;">0.20</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0168648</td>
-<td headers="mean_se" class="gt_row gt_right">1.5041742</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.8976098</td>
+<td headers="mean_se" class="gt_row gt_right">1.5096626</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #D49C00; color: #000000;">0.42</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0085769</td>
-<td headers="mean_se" class="gt_row gt_right">1.5084746</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.8978394</td>
+<td headers="mean_se" class="gt_row gt_right">1.5063429</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #B2C200; color: #000000;">0.63</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.9752729</td>
-<td headers="mean_se" class="gt_row gt_right">1.5112556</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #7DE600; color: #000000;">0.84</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.1014179</td>
-<td headers="mean_se" class="gt_row gt_right">1.2614984</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1089309</td>
-<td headers="mean_se" class="gt_row gt_right">1.2590881</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #DC8F00; color: #FFFFFF;">0.36</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1342221</td>
-<td headers="mean_se" class="gt_row gt_right">1.2577565</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">40</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1502230</td>
-<td headers="mean_se" class="gt_row gt_right">1.2587266</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.9065649</td>
+<td headers="mean_se" class="gt_row gt_right">1.5102823</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #65EF00; color: #000000;">0.90</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.8624299</td>
+<td headers="mean_se" class="gt_row gt_right">1.2642873</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.8966771</td>
+<td headers="mean_se" class="gt_row gt_right">1.2632430</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E48000; color: #FFFFFF;">0.29</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.9027209</td>
+<td headers="mean_se" class="gt_row gt_right">1.2631341</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #B8BD00; color: #000000;">0.60</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.8651279</td>
+<td headers="mean_se" class="gt_row gt_right">1.2660562</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #72EA00; color: #000000;">0.87</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1546151</td>
-<td headers="mean_se" class="gt_row gt_right">1.2577518</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.8895942</td>
+<td headers="mean_se" class="gt_row gt_right">1.2672331</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #2EFC00; color: #000000;">0.98</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.1843285</td>
-<td headers="mean_se" class="gt_row gt_right">1.2599090</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F25B00; color: #FFFFFF;">0.15</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.9841072</td>
+<td headers="mean_se" class="gt_row gt_right">1.2649182</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F15E00; color: #FFFFFF;">0.16</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1753171</td>
-<td headers="mean_se" class="gt_row gt_right">1.2610689</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #DA9100; color: #FFFFFF;">0.37</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.9939159</td>
+<td headers="mean_se" class="gt_row gt_right">1.2657064</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #DD8D00; color: #FFFFFF;">0.35</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1341799</td>
-<td headers="mean_se" class="gt_row gt_right">1.2599513</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #A4CE00; color: #000000;">0.70</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.0015429</td>
+<td headers="mean_se" class="gt_row gt_right">1.2671451</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #AEC600; color: #000000;">0.65</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1151274</td>
-<td headers="mean_se" class="gt_row gt_right">1.2600747</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #6AEE00; color: #000000;">0.89</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.9797475</td>
+<td headers="mean_se" class="gt_row gt_right">1.2674822</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #7DE600; color: #000000;">0.84</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1296019</td>
-<td headers="mean_se" class="gt_row gt_right">1.2581424</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.9817978</td>
+<td headers="mean_se" class="gt_row gt_right">1.2696728</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #41F900; color: #000000;">0.96</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0231829</td>
-<td headers="mean_se" class="gt_row gt_right">0.9119778</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #EE6700; color: #FFFFFF;">0.19</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.9598020</td>
+<td headers="mean_se" class="gt_row gt_right">0.9119584</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #EC6C00; color: #FFFFFF;">0.21</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0152660</td>
-<td headers="mean_se" class="gt_row gt_right">0.9127856</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #B2C200; color: #000000;">0.63</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.9561492</td>
+<td headers="mean_se" class="gt_row gt_right">0.9104045</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #C2B200; color: #000000;">0.54</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.9988844</td>
-<td headers="mean_se" class="gt_row gt_right">0.9128247</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #5BF200; color: #000000;">0.92</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.9585712</td>
+<td headers="mean_se" class="gt_row gt_right">0.9104254</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #60F100; color: #000000;">0.91</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0029801</td>
-<td headers="mean_se" class="gt_row gt_right">0.9132309</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.9730888</td>
+<td headers="mean_se" class="gt_row gt_right">0.9107474</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #1FFD00; color: #000000;">0.99</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0120642</td>
-<td headers="mean_se" class="gt_row gt_right">0.9141164</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.9661969</td>
+<td headers="mean_se" class="gt_row gt_right">0.9115207</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
   </tbody>
   

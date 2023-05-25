@@ -171,13 +171,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.1" data-path="r.html"><a href="r.html#establish-the-simulation-parameters"><i class="fa fa-check"></i><b>4.2.1</b> Establish the simulation parameters</a></li>
 <li class="chapter" data-level="4.2.2" data-path="r.html"><a href="r.html#establish-the-data-generating-parameters"><i class="fa fa-check"></i><b>4.2.2</b> Establish the data-generating parameters</a></li>
 <li class="chapter" data-level="4.2.3" data-path="r.html"><a href="r.html#simulate-the-sampling-process"><i class="fa fa-check"></i><b>4.2.3</b> Simulate the sampling process</a></li>
-<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#simulate-the-sampling-of-songs"><i class="fa fa-check"></i><b>4.2.4</b> Simulate the sampling of songs</a></li>
-<li class="chapter" data-level="4.2.5" data-path="r.html"><a href="r.html#simulate-the-sampling-of-subjects"><i class="fa fa-check"></i><b>4.2.5</b> Simulate the sampling of subjects</a></li>
-<li class="chapter" data-level="4.2.6" data-path="r.html"><a href="r.html#check-the-simulated-values"><i class="fa fa-check"></i><b>4.2.6</b> Check the simulated values</a></li>
-<li class="chapter" data-level="4.2.7" data-path="r.html"><a href="r.html#simulate-trials"><i class="fa fa-check"></i><b>4.2.7</b> Simulate trials</a></li>
-<li class="chapter" data-level="4.2.8" data-path="r.html"><a href="r.html#calculate-response-values"><i class="fa fa-check"></i><b>4.2.8</b> Calculate response values</a></li>
-<li class="chapter" data-level="4.2.9" data-path="r.html"><a href="r.html#plot-the-data"><i class="fa fa-check"></i><b>4.2.9</b> Plot the data</a></li>
-<li class="chapter" data-level="4.2.10" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.10</b> Analyze the simulated data</a></li>
+<li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.4</b> Analyze the simulated data</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="r.html"><a href="r.html#data-simulation-automated"><i class="fa fa-check"></i><b>4.3</b> Data simulation automated</a></li>
 <li class="chapter" data-level="4.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>4.4</b> Power calculation (single run)</a></li>
@@ -250,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-of-what" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Power of What?<a href="power-of-what.html#power-of-what" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>The initial steps of power simulation involve nothing more than thinking and writing down your thoughts using a pencil and paper. But, prior to walking through these steps, there is an even more fundamental issue to be addressed - the power of what?</p>
-<p>What quantity within your model do you wish to calculate power for? Overall model goodness-of-fit, individual parameters, or combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that you must answer the question: “power of what?”</p>
+<p>What quantity within our model do we wish to calculate power for? Overall model goodness-of-fit, individual parameters, or combinations of parameters? The point of entry for power analysis is always to identify the particular effect of interest, and for that we must answer the question: “power of what?”</p>
 <div id="study-design" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Study design<a href="power-of-what.html#study-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The study design we will use as an example throughout this tutorial comes from Julian Quandt’s blogpost (<a href="https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/" class="uri">https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-iv/</a>). He describes this as:</p>
@@ -260,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="mixed-effects-model" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Mixed effects model<a href="power-of-what.html#mixed-effects-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Canned routines exist to perform power analysis for some simple general linear models (GLMs), however, for generalized linear mixed effects models (GLMMs) we must rely on simulation. We will walk through the process of calculating power for a GLMM in a step by step manner, which will serve as scaffolding to build intuition about the process of conducting power simulation more generally. Once we have the workflow down, we can automate the simulation process using functions.</p>
+<p>Canned routines exist to perform power analysis for some simple general linear models (GLMs), however, for generalized linear mixed effects models (GLMMs) we must rely on simulation. We will walk through the process of simulating data for a GLMM in a step-by-step manner, which will serve as scaffolding to build intuition about how to conduct power simulation. Once we have the workflow down, we can automate the simulation process using functions.</p>
 <p>While the outcome in this example is bounded on the interval [0, 100], we will not concern ourselves with the issue of using a linear model with such an outcome.</p>
 <div id="step-1-model-specification" class="section level3 hasAnchor" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Step 1: model specification<a href="power-of-what.html#step-1-model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -359,7 +353,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="step-3-parameter-composition" class="section level3 hasAnchor" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Step 3: Parameter composition<a href="power-of-what.html#step-3-parameter-composition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try alternative values and compare power for each.</p>
+<p>Finally, we need to establish the data-generating parameters in the model. You may draw on your own, or your colleague’s, substantive expertise about the phenomenom you’re studying to determine what paramater values are plausible. Or, you might look to the literature for studies that examined similar effects. Table 3.2 lists parameter values we will use as a starting point. Later, we will try using some alternative values and compare power for each.</p>
 <caption>
 <span id="tab:param-all">Table 3.2: </span>
 </caption>
