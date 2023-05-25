@@ -286,7 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="establish-the-data-generating-parameters" class="section level3 hasAnchor" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Establish the data-generating parameters<a href="r.html#establish-the-data-generating-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r.html#cb7-1" tabindex="-1"></a><span class="co"># set all data-generating parameters</span></span>
-<span id="cb7-2"><a href="r.html#cb7-2" tabindex="-1"></a>beta_0  <span class="ot">&lt;-</span>  <span class="dv">65</span>   <span class="co"># intercept; i.e., the grand mean</span></span>
+<span id="cb7-2"><a href="r.html#cb7-2" tabindex="-1"></a>beta_0  <span class="ot">&lt;-</span>  <span class="dv">60</span>   <span class="co"># intercept; i.e., the grand mean</span></span>
 <span id="cb7-3"><a href="r.html#cb7-3" tabindex="-1"></a>beta_1  <span class="ot">&lt;-</span>   <span class="dv">5</span>   <span class="co"># slope; i.e, effect of category</span></span>
 <span id="cb7-4"><a href="r.html#cb7-4" tabindex="-1"></a>omega_0 <span class="ot">&lt;-</span>   <span class="dv">3</span>   <span class="co"># by-song random intercept sd</span></span>
 <span id="cb7-5"><a href="r.html#cb7-5" tabindex="-1"></a>tau_0   <span class="ot">&lt;-</span>   <span class="dv">7</span>   <span class="co"># by-subject random intercept sd</span></span>
@@ -297,9 +297,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="simulate-the-sampling-process" class="section level3 hasAnchor" number="4.2.3">
 <h3><span class="header-section-number">4.2.3</span> Simulate the sampling process<a href="r.html#simulate-the-sampling-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="r.html#cb8-1" tabindex="-1"></a><span class="co"># set number of subjects and songs</span></span>
-<span id="cb8-2"><a href="r.html#cb8-2" tabindex="-1"></a>n_subj <span class="ot">&lt;-</span>  <span class="dv">50</span> <span class="co"># number of subjects</span></span>
-<span id="cb8-3"><a href="r.html#cb8-3" tabindex="-1"></a>n_pop  <span class="ot">&lt;-</span>  <span class="dv">20</span> <span class="co"># number of songs in pop category</span></span>
-<span id="cb8-4"><a href="r.html#cb8-4" tabindex="-1"></a>n_rock <span class="ot">&lt;-</span>  <span class="dv">20</span> <span class="co"># number of songs in rock category</span></span></code></pre></div>
+<span id="cb8-2"><a href="r.html#cb8-2" tabindex="-1"></a>n_subj <span class="ot">&lt;-</span>  <span class="dv">25</span> <span class="co"># number of subjects</span></span>
+<span id="cb8-3"><a href="r.html#cb8-3" tabindex="-1"></a>n_pop  <span class="ot">&lt;-</span>  <span class="dv">15</span> <span class="co"># number of songs in pop category</span></span>
+<span id="cb8-4"><a href="r.html#cb8-4" tabindex="-1"></a>n_rock <span class="ot">&lt;-</span>  <span class="dv">15</span> <span class="co"># number of songs in rock category</span></span></code></pre></div>
 </div>
 <div id="simulate-the-sampling-of-songs" class="section level3 hasAnchor" number="4.2.4">
 <h3><span class="header-section-number">4.2.4</span> Simulate the sampling of songs<a href="r.html#simulate-the-sampling-of-songs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -341,10 +341,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 4 × 3
 ##   parameter value simulated
 ##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 omega_0     3      3.10  
-## 2 tau_0       7      7.17  
-## 3 tau_1       4      3.32  
-## 4 rho         0.2    0.0408</code></pre>
+## 1 omega_0     3       3.00 
+## 2 tau_0       7       7.87 
+## 3 tau_1       4       4.05 
+## 4 rho         0.2     0.495</code></pre>
 </div>
 <div id="simulate-trials" class="section level3 hasAnchor" number="4.2.7">
 <h3><span class="header-section-number">4.2.7</span> Simulate trials<a href="r.html#simulate-trials" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -386,24 +386,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Formula: liking_ij ~ 1 + genre_i + (1 | song_id) + (1 + genre_i | subj_id)
 ##    Data: dat_sim
 ## 
-## REML criterion at convergence: 14253.2
+## REML criterion at convergence: 5392.5
 ## 
 ## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -3.8285 -0.6164  0.0150  0.6420  2.6007 
+##      Min       1Q   Median       3Q      Max 
+## -3.00888 -0.66610  0.02982  0.64259  2.95212 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev. Corr
-##  subj_id  (Intercept) 50.156   7.082        
-##           genre_i      8.534   2.921    0.43
-##  song_id  (Intercept)  8.391   2.897        
-##  Residual             63.050   7.940        
-## Number of obs: 2000, groups:  subj_id, 50; song_id, 40
+##  song_id  (Intercept) 12.60    3.550        
+##  subj_id  (Intercept) 57.18    7.562        
+##           genre_i     22.98    4.793    0.45
+##  Residual             62.81    7.926        
+## Number of obs: 750, groups:  song_id, 30; subj_id, 25
 ## 
 ## Fixed effects:
 ##             Estimate Std. Error     df t value Pr(&gt;|t|)    
-## (Intercept)   65.273      1.219 75.260  53.551  &lt; 2e-16 ***
-## genre_i        6.812      1.066 49.017   6.392  5.8e-08 ***
+## (Intercept)   58.474      1.815 37.775  32.216  &lt; 2e-16 ***
+## genre_i        7.501      1.713 40.857   4.379 8.09e-05 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Use <code>broom.mixed::tidy(mod_sim)</code> to get a tidy table of the results. Below, we added column “parameter” and “value”, so you can compare the estimate from the model to the parameters you used to simulate the data.</p>
@@ -429,44 +429,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td align="left">(Intercept)</td>
 <td align="left">beta_0</td>
-<td align="right">65.0</td>
-<td align="right">65.273</td>
+<td align="right">60.0</td>
+<td align="right">58.474</td>
 </tr>
 <tr class="even">
 <td align="left">genre_i</td>
 <td align="left">beta_1</td>
 <td align="right">5.0</td>
-<td align="right">6.812</td>
+<td align="right">7.501</td>
 </tr>
 <tr class="odd">
 <td align="left">sd__(Intercept)</td>
 <td align="left">tau_0</td>
 <td align="right">7.0</td>
-<td align="right">7.082</td>
-</tr>
-<tr class="even">
-<td align="left">cor__(Intercept).genre_i</td>
-<td align="left">rho</td>
-<td align="right">0.2</td>
-<td align="right">0.431</td>
-</tr>
-<tr class="odd">
-<td align="left">sd__genre_i</td>
-<td align="left">tau_1</td>
-<td align="right">4.0</td>
-<td align="right">2.921</td>
+<td align="right">3.550</td>
 </tr>
 <tr class="even">
 <td align="left">sd__(Intercept)</td>
+<td align="left">rho</td>
+<td align="right">0.2</td>
+<td align="right">7.562</td>
+</tr>
+<tr class="odd">
+<td align="left">cor__(Intercept).genre_i</td>
+<td align="left">tau_1</td>
+<td align="right">4.0</td>
+<td align="right">0.451</td>
+</tr>
+<tr class="even">
+<td align="left">sd__genre_i</td>
 <td align="left">omega_0</td>
 <td align="right">3.0</td>
-<td align="right">2.897</td>
+<td align="right">4.793</td>
 </tr>
 <tr class="odd">
 <td align="left">sd__Observation</td>
 <td align="left">sigma</td>
 <td align="right">8.0</td>
-<td align="right">7.940</td>
+<td align="right">7.926</td>
 </tr>
 </tbody>
 </table>
@@ -477,10 +477,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Now that we’ve tested the data generating code, we can put it into a function so that it’s easy to run it repeatedly.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="r.html#cb19-1" tabindex="-1"></a><span class="co"># set up the custom data simulation function</span></span>
 <span id="cb19-2"><a href="r.html#cb19-2" tabindex="-1"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
-<span id="cb19-3"><a href="r.html#cb19-3" tabindex="-1"></a>  <span class="at">n_subj     =</span>  <span class="dv">50</span>,   <span class="co"># number of subjects</span></span>
-<span id="cb19-4"><a href="r.html#cb19-4" tabindex="-1"></a>  <span class="at">n_pop      =</span>  <span class="dv">20</span>,   <span class="co"># number of pop songs</span></span>
-<span id="cb19-5"><a href="r.html#cb19-5" tabindex="-1"></a>  <span class="at">n_rock     =</span>  <span class="dv">20</span>,   <span class="co"># number of rock songs</span></span>
-<span id="cb19-6"><a href="r.html#cb19-6" tabindex="-1"></a>  <span class="at">beta_0     =</span>  <span class="dv">65</span>,   <span class="co"># mean for pop genre</span></span>
+<span id="cb19-3"><a href="r.html#cb19-3" tabindex="-1"></a>  <span class="at">n_subj     =</span>  <span class="dv">25</span>,   <span class="co"># number of subjects</span></span>
+<span id="cb19-4"><a href="r.html#cb19-4" tabindex="-1"></a>  <span class="at">n_pop      =</span>  <span class="dv">15</span>,   <span class="co"># number of pop songs</span></span>
+<span id="cb19-5"><a href="r.html#cb19-5" tabindex="-1"></a>  <span class="at">n_rock     =</span>  <span class="dv">15</span>,   <span class="co"># number of rock songs</span></span>
+<span id="cb19-6"><a href="r.html#cb19-6" tabindex="-1"></a>  <span class="at">beta_0     =</span>  <span class="dv">60</span>,   <span class="co"># mean for pop genre</span></span>
 <span id="cb19-7"><a href="r.html#cb19-7" tabindex="-1"></a>  <span class="at">beta_1     =</span>   <span class="dv">5</span>,   <span class="co"># effect of genre</span></span>
 <span id="cb19-8"><a href="r.html#cb19-8" tabindex="-1"></a>  <span class="at">omega_0    =</span>   <span class="dv">3</span>,   <span class="co"># by-song random intercept sd</span></span>
 <span id="cb19-9"><a href="r.html#cb19-9" tabindex="-1"></a>  <span class="at">tau_0      =</span>   <span class="dv">7</span>,   <span class="co"># by-subject random intercept sd</span></span>
@@ -531,25 +531,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 7 × 8
 ##   effect   group    term            estimate std.error statistic    df   p.value
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
-## 1 fixed    &lt;NA&gt;     (Intercept)       66.7        1.12     59.6   77.8  1.08e-66
-## 2 fixed    &lt;NA&gt;     genre_i            3.79       1.14      3.33  56.4  1.54e- 3
-## 3 ran_pars subj_id  sd__(Intercept)    6.14      NA        NA     NA   NA       
-## 4 ran_pars subj_id  cor__(Intercep…    0.306     NA        NA     NA   NA       
-## 5 ran_pars subj_id  sd__genre_i        3.88      NA        NA     NA   NA       
-## 6 ran_pars song_id  sd__(Intercept)    2.95      NA        NA     NA   NA       
-## 7 ran_pars Residual sd__Observation    7.92      NA        NA     NA   NA</code></pre>
+## 1 fixed    &lt;NA&gt;     (Intercept)       60.9        1.89     32.2   34.6  2.26e-27
+## 2 fixed    &lt;NA&gt;     genre_i            4.23       1.58      2.68  39.9  1.08e- 2
+## 3 ran_pars song_id  sd__(Intercept)    3.27      NA        NA     NA   NA       
+## 4 ran_pars subj_id  sd__(Intercept)    8.24      NA        NA     NA   NA       
+## 5 ran_pars subj_id  cor__(Intercep…    0.678     NA        NA     NA   NA       
+## 6 ran_pars subj_id  sd__genre_i        4.37      NA        NA     NA   NA       
+## 7 ran_pars Residual sd__Observation    7.73      NA        NA     NA   NA</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="r.html#cb23-1" tabindex="-1"></a><span class="co"># run one model with new parameters</span></span>
-<span id="cb23-2"><a href="r.html#cb23-2" tabindex="-1"></a><span class="fu">power_run</span>(<span class="at">n_pop =</span> <span class="dv">50</span>, <span class="at">n_rock =</span> <span class="dv">25</span>, <span class="at">beta_1 =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb23-2"><a href="r.html#cb23-2" tabindex="-1"></a><span class="fu">power_run</span>(<span class="at">n_pop =</span> <span class="dv">10</span>, <span class="at">n_rock =</span> <span class="dv">50</span>, <span class="at">beta_1 =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 8
 ##   effect   group    term            estimate std.error statistic    df   p.value
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
-## 1 fixed    &lt;NA&gt;     (Intercept)       64.2       1.07      60.0   70.7  2.22e-62
-## 2 fixed    &lt;NA&gt;     genre_i            3.85      0.997      3.86 104.   1.96e- 4
-## 3 ran_pars song_id  sd__(Intercept)    3.25     NA         NA     NA   NA       
-## 4 ran_pars subj_id  sd__(Intercept)    6.73     NA         NA     NA   NA       
-## 5 ran_pars subj_id  cor__(Intercep…    0.377    NA         NA     NA   NA       
-## 6 ran_pars subj_id  sd__genre_i        3.78     NA         NA     NA   NA       
-## 7 ran_pars Residual sd__Observation    7.95     NA         NA     NA   NA</code></pre>
+## 1 fixed    &lt;NA&gt;     (Intercept)       57.0        1.97    29.0    44.9  1.05e-30
+## 2 fixed    &lt;NA&gt;     genre_i            1.54       1.76     0.873  57.3  3.86e- 1
+## 3 ran_pars song_id  sd__(Intercept)    3.46      NA       NA      NA   NA       
+## 4 ran_pars subj_id  sd__(Intercept)    7.77      NA       NA      NA   NA       
+## 5 ran_pars subj_id  cor__(Intercep…    0.210     NA       NA      NA   NA       
+## 6 ran_pars subj_id  sd__genre_i        5.85      NA       NA      NA   NA       
+## 7 ran_pars Residual sd__Observation    7.92      NA       NA      NA   NA</code></pre>
 </div>
 <div id="power-calculation-automated" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Power calculation automated<a href="r.html#power-calculation-automated" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -568,7 +568,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          5.05    1.17  0.98</code></pre>
+## 1 genre_i          4.96    1.48  0.88</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Set the effect of <code>genre_ij</code> to 0 to calculate the false positive rate. This is the probability of concluding there is an effect when there is no actual effect in your population.</p>
@@ -582,7 +582,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.09</code></pre>
+## 1  0.04</code></pre>
 <p>Ideally, the false positive rate will be equal to alpha, which we set here at 0.05.</p>
 </div>
 </div>
@@ -592,8 +592,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="r.html#cb30-1" tabindex="-1"></a><span class="co"># grid of paramater values of interest</span></span>
 <span id="cb30-2"><a href="r.html#cb30-2" tabindex="-1"></a>pgrid <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
 <span id="cb30-3"><a href="r.html#cb30-3" tabindex="-1"></a>  <span class="at">n_subj =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>),</span>
-<span id="cb30-4"><a href="r.html#cb30-4" tabindex="-1"></a>  <span class="at">n_pop =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),</span>
-<span id="cb30-5"><a href="r.html#cb30-5" tabindex="-1"></a>  <span class="at">n_rock =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),</span>
+<span id="cb30-4"><a href="r.html#cb30-4" tabindex="-1"></a>  <span class="at">n_pop =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
+<span id="cb30-5"><a href="r.html#cb30-5" tabindex="-1"></a>  <span class="at">n_rock =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
 <span id="cb30-6"><a href="r.html#cb30-6" tabindex="-1"></a>  <span class="at">beta_1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span> </span>
 <span id="cb30-7"><a href="r.html#cb30-7" tabindex="-1"></a>)</span>
 <span id="cb30-8"><a href="r.html#cb30-8" tabindex="-1"></a></span>
@@ -662,23 +662,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb34-8"><a href="r.html#cb34-8" tabindex="-1"></a>      <span class="at">domain =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb34-9"><a href="r.html#cb34-9" tabindex="-1"></a>      )</span>
 <span id="cb34-10"><a href="r.html#cb34-10" tabindex="-1"></a>  )</span></code></pre></div>
-<div id="eclhoyuzpv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eclhoyuzpv table {
+<div id="eiyfpptxwg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eiyfpptxwg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eclhoyuzpv thead, #eclhoyuzpv tbody, #eclhoyuzpv tfoot, #eclhoyuzpv tr, #eclhoyuzpv td, #eclhoyuzpv th {
+#eiyfpptxwg thead, #eiyfpptxwg tbody, #eiyfpptxwg tfoot, #eiyfpptxwg tr, #eiyfpptxwg td, #eiyfpptxwg th {
   border-style: none;
 }
 
-#eclhoyuzpv p {
+#eiyfpptxwg p {
   margin: 0;
   padding: 0;
 }
 
-#eclhoyuzpv .gt_table {
+#eiyfpptxwg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -704,12 +704,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_caption {
+#eiyfpptxwg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eclhoyuzpv .gt_title {
+#eiyfpptxwg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -721,7 +721,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#eclhoyuzpv .gt_subtitle {
+#eiyfpptxwg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -733,7 +733,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#eclhoyuzpv .gt_heading {
+#eiyfpptxwg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -745,13 +745,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_bottom_border {
+#eiyfpptxwg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_col_headings {
+#eiyfpptxwg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -766,7 +766,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_col_heading {
+#eiyfpptxwg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -786,7 +786,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#eclhoyuzpv .gt_column_spanner_outer {
+#eiyfpptxwg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -798,15 +798,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#eclhoyuzpv .gt_column_spanner_outer:first-child {
+#eiyfpptxwg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eclhoyuzpv .gt_column_spanner_outer:last-child {
+#eiyfpptxwg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eclhoyuzpv .gt_column_spanner {
+#eiyfpptxwg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -818,11 +818,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#eclhoyuzpv .gt_spanner_row {
+#eiyfpptxwg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eclhoyuzpv .gt_group_heading {
+#eiyfpptxwg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -848,7 +848,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#eclhoyuzpv .gt_empty_group_heading {
+#eiyfpptxwg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -863,15 +863,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#eclhoyuzpv .gt_from_md > :first-child {
+#eiyfpptxwg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eclhoyuzpv .gt_from_md > :last-child {
+#eiyfpptxwg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eclhoyuzpv .gt_row {
+#eiyfpptxwg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -890,7 +890,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#eclhoyuzpv .gt_stub {
+#eiyfpptxwg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -903,7 +903,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eclhoyuzpv .gt_stub_row_group {
+#eiyfpptxwg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -917,15 +917,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#eclhoyuzpv .gt_row_group_first td {
+#eiyfpptxwg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eclhoyuzpv .gt_row_group_first th {
+#eiyfpptxwg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eclhoyuzpv .gt_summary_row {
+#eiyfpptxwg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -935,16 +935,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eclhoyuzpv .gt_first_summary_row {
+#eiyfpptxwg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_first_summary_row.thick {
+#eiyfpptxwg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eclhoyuzpv .gt_last_summary_row {
+#eiyfpptxwg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -954,7 +954,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_grand_summary_row {
+#eiyfpptxwg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -964,7 +964,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eclhoyuzpv .gt_first_grand_summary_row {
+#eiyfpptxwg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -974,7 +974,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_last_grand_summary_row_top {
+#eiyfpptxwg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -984,11 +984,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_striped {
+#eiyfpptxwg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eclhoyuzpv .gt_table_body {
+#eiyfpptxwg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -997,7 +997,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_footnotes {
+#eiyfpptxwg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1011,7 +1011,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_footnote {
+#eiyfpptxwg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1020,7 +1020,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eclhoyuzpv .gt_sourcenotes {
+#eiyfpptxwg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1034,7 +1034,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#eclhoyuzpv .gt_sourcenote {
+#eiyfpptxwg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1042,63 +1042,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#eclhoyuzpv .gt_left {
+#eiyfpptxwg .gt_left {
   text-align: left;
 }
 
-#eclhoyuzpv .gt_center {
+#eiyfpptxwg .gt_center {
   text-align: center;
 }
 
-#eclhoyuzpv .gt_right {
+#eiyfpptxwg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eclhoyuzpv .gt_font_normal {
+#eiyfpptxwg .gt_font_normal {
   font-weight: normal;
 }
 
-#eclhoyuzpv .gt_font_bold {
+#eiyfpptxwg .gt_font_bold {
   font-weight: bold;
 }
 
-#eclhoyuzpv .gt_font_italic {
+#eiyfpptxwg .gt_font_italic {
   font-style: italic;
 }
 
-#eclhoyuzpv .gt_super {
+#eiyfpptxwg .gt_super {
   font-size: 65%;
 }
 
-#eclhoyuzpv .gt_footnote_marks {
+#eiyfpptxwg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eclhoyuzpv .gt_asterisk {
+#eiyfpptxwg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eclhoyuzpv .gt_indent_1 {
+#eiyfpptxwg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eclhoyuzpv .gt_indent_2 {
+#eiyfpptxwg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eclhoyuzpv .gt_indent_3 {
+#eiyfpptxwg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eclhoyuzpv .gt_indent_4 {
+#eiyfpptxwg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eclhoyuzpv .gt_indent_5 {
+#eiyfpptxwg .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1125,480 +1125,480 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.2018339</td>
-<td headers="mean_se" class="gt_row gt_right">2.1085692</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #FA3900; color: #FFFFFF;">0.06</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.2886415</td>
+<td headers="mean_se" class="gt_row gt_right">2.2051926</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1637104</td>
-<td headers="mean_se" class="gt_row gt_right">2.1137259</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F74A00; color: #FFFFFF;">0.10</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.2995193</td>
+<td headers="mean_se" class="gt_row gt_right">2.1978048</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F06100; color: #FFFFFF;">0.17</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1331794</td>
-<td headers="mean_se" class="gt_row gt_right">2.1084551</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E67B00; color: #FFFFFF;">0.27</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.3051960</td>
+<td headers="mean_se" class="gt_row gt_right">2.1870553</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E57E00; color: #FFFFFF;">0.28</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1459106</td>
-<td headers="mean_se" class="gt_row gt_right">2.1146228</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #D89600; color: #000000;">0.39</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.3064995</td>
+<td headers="mean_se" class="gt_row gt_right">2.1859357</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #D49C00; color: #000000;">0.42</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1221816</td>
-<td headers="mean_se" class="gt_row gt_right">2.1151904</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #B6BF00; color: #000000;">0.61</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">5.2980658</td>
+<td headers="mean_se" class="gt_row gt_right">2.1916204</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #C5AF00; color: #000000;">0.52</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.7731489</td>
-<td headers="mean_se" class="gt_row gt_right">1.8634578</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.9504992</td>
+<td headers="mean_se" class="gt_row gt_right">1.8476274</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.7524317</td>
-<td headers="mean_se" class="gt_row gt_right">1.8612927</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.9560039</td>
+<td headers="mean_se" class="gt_row gt_right">1.8404321</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F25B00; color: #FFFFFF;">0.15</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.7828866</td>
-<td headers="mean_se" class="gt_row gt_right">1.8591210</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.9363111</td>
+<td headers="mean_se" class="gt_row gt_right">1.8437168</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #E48000; color: #FFFFFF;">0.29</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.7748047</td>
-<td headers="mean_se" class="gt_row gt_right">1.8617585</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #CEA300; color: #000000;">0.46</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.9538652</td>
+<td headers="mean_se" class="gt_row gt_right">1.8365045</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #C2B200; color: #000000;">0.54</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.7660136</td>
-<td headers="mean_se" class="gt_row gt_right">1.8618836</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #AAC900; color: #000000;">0.67</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.9815307</td>
+<td headers="mean_se" class="gt_row gt_right">1.8329912</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9AD500; color: #000000;">0.74</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.9955136</td>
-<td headers="mean_se" class="gt_row gt_right">1.9033383</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">0.8972998</td>
+<td headers="mean_se" class="gt_row gt_right">1.8730572</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #FB3300; color: #FFFFFF;">0.05</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.9970597</td>
-<td headers="mean_se" class="gt_row gt_right">1.8961136</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E97400; color: #FFFFFF;">0.24</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0403788</td>
-<td headers="mean_se" class="gt_row gt_right">1.8874493</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #DC8F00; color: #FFFFFF;">0.36</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0724828</td>
-<td headers="mean_se" class="gt_row gt_right">1.8858859</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #CAA900; color: #000000;">0.49</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0722607</td>
-<td headers="mean_se" class="gt_row gt_right">1.8803114</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #A4CE00; color: #000000;">0.70</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.1505425</td>
-<td headers="mean_se" class="gt_row gt_right">1.6015383</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.9288786</td>
+<td headers="mean_se" class="gt_row gt_right">1.8813209</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1471119</td>
-<td headers="mean_se" class="gt_row gt_right">1.5957340</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #EA7200; color: #FFFFFF;">0.23</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1295198</td>
-<td headers="mean_se" class="gt_row gt_right">1.5995755</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #D59A00; color: #000000;">0.41</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.9615486</td>
+<td headers="mean_se" class="gt_row gt_right">1.8853713</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E38200; color: #FFFFFF;">0.30</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1732999</td>
-<td headers="mean_se" class="gt_row gt_right">1.6039546</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #AAC900; color: #000000;">0.67</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.9411311</td>
+<td headers="mean_se" class="gt_row gt_right">1.8819500</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">10</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1664646</td>
-<td headers="mean_se" class="gt_row gt_right">1.6069474</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #7DE600; color: #000000;">0.84</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.9069115</td>
+<td headers="mean_se" class="gt_row gt_right">1.8832601</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9AD500; color: #000000;">0.74</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.1489613</td>
-<td headers="mean_se" class="gt_row gt_right">1.6194583</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F45500; color: #FFFFFF;">0.13</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.2218135</td>
+<td headers="mean_se" class="gt_row gt_right">1.5382892</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F35800; color: #FFFFFF;">0.14</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1496256</td>
-<td headers="mean_se" class="gt_row gt_right">1.6191461</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E28500; color: #FFFFFF;">0.31</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.1995445</td>
+<td headers="mean_se" class="gt_row gt_right">1.5369176</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E57E00; color: #FFFFFF;">0.28</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1330126</td>
-<td headers="mean_se" class="gt_row gt_right">1.6168670</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.1428056</td>
+<td headers="mean_se" class="gt_row gt_right">1.5342389</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #D1A000; color: #000000;">0.44</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.1413103</td>
+<td headers="mean_se" class="gt_row gt_right">1.5303200</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #AEC600; color: #000000;">0.65</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">10</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.0898503</td>
+<td headers="mean_se" class="gt_row gt_right">1.5304581</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #84E200; color: #000000;">0.82</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.9010020</td>
+<td headers="mean_se" class="gt_row gt_right">1.7053380</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.9115412</td>
+<td headers="mean_se" class="gt_row gt_right">1.6999440</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #EF6400; color: #FFFFFF;">0.18</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.8576675</td>
+<td headers="mean_se" class="gt_row gt_right">1.7003355</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #DE8B00; color: #FFFFFF;">0.34</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1410841</td>
-<td headers="mean_se" class="gt_row gt_right">1.6148951</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #ACC800; color: #000000;">0.66</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.8647335</td>
+<td headers="mean_se" class="gt_row gt_right">1.6991640</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #BDB800; color: #000000;">0.57</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1334132</td>
-<td headers="mean_se" class="gt_row gt_right">1.6170772</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #8ADF00; color: #000000;">0.80</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.9987910</td>
-<td headers="mean_se" class="gt_row gt_right">1.4687188</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F84200; color: #FFFFFF;">0.08</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0323572</td>
-<td headers="mean_se" class="gt_row gt_right">1.4683084</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E77900; color: #FFFFFF;">0.26</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0154221</td>
-<td headers="mean_se" class="gt_row gt_right">1.4643295</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C2B200; color: #000000;">0.54</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0254671</td>
-<td headers="mean_se" class="gt_row gt_right">1.4613611</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #9DD300; color: #000000;">0.73</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0235992</td>
-<td headers="mean_se" class="gt_row gt_right">1.4652644</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #5BF200; color: #000000;">0.92</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">0.9855006</td>
-<td headers="mean_se" class="gt_row gt_right">1.4421147</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0056127</td>
-<td headers="mean_se" class="gt_row gt_right">1.4424456</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E77900; color: #FFFFFF;">0.26</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0527490</td>
-<td headers="mean_se" class="gt_row gt_right">1.4405335</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C2B200; color: #000000;">0.54</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0437493</td>
-<td headers="mean_se" class="gt_row gt_right">1.4431156</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.8511643</td>
+<td headers="mean_se" class="gt_row gt_right">1.6958735</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #87E100; color: #000000;">0.81</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0990799</td>
-<td headers="mean_se" class="gt_row gt_right">1.4445686</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #56F400; color: #000000;">0.93</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0481306</td>
-<td headers="mean_se" class="gt_row gt_right">1.1693481</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F25B00; color: #FFFFFF;">0.15</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.1839103</td>
+<td headers="mean_se" class="gt_row gt_right">1.4401973</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0571601</td>
-<td headers="mean_se" class="gt_row gt_right">1.1691169</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #D59A00; color: #000000;">0.41</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.1873078</td>
+<td headers="mean_se" class="gt_row gt_right">1.4406353</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E08700; color: #FFFFFF;">0.32</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0586072</td>
-<td headers="mean_se" class="gt_row gt_right">1.1678732</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #95D800; color: #000000;">0.76</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.1806765</td>
+<td headers="mean_se" class="gt_row gt_right">1.4424616</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #BBBA00; color: #000000;">0.58</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0629669</td>
-<td headers="mean_se" class="gt_row gt_right">1.1669522</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #56F400; color: #000000;">0.93</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">25</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0848589</td>
-<td headers="mean_se" class="gt_row gt_right">1.1681738</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #38FA00; color: #000000;">0.97</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0879283</td>
-<td headers="mean_se" class="gt_row gt_right">1.4495139</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0805225</td>
-<td headers="mean_se" class="gt_row gt_right">1.4437008</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #E77900; color: #FFFFFF;">0.26</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0875458</td>
-<td headers="mean_se" class="gt_row gt_right">1.4449442</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #C5AF00; color: #000000;">0.52</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">10</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0839938</td>
-<td headers="mean_se" class="gt_row gt_right">1.4478802</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.1595173</td>
+<td headers="mean_se" class="gt_row gt_right">1.4434819</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #8ADF00; color: #000000;">0.80</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.1404194</td>
+<td headers="mean_se" class="gt_row gt_right">1.4436587</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #50F600; color: #000000;">0.94</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.0324710</td>
+<td headers="mean_se" class="gt_row gt_right">1.4209199</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.0190181</td>
+<td headers="mean_se" class="gt_row gt_right">1.4226040</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E97400; color: #FFFFFF;">0.24</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.0263586</td>
+<td headers="mean_se" class="gt_row gt_right">1.4243192</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #C4B100; color: #000000;">0.53</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.0436168</td>
+<td headers="mean_se" class="gt_row gt_right">1.4232637</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #87E100; color: #000000;">0.81</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.0682301</td>
+<td headers="mean_se" class="gt_row gt_right">1.4260783</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #5BF200; color: #000000;">0.92</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.0273661</td>
+<td headers="mean_se" class="gt_row gt_right">1.0713724</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.0305613</td>
+<td headers="mean_se" class="gt_row gt_right">1.0704567</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CAA900; color: #000000;">0.49</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.0194512</td>
+<td headers="mean_se" class="gt_row gt_right">1.0699520</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #8DDD00; color: #000000;">0.79</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.0329333</td>
+<td headers="mean_se" class="gt_row gt_right">1.0713592</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #41F900; color: #000000;">0.96</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">25</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">5</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.0415911</td>
+<td headers="mean_se" class="gt_row gt_right">1.0712682</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">0.9763592</td>
+<td headers="mean_se" class="gt_row gt_right">1.5100534</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F74A00; color: #FFFFFF;">0.10</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.0011045</td>
+<td headers="mean_se" class="gt_row gt_right">1.5062776</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #E67B00; color: #FFFFFF;">0.27</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">3.0168648</td>
+<td headers="mean_se" class="gt_row gt_right">1.5041742</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #CDA500; color: #000000;">0.47</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">10</td>
+<td headers="n_rock" class="gt_row gt_right">10</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.0085769</td>
+<td headers="mean_se" class="gt_row gt_right">1.5084746</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0412951</td>
-<td headers="mean_se" class="gt_row gt_right">1.4497919</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #56F400; color: #000000;">0.93</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.9752729</td>
+<td headers="mean_se" class="gt_row gt_right">1.5112556</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #7DE600; color: #000000;">0.84</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0168655</td>
-<td headers="mean_se" class="gt_row gt_right">1.2596348</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F55100; color: #FFFFFF;">0.12</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.1014179</td>
+<td headers="mean_se" class="gt_row gt_right">1.2614984</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F84600; color: #FFFFFF;">0.09</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0184249</td>
-<td headers="mean_se" class="gt_row gt_right">1.2604427</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #DE8B00; color: #FFFFFF;">0.34</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.1089309</td>
+<td headers="mean_se" class="gt_row gt_right">1.2590881</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #DC8F00; color: #FFFFFF;">0.36</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0245721</td>
-<td headers="mean_se" class="gt_row gt_right">1.2615433</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #A6CD00; color: #000000;">0.69</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.1342221</td>
+<td headers="mean_se" class="gt_row gt_right">1.2577565</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #9FD200; color: #000000;">0.72</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0529231</td>
-<td headers="mean_se" class="gt_row gt_right">1.2615892</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.1502230</td>
+<td headers="mean_se" class="gt_row gt_right">1.2587266</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #65EF00; color: #000000;">0.90</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
 <td headers="n_pop" class="gt_row gt_right">10</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0971422</td>
-<td headers="mean_se" class="gt_row gt_right">1.2626819</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #49F700; color: #000000;">0.95</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">5.1546151</td>
+<td headers="mean_se" class="gt_row gt_right">1.2577518</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.0798211</td>
-<td headers="mean_se" class="gt_row gt_right">1.2641202</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #F45500; color: #FFFFFF;">0.13</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">1.1843285</td>
+<td headers="mean_se" class="gt_row gt_right">1.2599090</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #F25B00; color: #FFFFFF;">0.15</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.0760441</td>
-<td headers="mean_se" class="gt_row gt_right">1.2617140</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #DD8D00; color: #FFFFFF;">0.35</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">2.1753171</td>
+<td headers="mean_se" class="gt_row gt_right">1.2610689</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #DA9100; color: #FFFFFF;">0.37</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.0909519</td>
-<td headers="mean_se" class="gt_row gt_right">1.2624689</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #B0C400; color: #000000;">0.64</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">3.1341799</td>
+<td headers="mean_se" class="gt_row gt_right">1.2599513</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #A4CE00; color: #000000;">0.70</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.0814478</td>
-<td headers="mean_se" class="gt_row gt_right">1.2604669</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #50F600; color: #000000;">0.94</td></tr>
+<td headers="mean_estimate" class="gt_row gt_right">4.1151274</td>
+<td headers="mean_se" class="gt_row gt_right">1.2600747</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #6AEE00; color: #000000;">0.89</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
 <td headers="n_rock" class="gt_row gt_right">10</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.0819834</td>
-<td headers="mean_se" class="gt_row gt_right">1.2624033</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.1296019</td>
+<td headers="mean_se" class="gt_row gt_right">1.2581424</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">1</td>
+<td headers="mean_estimate" class="gt_row gt_right">1.0231829</td>
+<td headers="mean_se" class="gt_row gt_right">0.9119778</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #EE6700; color: #FFFFFF;">0.19</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">2</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.0152660</td>
+<td headers="mean_se" class="gt_row gt_right">0.9127856</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #B2C200; color: #000000;">0.63</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">3</td>
+<td headers="mean_estimate" class="gt_row gt_right">2.9988844</td>
+<td headers="mean_se" class="gt_row gt_right">0.9128247</td>
+<td headers="power" class="gt_row gt_right" style="background-color: #5BF200; color: #000000;">0.92</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
+<td headers="n_subj" class="gt_row gt_right">50</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
+<td headers="beta_1" class="gt_row gt_right">4</td>
+<td headers="mean_estimate" class="gt_row gt_right">4.0029801</td>
+<td headers="mean_se" class="gt_row gt_right">0.9132309</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #1FFD00; color: #000000;">0.99</td></tr>
     <tr><td headers="term" class="gt_row gt_left">genre_i</td>
 <td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">1</td>
-<td headers="mean_estimate" class="gt_row gt_right">1.1143443</td>
-<td headers="mean_se" class="gt_row gt_right">0.9902816</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #EC6C00; color: #FFFFFF;">0.21</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">2</td>
-<td headers="mean_estimate" class="gt_row gt_right">2.1311831</td>
-<td headers="mean_se" class="gt_row gt_right">0.9907973</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #BDB800; color: #000000;">0.57</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">3</td>
-<td headers="mean_estimate" class="gt_row gt_right">3.1530184</td>
-<td headers="mean_se" class="gt_row gt_right">0.9922271</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #76E900; color: #000000;">0.86</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
-<td headers="beta_1" class="gt_row gt_right">4</td>
-<td headers="mean_estimate" class="gt_row gt_right">4.1514167</td>
-<td headers="mean_se" class="gt_row gt_right">0.9929817</td>
-<td headers="power" class="gt_row gt_right" style="background-color: #1FFD00; color: #000000;">0.99</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">genre_i</td>
-<td headers="n_subj" class="gt_row gt_right">50</td>
-<td headers="n_pop" class="gt_row gt_right">30</td>
-<td headers="n_rock" class="gt_row gt_right">30</td>
+<td headers="n_pop" class="gt_row gt_right">40</td>
+<td headers="n_rock" class="gt_row gt_right">40</td>
 <td headers="beta_1" class="gt_row gt_right">5</td>
-<td headers="mean_estimate" class="gt_row gt_right">5.1554869</td>
-<td headers="mean_se" class="gt_row gt_right">0.9940341</td>
+<td headers="mean_estimate" class="gt_row gt_right">5.0120642</td>
+<td headers="mean_se" class="gt_row gt_right">0.9141164</td>
 <td headers="power" class="gt_row gt_right" style="background-color: #00FF00; color: #000000;">1.00</td></tr>
   </tbody>
   

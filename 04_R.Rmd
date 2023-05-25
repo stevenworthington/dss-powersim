@@ -62,7 +62,7 @@ alpha <- 0.05
 
 ```{r params-all}
 # set all data-generating parameters
-beta_0  <-  65   # intercept; i.e., the grand mean
+beta_0  <-  60   # intercept; i.e., the grand mean
 beta_1  <-   5   # slope; i.e, effect of category
 omega_0 <-   3   # by-song random intercept sd
 tau_0   <-   7   # by-subject random intercept sd
@@ -75,9 +75,9 @@ sigma   <-   8   # residual (error) sd
 
 ```{r sampling}
 # set number of subjects and songs
-n_subj <-  50 # number of subjects
-n_pop  <-  20 # number of songs in pop category
-n_rock <-  20 # number of songs in rock category
+n_subj <-  25 # number of subjects
+n_pop  <-  15 # number of songs in pop category
+n_rock <-  15 # number of songs in rock category
 ```
 
 ### Simulate the sampling of songs
@@ -189,10 +189,10 @@ Now that we've tested the data generating code, we can put it into a function so
 ```{r}
 # set up the custom data simulation function
 sim_data <- function(
-  n_subj     =  50,   # number of subjects
-  n_pop      =  20,   # number of pop songs
-  n_rock     =  20,   # number of rock songs
-  beta_0     =  65,   # mean for pop genre
+  n_subj     =  25,   # number of subjects
+  n_pop      =  15,   # number of pop songs
+  n_rock     =  15,   # number of rock songs
+  beta_0     =  60,   # mean for pop genre
   beta_1     =   5,   # effect of genre
   omega_0    =   3,   # by-song random intercept sd
   tau_0      =   7,   # by-subject random intercept sd
@@ -250,7 +250,7 @@ power_run()
 
 ```{r}
 # run one model with new parameters
-power_run(n_pop = 50, n_rock = 25, beta_1 = 2)
+power_run(n_pop = 10, n_rock = 50, beta_1 = 2)
 ```
 
 ## Power calculation automated
@@ -298,8 +298,8 @@ In real life, we will not know the effect size of our quantity of interest and s
 # grid of paramater values of interest
 pgrid <- crossing(
   n_subj = c(10, 25, 50),
-  n_pop = c(10, 30),
-  n_rock = c(10, 30),
+  n_pop = c(10, 40),
+  n_rock = c(10, 40),
   beta_1 = 1:5 
 )
 
