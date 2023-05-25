@@ -182,7 +182,10 @@ ggplot(aes(category, liking_ij, color = category)) +
 Now we can analyze our simulated data in a linear mixed effects model using the function `lmer()` from the `{lmerTest}` package (which is a wrapper around the `lmer()` function from the `{lme4}` package that additionally provides $p$-values). The model formula in `lmer()` maps onto how we calculated our `liking_ij` outcome variable above.
 
 ```{r}
-form <- formula(liking_ij ~ 1 + genre_i + (1 | song_id) + (1 + genre_i | subj_id))
+# fit a linear mixed-effects model to data
+mod_sim <- lmer(liking_ij ~ 1 + genre_i + (1 | song_id) + (1 + genre_i | subj_id), data = dat_sim)
+
+summary(mod_sim, corr = FALSE)
 ```
 
 The terms in this R formula are as follows:
@@ -193,14 +196,6 @@ The terms in this R formula are as follows:
 - `(1 | song_id)` specifies a song-specific random intercept (`O_0i`).
 - `(1 + genre_i | subj_id)` specifies a subject-specific random intercept (`T_0j`) plus the subject specific random slope of the genre category (`T_1j`).
 
-Now we can estimate the model.
-
-```{r}
-# fit a linear mixed-effects model to data
-mod_sim <- lmer(form, data = dat_sim)
-
-summary(mod_sim, corr = FALSE)
-```
 
 We can use the `broom.mixed::tidy()` function to get a tidy table of the results. This will prove to be super useful later when we need to combine the output from hundreds of simulations to calculate power. We will added columns for `parameter` and `value`, so we can compare the estimate from the model to the parameters we used to simulate the data. 
 
@@ -326,7 +321,7 @@ sims_fp |>
   summarise(power = mean(p.value < alpha))
 ```
 
-Ideally, the false positive rate will be equal to `alpha`, which we set at `r alpha`. 
+Ideally, the false positive rate will be equal to `alpha`, which we set here at `r alpha`. 
 
 ## Power for different effect sizes
 
@@ -361,7 +356,7 @@ parameter_search <- function(params = pgrid){
 }
 ```
 
-If we call `parameter_search()` it will return a single replication of simulations for each combination of parameter values in `pgrid`.
+If we call `parameter_search()` it will return a single replications worth of simulations for each combination of parameter values in `pgrid`.
 
 ```{r}
 parameter_search()
@@ -386,7 +381,7 @@ sims_params <- future_replicate(
   mutate(pgrid_expand, .before = "effect") # add in the parameter grid values
 ```
 
-Now, as before, we can calculate power. But this time we'll group by all of the parameters we manipulated in `pgrid`, so that we can get power estimates for all combinations of parameter values.
+Now, as before, we can calculate power. But this time we'll group by all of the parameters we manipulated in `pgrid`.
 
 ```{r}
 sims_table <- sims_params |>

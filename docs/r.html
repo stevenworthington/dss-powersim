@@ -382,13 +382,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="analyze-the-simulated-data" class="section level3 hasAnchor" number="4.2.4">
 <h3><span class="header-section-number">4.2.4</span> Analyze the simulated data<a href="r.html#analyze-the-simulated-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now we can analyze our simulated data in a linear mixed effects model using the function <code>lmer()</code> from the <code>{lmerTest}</code> package (which is a wrapper around the <code>lmer()</code> function from the <code>{lme4}</code> package that additionally provides <span class="math inline">\(p\)</span>-values). The model formula in <code>lmer()</code> maps onto how we calculated our <code>liking_ij</code> outcome variable above.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="r.html#cb16-1" tabindex="-1"></a><span class="co"># fit a linear mixed-effects model to data</span></span>
-<span id="cb16-2"><a href="r.html#cb16-2" tabindex="-1"></a>mod_sim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(liking_ij <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> song_id) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">|</span> subj_id), <span class="at">data =</span> dat_sim)</span>
-<span id="cb16-3"><a href="r.html#cb16-3" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="r.html#cb16-4" tabindex="-1"></a><span class="fu">summary</span>(mod_sim, <span class="at">corr =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="r.html#cb16-1" tabindex="-1"></a>form <span class="ot">&lt;-</span> <span class="fu">formula</span>(liking_ij <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> song_id) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">|</span> subj_id))</span></code></pre></div>
+<p>The terms in this R formula are as follows:</p>
+<ul>
+<li><code>liking_ij</code> is the response.</li>
+<li><code>1</code> is the intercept (<code>beta_0</code>), which is the mean of the response for the pop genre of songs (because we used dummy coding for the <code>genre_i</code> term).</li>
+<li><code>genre_i</code> is the dummy coded variable identifying whether song <span class="math inline">\(i\)</span> belongs to the pop or rock genre.</li>
+<li><code>(1 | song_id)</code> specifies a song-specific random intercept (<code>O_0i</code>).</li>
+<li><code>(1 + genre_i | subj_id)</code> specifies a subject-specific random intercept (<code>T_0j</code>) plus the subject specific random slope of the genre category (<code>T_1j</code>).</li>
+</ul>
+<p>Now we can estimate the model.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="r.html#cb17-1" tabindex="-1"></a><span class="co"># fit a linear mixed-effects model to data</span></span>
+<span id="cb17-2"><a href="r.html#cb17-2" tabindex="-1"></a>mod_sim <span class="ot">&lt;-</span> <span class="fu">lmer</span>(form, <span class="at">data =</span> dat_sim)</span>
+<span id="cb17-3"><a href="r.html#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="r.html#cb17-4" tabindex="-1"></a><span class="fu">summary</span>(mod_sim, <span class="at">corr =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
 ## lmerModLmerTest]
-## Formula: liking_ij ~ 1 + genre_i + (1 | song_id) + (1 + genre_i | subj_id)
+## Formula: form
 ##    Data: dat_sim
 ## 
 ## REML criterion at convergence: 5392.5
@@ -411,24 +421,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## genre_i        7.501      1.713 40.857   4.379 8.09e-05 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The terms in this R formula are as follows:</p>
-<ul>
-<li><code>liking_ij</code> is the response.</li>
-<li><code>1</code> is the intercept (<code>beta_0</code>), which is the mean of the response for the pop genre of songs (because we used dummy coding for the <code>genre_i</code> term).</li>
-<li><code>genre_i</code> is the dummy coded variable identifying whether song <span class="math inline">\(i\)</span> belongs to the pop or rock genre.</li>
-<li><code>(1 | song_id)</code> specifies a song-specific random intercept (<code>O_0i</code>).</li>
-<li><code>(1 + genre_i | subj_id)</code> specifies a subject-specific random intercept (<code>T_0j</code>) plus the subject specific random slope of the genre category (<code>T_1j</code>).</li>
-</ul>
 <p>We can use the <code>broom.mixed::tidy()</code> function to get a tidy table of the results. This will prove to be super useful later when we need to combine the output from hundreds of simulations to calculate power. We will added columns for <code>parameter</code> and <code>value</code>, so we can compare the estimate from the model to the parameters we used to simulate the data.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="r.html#cb18-1" tabindex="-1"></a><span class="co"># get a tidy table of results</span></span>
-<span id="cb18-2"><a href="r.html#cb18-2" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim) <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="r.html#cb18-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(is.numeric, round, <span class="dv">3</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb18-4"><a href="r.html#cb18-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb18-5"><a href="r.html#cb18-5" tabindex="-1"></a>    <span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">&quot;beta_0&quot;</span>, <span class="st">&quot;beta_1&quot;</span>, <span class="st">&quot;tau_0&quot;</span>, <span class="st">&quot;rho&quot;</span>, <span class="st">&quot;tau_1&quot;</span>, <span class="st">&quot;omega_0&quot;</span>, <span class="st">&quot;sigma&quot;</span>),</span>
-<span id="cb18-6"><a href="r.html#cb18-6" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">c</span>(beta_0, beta_1, tau_0, rho, tau_1, omega_0, sigma),</span>
-<span id="cb18-7"><a href="r.html#cb18-7" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb18-8"><a href="r.html#cb18-8" tabindex="-1"></a>  <span class="fu">select</span>(term, parameter, value, estimate) <span class="sc">|&gt;</span></span>
-<span id="cb18-9"><a href="r.html#cb18-9" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="r.html#cb19-1" tabindex="-1"></a><span class="co"># get a tidy table of results</span></span>
+<span id="cb19-2"><a href="r.html#cb19-2" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="r.html#cb19-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(is.numeric, round, <span class="dv">3</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-4"><a href="r.html#cb19-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-5"><a href="r.html#cb19-5" tabindex="-1"></a>    <span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">&quot;beta_0&quot;</span>, <span class="st">&quot;beta_1&quot;</span>, <span class="st">&quot;tau_0&quot;</span>, <span class="st">&quot;rho&quot;</span>, <span class="st">&quot;tau_1&quot;</span>, <span class="st">&quot;omega_0&quot;</span>, <span class="st">&quot;sigma&quot;</span>),</span>
+<span id="cb19-6"><a href="r.html#cb19-6" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">c</span>(beta_0, beta_1, tau_0, rho, tau_1, omega_0, sigma),</span>
+<span id="cb19-7"><a href="r.html#cb19-7" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb19-8"><a href="r.html#cb19-8" tabindex="-1"></a>  <span class="fu">select</span>(term, parameter, value, estimate) <span class="sc">|&gt;</span></span>
+<span id="cb19-9"><a href="r.html#cb19-9" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -488,60 +490,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-simulation-automated" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Data simulation automated<a href="r.html#data-simulation-automated" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Now that we’ve tested the data generating code, we can put it into a function so that it’s easy to run it repeatedly.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="r.html#cb19-1" tabindex="-1"></a><span class="co"># set up the custom data simulation function</span></span>
-<span id="cb19-2"><a href="r.html#cb19-2" tabindex="-1"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
-<span id="cb19-3"><a href="r.html#cb19-3" tabindex="-1"></a>  <span class="at">n_subj     =</span>  <span class="dv">25</span>,   <span class="co"># number of subjects</span></span>
-<span id="cb19-4"><a href="r.html#cb19-4" tabindex="-1"></a>  <span class="at">n_pop      =</span>  <span class="dv">15</span>,   <span class="co"># number of pop songs</span></span>
-<span id="cb19-5"><a href="r.html#cb19-5" tabindex="-1"></a>  <span class="at">n_rock     =</span>  <span class="dv">15</span>,   <span class="co"># number of rock songs</span></span>
-<span id="cb19-6"><a href="r.html#cb19-6" tabindex="-1"></a>  <span class="at">beta_0     =</span>  <span class="dv">60</span>,   <span class="co"># mean for pop genre</span></span>
-<span id="cb19-7"><a href="r.html#cb19-7" tabindex="-1"></a>  <span class="at">beta_1     =</span>   <span class="dv">5</span>,   <span class="co"># effect of genre</span></span>
-<span id="cb19-8"><a href="r.html#cb19-8" tabindex="-1"></a>  <span class="at">omega_0    =</span>   <span class="dv">3</span>,   <span class="co"># by-song random intercept sd</span></span>
-<span id="cb19-9"><a href="r.html#cb19-9" tabindex="-1"></a>  <span class="at">tau_0      =</span>   <span class="dv">7</span>,   <span class="co"># by-subject random intercept sd</span></span>
-<span id="cb19-10"><a href="r.html#cb19-10" tabindex="-1"></a>  <span class="at">tau_1      =</span>   <span class="dv">4</span>,   <span class="co"># by-subject random slope sd</span></span>
-<span id="cb19-11"><a href="r.html#cb19-11" tabindex="-1"></a>  <span class="at">rho        =</span>   <span class="fl">0.2</span>, <span class="co"># correlation between intercept and slope</span></span>
-<span id="cb19-12"><a href="r.html#cb19-12" tabindex="-1"></a>  <span class="at">sigma      =</span>   <span class="dv">8</span>    <span class="co"># residual (standard deviation)</span></span>
-<span id="cb19-13"><a href="r.html#cb19-13" tabindex="-1"></a>  )</span>
-<span id="cb19-14"><a href="r.html#cb19-14" tabindex="-1"></a>{</span>
-<span id="cb19-15"><a href="r.html#cb19-15" tabindex="-1"></a>  <span class="co"># simulate a sample of songs</span></span>
-<span id="cb19-16"><a href="r.html#cb19-16" tabindex="-1"></a>  songs <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb19-17"><a href="r.html#cb19-17" tabindex="-1"></a>    <span class="at">song_id =</span> <span class="fu">seq_len</span>(n_pop <span class="sc">+</span> n_rock),</span>
-<span id="cb19-18"><a href="r.html#cb19-18" tabindex="-1"></a>    <span class="at">category =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;pop&quot;</span>, <span class="st">&quot;rock&quot;</span>), <span class="fu">c</span>(n_pop, n_rock)),</span>
-<span id="cb19-19"><a href="r.html#cb19-19" tabindex="-1"></a>    <span class="at">genre_i =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(n_pop, n_rock)),</span>
-<span id="cb19-20"><a href="r.html#cb19-20" tabindex="-1"></a>    <span class="at">O_0i =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n_pop <span class="sc">+</span> n_rock, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> omega_0)</span>
-<span id="cb19-21"><a href="r.html#cb19-21" tabindex="-1"></a>  )</span>
-<span id="cb19-22"><a href="r.html#cb19-22" tabindex="-1"></a></span>
-<span id="cb19-23"><a href="r.html#cb19-23" tabindex="-1"></a>  <span class="co"># simulate a sample of subjects</span></span>
-<span id="cb19-24"><a href="r.html#cb19-24" tabindex="-1"></a>  subjects <span class="ot">&lt;-</span> faux<span class="sc">::</span><span class="fu">rnorm_multi</span>(</span>
-<span id="cb19-25"><a href="r.html#cb19-25" tabindex="-1"></a>    <span class="at">n =</span> n_subj,</span>
-<span id="cb19-26"><a href="r.html#cb19-26" tabindex="-1"></a>    <span class="at">mu =</span> <span class="dv">0</span>,</span>
-<span id="cb19-27"><a href="r.html#cb19-27" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">c</span>(tau_0, tau_1),</span>
-<span id="cb19-28"><a href="r.html#cb19-28" tabindex="-1"></a>    <span class="at">r =</span> rho,</span>
-<span id="cb19-29"><a href="r.html#cb19-29" tabindex="-1"></a>    <span class="at">varnames =</span> <span class="fu">c</span>(<span class="st">&quot;T_0j&quot;</span>, <span class="st">&quot;T_1j&quot;</span>)</span>
-<span id="cb19-30"><a href="r.html#cb19-30" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb19-31"><a href="r.html#cb19-31" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">subj_id =</span> <span class="fu">seq_len</span>(n_subj))</span>
-<span id="cb19-32"><a href="r.html#cb19-32" tabindex="-1"></a></span>
-<span id="cb19-33"><a href="r.html#cb19-33" tabindex="-1"></a><span class="co"># cross subject and song IDs</span></span>
-<span id="cb19-34"><a href="r.html#cb19-34" tabindex="-1"></a><span class="fu">crossing</span>(subjects, songs) <span class="sc">|&gt;</span></span>
-<span id="cb19-35"><a href="r.html#cb19-35" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">e_ij =</span> <span class="fu">rnorm</span>(<span class="fu">n</span>(), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma),</span>
-<span id="cb19-36"><a href="r.html#cb19-36" tabindex="-1"></a>         <span class="at">liking_ij =</span> beta_0 <span class="sc">+</span> T_0j <span class="sc">+</span> O_0i <span class="sc">+</span> (beta_1 <span class="sc">+</span> T_1j) <span class="sc">*</span> genre_i <span class="sc">+</span> e_ij) <span class="sc">|&gt;</span></span>
-<span id="cb19-37"><a href="r.html#cb19-37" tabindex="-1"></a>  <span class="fu">select</span>(subj_id, song_id, category, genre_i, liking_ij)</span>
-<span id="cb19-38"><a href="r.html#cb19-38" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="r.html#cb20-1" tabindex="-1"></a><span class="co"># set up the custom data simulation function</span></span>
+<span id="cb20-2"><a href="r.html#cb20-2" tabindex="-1"></a>sim_data <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb20-3"><a href="r.html#cb20-3" tabindex="-1"></a>  <span class="at">n_subj     =</span>  <span class="dv">25</span>,   <span class="co"># number of subjects</span></span>
+<span id="cb20-4"><a href="r.html#cb20-4" tabindex="-1"></a>  <span class="at">n_pop      =</span>  <span class="dv">15</span>,   <span class="co"># number of pop songs</span></span>
+<span id="cb20-5"><a href="r.html#cb20-5" tabindex="-1"></a>  <span class="at">n_rock     =</span>  <span class="dv">15</span>,   <span class="co"># number of rock songs</span></span>
+<span id="cb20-6"><a href="r.html#cb20-6" tabindex="-1"></a>  <span class="at">beta_0     =</span>  <span class="dv">60</span>,   <span class="co"># mean for pop genre</span></span>
+<span id="cb20-7"><a href="r.html#cb20-7" tabindex="-1"></a>  <span class="at">beta_1     =</span>   <span class="dv">5</span>,   <span class="co"># effect of genre</span></span>
+<span id="cb20-8"><a href="r.html#cb20-8" tabindex="-1"></a>  <span class="at">omega_0    =</span>   <span class="dv">3</span>,   <span class="co"># by-song random intercept sd</span></span>
+<span id="cb20-9"><a href="r.html#cb20-9" tabindex="-1"></a>  <span class="at">tau_0      =</span>   <span class="dv">7</span>,   <span class="co"># by-subject random intercept sd</span></span>
+<span id="cb20-10"><a href="r.html#cb20-10" tabindex="-1"></a>  <span class="at">tau_1      =</span>   <span class="dv">4</span>,   <span class="co"># by-subject random slope sd</span></span>
+<span id="cb20-11"><a href="r.html#cb20-11" tabindex="-1"></a>  <span class="at">rho        =</span>   <span class="fl">0.2</span>, <span class="co"># correlation between intercept and slope</span></span>
+<span id="cb20-12"><a href="r.html#cb20-12" tabindex="-1"></a>  <span class="at">sigma      =</span>   <span class="dv">8</span>    <span class="co"># residual (standard deviation)</span></span>
+<span id="cb20-13"><a href="r.html#cb20-13" tabindex="-1"></a>  )</span>
+<span id="cb20-14"><a href="r.html#cb20-14" tabindex="-1"></a>{</span>
+<span id="cb20-15"><a href="r.html#cb20-15" tabindex="-1"></a>  <span class="co"># simulate a sample of songs</span></span>
+<span id="cb20-16"><a href="r.html#cb20-16" tabindex="-1"></a>  songs <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb20-17"><a href="r.html#cb20-17" tabindex="-1"></a>    <span class="at">song_id =</span> <span class="fu">seq_len</span>(n_pop <span class="sc">+</span> n_rock),</span>
+<span id="cb20-18"><a href="r.html#cb20-18" tabindex="-1"></a>    <span class="at">category =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;pop&quot;</span>, <span class="st">&quot;rock&quot;</span>), <span class="fu">c</span>(n_pop, n_rock)),</span>
+<span id="cb20-19"><a href="r.html#cb20-19" tabindex="-1"></a>    <span class="at">genre_i =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(n_pop, n_rock)),</span>
+<span id="cb20-20"><a href="r.html#cb20-20" tabindex="-1"></a>    <span class="at">O_0i =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n_pop <span class="sc">+</span> n_rock, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> omega_0)</span>
+<span id="cb20-21"><a href="r.html#cb20-21" tabindex="-1"></a>  )</span>
+<span id="cb20-22"><a href="r.html#cb20-22" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="r.html#cb20-23" tabindex="-1"></a>  <span class="co"># simulate a sample of subjects</span></span>
+<span id="cb20-24"><a href="r.html#cb20-24" tabindex="-1"></a>  subjects <span class="ot">&lt;-</span> faux<span class="sc">::</span><span class="fu">rnorm_multi</span>(</span>
+<span id="cb20-25"><a href="r.html#cb20-25" tabindex="-1"></a>    <span class="at">n =</span> n_subj,</span>
+<span id="cb20-26"><a href="r.html#cb20-26" tabindex="-1"></a>    <span class="at">mu =</span> <span class="dv">0</span>,</span>
+<span id="cb20-27"><a href="r.html#cb20-27" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">c</span>(tau_0, tau_1),</span>
+<span id="cb20-28"><a href="r.html#cb20-28" tabindex="-1"></a>    <span class="at">r =</span> rho,</span>
+<span id="cb20-29"><a href="r.html#cb20-29" tabindex="-1"></a>    <span class="at">varnames =</span> <span class="fu">c</span>(<span class="st">&quot;T_0j&quot;</span>, <span class="st">&quot;T_1j&quot;</span>)</span>
+<span id="cb20-30"><a href="r.html#cb20-30" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb20-31"><a href="r.html#cb20-31" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">subj_id =</span> <span class="fu">seq_len</span>(n_subj))</span>
+<span id="cb20-32"><a href="r.html#cb20-32" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="r.html#cb20-33" tabindex="-1"></a><span class="co"># cross subject and song IDs</span></span>
+<span id="cb20-34"><a href="r.html#cb20-34" tabindex="-1"></a><span class="fu">crossing</span>(subjects, songs) <span class="sc">|&gt;</span></span>
+<span id="cb20-35"><a href="r.html#cb20-35" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">e_ij =</span> <span class="fu">rnorm</span>(<span class="fu">n</span>(), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma),</span>
+<span id="cb20-36"><a href="r.html#cb20-36" tabindex="-1"></a>         <span class="at">liking_ij =</span> beta_0 <span class="sc">+</span> T_0j <span class="sc">+</span> O_0i <span class="sc">+</span> (beta_1 <span class="sc">+</span> T_1j) <span class="sc">*</span> genre_i <span class="sc">+</span> e_ij) <span class="sc">|&gt;</span></span>
+<span id="cb20-37"><a href="r.html#cb20-37" tabindex="-1"></a>  <span class="fu">select</span>(subj_id, song_id, category, genre_i, liking_ij)</span>
+<span id="cb20-38"><a href="r.html#cb20-38" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="power-calculation-single-run" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Power calculation (single run)<a href="r.html#power-calculation-single-run" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can wrap the data generating function and modeling code in a new function <code>power_one_run()</code> that returns a tidy table of the analysis results for a single simulation run. We’ll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="r.html#cb20-1" tabindex="-1"></a><span class="co"># set up the power function</span></span>
-<span id="cb20-2"><a href="r.html#cb20-2" tabindex="-1"></a>power_one_run <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb20-3"><a href="r.html#cb20-3" tabindex="-1"></a>  <span class="co"># ... is a shortcut that forwards any additional arguments to sim_data()</span></span>
-<span id="cb20-4"><a href="r.html#cb20-4" tabindex="-1"></a>  dat_sim <span class="ot">&lt;-</span> <span class="fu">sim_data</span>(...)</span>
-<span id="cb20-5"><a href="r.html#cb20-5" tabindex="-1"></a>  mod_sim <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>({ <span class="fu">suppressMessages</span>({ <span class="co"># suppress singularity messages</span></span>
-<span id="cb20-6"><a href="r.html#cb20-6" tabindex="-1"></a>    lmerTest<span class="sc">::</span><span class="fu">lmer</span>(liking_ij <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> song_id) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">|</span> subj_id), <span class="at">data =</span> dat_sim)</span>
-<span id="cb20-7"><a href="r.html#cb20-7" tabindex="-1"></a>  })})</span>
-<span id="cb20-8"><a href="r.html#cb20-8" tabindex="-1"></a>  broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim)</span>
-<span id="cb20-9"><a href="r.html#cb20-9" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="r.html#cb21-1" tabindex="-1"></a><span class="co"># set up the power function</span></span>
+<span id="cb21-2"><a href="r.html#cb21-2" tabindex="-1"></a>power_one_run <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb21-3"><a href="r.html#cb21-3" tabindex="-1"></a>  <span class="co"># ... is a shortcut that forwards any additional arguments to sim_data()</span></span>
+<span id="cb21-4"><a href="r.html#cb21-4" tabindex="-1"></a>  dat_sim <span class="ot">&lt;-</span> <span class="fu">sim_data</span>(...)</span>
+<span id="cb21-5"><a href="r.html#cb21-5" tabindex="-1"></a>  mod_sim <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>({ <span class="fu">suppressMessages</span>({ <span class="co"># suppress singularity messages</span></span>
+<span id="cb21-6"><a href="r.html#cb21-6" tabindex="-1"></a>    lmerTest<span class="sc">::</span><span class="fu">lmer</span>(liking_ij <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> song_id) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> genre_i <span class="sc">|</span> subj_id), <span class="at">data =</span> dat_sim)</span>
+<span id="cb21-7"><a href="r.html#cb21-7" tabindex="-1"></a>  })})</span>
+<span id="cb21-8"><a href="r.html#cb21-8" tabindex="-1"></a>  broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(mod_sim)</span>
+<span id="cb21-9"><a href="r.html#cb21-9" tabindex="-1"></a>}</span></code></pre></div>
 <p>Let’s test that our new <code>power_one_run()</code> function performs as expected.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="r.html#cb21-1" tabindex="-1"></a><span class="co"># run one model with default parameters</span></span>
-<span id="cb21-2"><a href="r.html#cb21-2" tabindex="-1"></a><span class="fu">power_one_run</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="r.html#cb22-1" tabindex="-1"></a><span class="co"># run one model with default parameters</span></span>
+<span id="cb22-2"><a href="r.html#cb22-2" tabindex="-1"></a><span class="fu">power_one_run</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 8
 ##   effect   group    term            estimate std.error statistic    df   p.value
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
@@ -552,8 +554,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 5 ran_pars subj_id  cor__(Intercep…    0.678     NA        NA     NA   NA       
 ## 6 ran_pars subj_id  sd__genre_i        4.37      NA        NA     NA   NA       
 ## 7 ran_pars Residual sd__Observation    7.73      NA        NA     NA   NA</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="r.html#cb23-1" tabindex="-1"></a><span class="co"># run one model with new parameters</span></span>
-<span id="cb23-2"><a href="r.html#cb23-2" tabindex="-1"></a><span class="fu">power_one_run</span>(<span class="at">n_pop =</span> <span class="dv">10</span>, <span class="at">n_rock =</span> <span class="dv">50</span>, <span class="at">beta_1 =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="r.html#cb24-1" tabindex="-1"></a><span class="co"># run one model with new parameters</span></span>
+<span id="cb24-2"><a href="r.html#cb24-2" tabindex="-1"></a><span class="fu">power_one_run</span>(<span class="at">n_pop =</span> <span class="dv">10</span>, <span class="at">n_rock =</span> <span class="dv">50</span>, <span class="at">beta_1 =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 8
 ##   effect   group    term            estimate std.error statistic    df   p.value
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
@@ -568,66 +570,66 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-calculation-automated" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Power calculation automated<a href="r.html#power-calculation-automated" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To get an accurate estimation of power, we need to run the simulation many times. Here we use the <code>future_map_dfr()</code> function to iterate over a sequence of integers denoting the replications we want to perform.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="r.html#cb25-1" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_one_run</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="r.html#cb26-1" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_one_run</span>())</span></code></pre></div>
 <p>We can finally calculate power for our parameter of interest <code>beta_1</code>(denoted in the tidy model output table as the term <code>genre_i</code>) by filtering to keep only that term and the calculating the proportion of times the <span class="math inline">\(p\)</span>-value is below the <code>alpha</code> (0.05) threshold.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="r.html#cb26-1" tabindex="-1"></a><span class="co"># calculate mean estimates and power for specified alpha</span></span>
-<span id="cb26-2"><a href="r.html#cb26-2" tabindex="-1"></a>sims <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="r.html#cb26-3" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-4"><a href="r.html#cb26-4" tabindex="-1"></a>  <span class="fu">group_by</span>(term) <span class="sc">|&gt;</span></span>
-<span id="cb26-5"><a href="r.html#cb26-5" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb26-6"><a href="r.html#cb26-6" tabindex="-1"></a>    <span class="at">mean_estimate =</span> <span class="fu">mean</span>(estimate),</span>
-<span id="cb26-7"><a href="r.html#cb26-7" tabindex="-1"></a>    <span class="at">mean_se =</span> <span class="fu">mean</span>(std.error),</span>
-<span id="cb26-8"><a href="r.html#cb26-8" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha),</span>
-<span id="cb26-9"><a href="r.html#cb26-9" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
-<span id="cb26-10"><a href="r.html#cb26-10" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="r.html#cb27-1" tabindex="-1"></a><span class="co"># calculate mean estimates and power for specified alpha</span></span>
+<span id="cb27-2"><a href="r.html#cb27-2" tabindex="-1"></a>sims <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="r.html#cb27-3" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href="r.html#cb27-4" tabindex="-1"></a>  <span class="fu">group_by</span>(term) <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href="r.html#cb27-5" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb27-6"><a href="r.html#cb27-6" tabindex="-1"></a>    <span class="at">mean_estimate =</span> <span class="fu">mean</span>(estimate),</span>
+<span id="cb27-7"><a href="r.html#cb27-7" tabindex="-1"></a>    <span class="at">mean_se =</span> <span class="fu">mean</span>(std.error),</span>
+<span id="cb27-8"><a href="r.html#cb27-8" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha),</span>
+<span id="cb27-9"><a href="r.html#cb27-9" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb27-10"><a href="r.html#cb27-10" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          4.99    1.47  0.85</code></pre>
+## 1 genre_i          5.02    1.47  0.92</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of <code>genre_ij</code> (<code>beta_1</code>) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="r.html#cb28-1" tabindex="-1"></a><span class="co"># run simulations and calculate the false positive rate</span></span>
-<span id="cb28-2"><a href="r.html#cb28-2" tabindex="-1"></a>sims_fp <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_one_run</span>(<span class="at">beta_1 =</span> <span class="dv">0</span>))</span>
-<span id="cb28-3"><a href="r.html#cb28-3" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="r.html#cb28-4" tabindex="-1"></a><span class="co"># calculate mean estimates and power for specified alpha</span></span>
-<span id="cb28-5"><a href="r.html#cb28-5" tabindex="-1"></a>sims_fp <span class="sc">|&gt;</span></span>
-<span id="cb28-6"><a href="r.html#cb28-6" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb28-7"><a href="r.html#cb28-7" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha))</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="r.html#cb29-1" tabindex="-1"></a><span class="co"># run simulations and calculate the false positive rate</span></span>
+<span id="cb29-2"><a href="r.html#cb29-2" tabindex="-1"></a>sims_fp <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>reps, <span class="sc">~</span> <span class="fu">power_one_run</span>(<span class="at">beta_1 =</span> <span class="dv">0</span>))</span>
+<span id="cb29-3"><a href="r.html#cb29-3" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="r.html#cb29-4" tabindex="-1"></a><span class="co"># calculate mean estimates and power for specified alpha</span></span>
+<span id="cb29-5"><a href="r.html#cb29-5" tabindex="-1"></a>sims_fp <span class="sc">|&gt;</span></span>
+<span id="cb29-6"><a href="r.html#cb29-6" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-7"><a href="r.html#cb29-7" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha))</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
 ## 1  0.08</code></pre>
-<p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set here at 0.05.</p>
+<p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set at 0.05.</p>
 </div>
 </div>
 <div id="power-for-different-effect-sizes" class="section level2 hasAnchor" number="4.6">
 <h2><span class="header-section-number">4.6</span> Power for different effect sizes<a href="r.html#power-for-different-effect-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="r.html#cb30-1" tabindex="-1"></a><span class="co"># grid of paramater values of interest</span></span>
-<span id="cb30-2"><a href="r.html#cb30-2" tabindex="-1"></a>pgrid <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
-<span id="cb30-3"><a href="r.html#cb30-3" tabindex="-1"></a>  <span class="at">n_subj =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>),</span>
-<span id="cb30-4"><a href="r.html#cb30-4" tabindex="-1"></a>  <span class="at">n_pop =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
-<span id="cb30-5"><a href="r.html#cb30-5" tabindex="-1"></a>  <span class="at">n_rock =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
-<span id="cb30-6"><a href="r.html#cb30-6" tabindex="-1"></a>  <span class="at">beta_1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span> </span>
-<span id="cb30-7"><a href="r.html#cb30-7" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="r.html#cb31-1" tabindex="-1"></a><span class="co"># grid of paramater values of interest</span></span>
+<span id="cb31-2"><a href="r.html#cb31-2" tabindex="-1"></a>pgrid <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
+<span id="cb31-3"><a href="r.html#cb31-3" tabindex="-1"></a>  <span class="at">n_subj =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>),</span>
+<span id="cb31-4"><a href="r.html#cb31-4" tabindex="-1"></a>  <span class="at">n_pop =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
+<span id="cb31-5"><a href="r.html#cb31-5" tabindex="-1"></a>  <span class="at">n_rock =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>),</span>
+<span id="cb31-6"><a href="r.html#cb31-6" tabindex="-1"></a>  <span class="at">beta_1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span> </span>
+<span id="cb31-7"><a href="r.html#cb31-7" tabindex="-1"></a>)</span></code></pre></div>
 <p>We can now wrap our <code>power_one_run()</code> function within a more general function <code>parameter_search()</code> that takes the grid of parameter values as input and uses the <code>future_pmap_dfr()</code> function to iterate over each row of parameter values in <code>pgrid</code> and feed them into <code>power_one_run()</code>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="r.html#cb31-1" tabindex="-1"></a><span class="co"># fit the models over the parameters</span></span>
-<span id="cb31-2"><a href="r.html#cb31-2" tabindex="-1"></a>parameter_search <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">params =</span> pgrid){</span>
-<span id="cb31-3"><a href="r.html#cb31-3" tabindex="-1"></a>  <span class="fu">future_pmap_dfr</span>(</span>
-<span id="cb31-4"><a href="r.html#cb31-4" tabindex="-1"></a>    <span class="at">.l =</span> params, <span class="co"># iterate over the grid of parameter values</span></span>
-<span id="cb31-5"><a href="r.html#cb31-5" tabindex="-1"></a>    <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">power_one_run</span>(</span>
-<span id="cb31-6"><a href="r.html#cb31-6" tabindex="-1"></a>             <span class="at">n_subj =</span> ..<span class="dv">1</span>, <span class="co"># plug each row of parameter values into power_one_run()</span></span>
-<span id="cb31-7"><a href="r.html#cb31-7" tabindex="-1"></a>             <span class="at">n_pop  =</span> ..<span class="dv">2</span>, </span>
-<span id="cb31-8"><a href="r.html#cb31-8" tabindex="-1"></a>             <span class="at">n_rock =</span> ..<span class="dv">3</span>,</span>
-<span id="cb31-9"><a href="r.html#cb31-9" tabindex="-1"></a>             <span class="at">beta_1 =</span> ..<span class="dv">4</span></span>
-<span id="cb31-10"><a href="r.html#cb31-10" tabindex="-1"></a>             ),</span>
-<span id="cb31-11"><a href="r.html#cb31-11" tabindex="-1"></a>    <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb31-12"><a href="r.html#cb31-12" tabindex="-1"></a>    <span class="at">.progress =</span> <span class="cn">TRUE</span></span>
-<span id="cb31-13"><a href="r.html#cb31-13" tabindex="-1"></a>  )</span>
-<span id="cb31-14"><a href="r.html#cb31-14" tabindex="-1"></a>}</span></code></pre></div>
-<p>If we call <code>parameter_search()</code> it will return a single replications worth of simulations for each combination of parameter values in <code>pgrid</code>.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="r.html#cb32-1" tabindex="-1"></a><span class="fu">parameter_search</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="r.html#cb32-1" tabindex="-1"></a><span class="co"># fit the models over the parameters</span></span>
+<span id="cb32-2"><a href="r.html#cb32-2" tabindex="-1"></a>parameter_search <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">params =</span> pgrid){</span>
+<span id="cb32-3"><a href="r.html#cb32-3" tabindex="-1"></a>  <span class="fu">future_pmap_dfr</span>(</span>
+<span id="cb32-4"><a href="r.html#cb32-4" tabindex="-1"></a>    <span class="at">.l =</span> params, <span class="co"># iterate over the grid of parameter values</span></span>
+<span id="cb32-5"><a href="r.html#cb32-5" tabindex="-1"></a>    <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">power_one_run</span>(</span>
+<span id="cb32-6"><a href="r.html#cb32-6" tabindex="-1"></a>             <span class="at">n_subj =</span> ..<span class="dv">1</span>, <span class="co"># plug each row of parameter values into power_one_run()</span></span>
+<span id="cb32-7"><a href="r.html#cb32-7" tabindex="-1"></a>             <span class="at">n_pop  =</span> ..<span class="dv">2</span>, </span>
+<span id="cb32-8"><a href="r.html#cb32-8" tabindex="-1"></a>             <span class="at">n_rock =</span> ..<span class="dv">3</span>,</span>
+<span id="cb32-9"><a href="r.html#cb32-9" tabindex="-1"></a>             <span class="at">beta_1 =</span> ..<span class="dv">4</span></span>
+<span id="cb32-10"><a href="r.html#cb32-10" tabindex="-1"></a>             ),</span>
+<span id="cb32-11"><a href="r.html#cb32-11" tabindex="-1"></a>    <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb32-12"><a href="r.html#cb32-12" tabindex="-1"></a>    <span class="at">.progress =</span> <span class="cn">TRUE</span></span>
+<span id="cb32-13"><a href="r.html#cb32-13" tabindex="-1"></a>  )</span>
+<span id="cb32-14"><a href="r.html#cb32-14" tabindex="-1"></a>}</span></code></pre></div>
+<p>If we call <code>parameter_search()</code> it will return a single replication of simulations for each combination of parameter values in <code>pgrid</code>.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="r.html#cb33-1" tabindex="-1"></a><span class="fu">parameter_search</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 420 × 8
 ##    effect   group    term           estimate std.error statistic    df   p.value
 ##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
@@ -643,60 +645,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 ran_pars song_id  sd__(Intercep…    3.52      NA       NA      NA   NA       
 ## # ℹ 410 more rows</code></pre>
 <p>To run multiple replications of <code>parameter_search()</code>, we can use the <code>future_replicate()</code> function, which just repeatedly calls <code>parameter_search()</code> for the number of times specified by <code>reps</code>. Fair warning, this will take some time if you have set a high number of replications!</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="r.html#cb34-1" tabindex="-1"></a><span class="co"># replicate the parameter grid to match the dimensions of the model outputs</span></span>
-<span id="cb34-2"><a href="r.html#cb34-2" tabindex="-1"></a>pgrid_expand <span class="ot">&lt;-</span> pgrid <span class="sc">|&gt;</span> </span>
-<span id="cb34-3"><a href="r.html#cb34-3" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>(), <span class="at">each =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span> <span class="co"># replicate each row by 7 parameters</span></span>
-<span id="cb34-4"><a href="r.html#cb34-4" tabindex="-1"></a>  <span class="fu">map_df</span>(rep.int, <span class="at">times =</span> reps) <span class="co"># replicate the whole grid by number of reps</span></span>
-<span id="cb34-5"><a href="r.html#cb34-5" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="r.html#cb34-6" tabindex="-1"></a><span class="co"># replicate the parameter search many times</span></span>
-<span id="cb34-7"><a href="r.html#cb34-7" tabindex="-1"></a>sims_params <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(</span>
-<span id="cb34-8"><a href="r.html#cb34-8" tabindex="-1"></a>    <span class="at">n =</span> reps, </span>
-<span id="cb34-9"><a href="r.html#cb34-9" tabindex="-1"></a>    <span class="at">expr =</span> <span class="fu">parameter_search</span>(), </span>
-<span id="cb34-10"><a href="r.html#cb34-10" tabindex="-1"></a>    <span class="at">simplify =</span> <span class="cn">FALSE</span></span>
-<span id="cb34-11"><a href="r.html#cb34-11" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb34-12"><a href="r.html#cb34-12" tabindex="-1"></a>  <span class="fu">imap</span>( <span class="sc">~</span> <span class="fu">mutate</span>(.x, <span class="at">rep =</span> .y, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># include rep ID</span></span>
-<span id="cb34-13"><a href="r.html#cb34-13" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> <span class="co"># combine into a single tibble</span></span>
-<span id="cb34-14"><a href="r.html#cb34-14" tabindex="-1"></a>  <span class="fu">mutate</span>(pgrid_expand, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>) <span class="co"># add in the parameter grid values</span></span></code></pre></div>
-<p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in <code>pgrid</code>.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="r.html#cb35-1" tabindex="-1"></a>sims_table <span class="ot">&lt;-</span> sims_params <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="r.html#cb35-2" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="r.html#cb35-3" tabindex="-1"></a>  <span class="fu">group_by</span>(term, n_subj, n_pop, n_rock, beta_1) <span class="sc">|&gt;</span></span>
-<span id="cb35-4"><a href="r.html#cb35-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb35-5"><a href="r.html#cb35-5" tabindex="-1"></a>    <span class="at">mean_estimate =</span> <span class="fu">mean</span>(estimate),</span>
-<span id="cb35-6"><a href="r.html#cb35-6" tabindex="-1"></a>    <span class="at">mean_se =</span> <span class="fu">mean</span>(std.error),</span>
-<span id="cb35-7"><a href="r.html#cb35-7" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha),</span>
-<span id="cb35-8"><a href="r.html#cb35-8" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
-<span id="cb35-9"><a href="r.html#cb35-9" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="r.html#cb35-1" tabindex="-1"></a><span class="co"># replicate the parameter grid to match the dimensions of the model outputs</span></span>
+<span id="cb35-2"><a href="r.html#cb35-2" tabindex="-1"></a>pgrid_expand <span class="ot">&lt;-</span> pgrid <span class="sc">|&gt;</span> </span>
+<span id="cb35-3"><a href="r.html#cb35-3" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>(), <span class="at">each =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span> <span class="co"># replicate each row by 7 parameters</span></span>
+<span id="cb35-4"><a href="r.html#cb35-4" tabindex="-1"></a>  <span class="fu">map_df</span>(rep.int, <span class="at">times =</span> reps) <span class="co"># replicate the whole grid by number of reps</span></span>
+<span id="cb35-5"><a href="r.html#cb35-5" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="r.html#cb35-6" tabindex="-1"></a><span class="co"># replicate the parameter search many times</span></span>
+<span id="cb35-7"><a href="r.html#cb35-7" tabindex="-1"></a>sims_params <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(</span>
+<span id="cb35-8"><a href="r.html#cb35-8" tabindex="-1"></a>    <span class="at">n =</span> reps, </span>
+<span id="cb35-9"><a href="r.html#cb35-9" tabindex="-1"></a>    <span class="at">expr =</span> <span class="fu">parameter_search</span>(), </span>
+<span id="cb35-10"><a href="r.html#cb35-10" tabindex="-1"></a>    <span class="at">simplify =</span> <span class="cn">FALSE</span></span>
+<span id="cb35-11"><a href="r.html#cb35-11" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb35-12"><a href="r.html#cb35-12" tabindex="-1"></a>  <span class="fu">imap</span>( <span class="sc">~</span> <span class="fu">mutate</span>(.x, <span class="at">rep =</span> .y, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># include rep ID</span></span>
+<span id="cb35-13"><a href="r.html#cb35-13" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> <span class="co"># combine into a single tibble</span></span>
+<span id="cb35-14"><a href="r.html#cb35-14" tabindex="-1"></a>  <span class="fu">mutate</span>(pgrid_expand, <span class="at">.before =</span> <span class="st">&quot;effect&quot;</span>) <span class="co"># add in the parameter grid values</span></span></code></pre></div>
+<p>Now, as before, we can calculate power. But this time we’ll group by all of the parameters we manipulated in <code>pgrid</code>, so that we can get power estimates for all combinations of parameter values.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="r.html#cb36-1" tabindex="-1"></a>sims_table <span class="ot">&lt;-</span> sims_params <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="r.html#cb36-2" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;genre_i&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="r.html#cb36-3" tabindex="-1"></a>  <span class="fu">group_by</span>(term, n_subj, n_pop, n_rock, beta_1) <span class="sc">|&gt;</span></span>
+<span id="cb36-4"><a href="r.html#cb36-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb36-5"><a href="r.html#cb36-5" tabindex="-1"></a>    <span class="at">mean_estimate =</span> <span class="fu">mean</span>(estimate),</span>
+<span id="cb36-6"><a href="r.html#cb36-6" tabindex="-1"></a>    <span class="at">mean_se =</span> <span class="fu">mean</span>(std.error),</span>
+<span id="cb36-7"><a href="r.html#cb36-7" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">mean</span>(p.value <span class="sc">&lt;</span> alpha),</span>
+<span id="cb36-8"><a href="r.html#cb36-8" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb36-9"><a href="r.html#cb36-9" tabindex="-1"></a>  )</span></code></pre></div>
 <p>Here’s a graph that visualizes the output of the power simulation.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="r.html#cb36-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
-<span id="cb36-2"><a href="r.html#cb36-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(n_subj<span class="sc">:</span>beta_1, as.factor),</span>
-<span id="cb36-3"><a href="r.html#cb36-3" tabindex="-1"></a>         <span class="at">n_pop =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_pop: &quot;</span>, n_pop),</span>
-<span id="cb36-4"><a href="r.html#cb36-4" tabindex="-1"></a>         <span class="at">n_rock =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_rock: &quot;</span>, n_rock)) <span class="sc">|&gt;</span></span>
-<span id="cb36-5"><a href="r.html#cb36-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> mean_estimate, <span class="at">y =</span> power,</span>
-<span id="cb36-6"><a href="r.html#cb36-6" tabindex="-1"></a>             <span class="at">group =</span> n_subj, <span class="at">color =</span> n_subj)) <span class="sc">+</span></span>
-<span id="cb36-7"><a href="r.html#cb36-7" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
-<span id="cb36-8"><a href="r.html#cb36-8" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">linewidth =</span>  <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb36-9"><a href="r.html#cb36-9" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb36-10"><a href="r.html#cb36-10" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb36-11"><a href="r.html#cb36-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(n_pop <span class="sc">~</span> n_rock) <span class="sc">+</span></span>
-<span id="cb36-12"><a href="r.html#cb36-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb36-13"><a href="r.html#cb36-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Effect size (rock genre - pop genre)&quot;</span>,</span>
-<span id="cb36-14"><a href="r.html#cb36-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Power&quot;</span>,</span>
-<span id="cb36-15"><a href="r.html#cb36-15" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Power analysis via simulation&quot;</span>,</span>
-<span id="cb36-16"><a href="r.html#cb36-16" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Sample size&quot;</span>) <span class="sc">+</span></span>
-<span id="cb36-17"><a href="r.html#cb36-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="figures/unnamed-chunk-25-1.png" width="768" /></p>
-<p>Here’s a table that summarizes the output from the power simulation.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="r.html#cb37-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="r.html#cb37-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb37-3"><a href="r.html#cb37-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-4"><a href="r.html#cb37-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
-<span id="cb37-5"><a href="r.html#cb37-5" tabindex="-1"></a>    <span class="at">columns =</span> power,</span>
-<span id="cb37-6"><a href="r.html#cb37-6" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
-<span id="cb37-7"><a href="r.html#cb37-7" tabindex="-1"></a>      <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
-<span id="cb37-8"><a href="r.html#cb37-8" tabindex="-1"></a>      <span class="at">domain =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb37-9"><a href="r.html#cb37-9" tabindex="-1"></a>      )</span>
-<span id="cb37-10"><a href="r.html#cb37-10" tabindex="-1"></a>  )</span></code></pre></div>
+<span id="cb37-2"><a href="r.html#cb37-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(n_subj<span class="sc">:</span>beta_1, as.factor),</span>
+<span id="cb37-3"><a href="r.html#cb37-3" tabindex="-1"></a>         <span class="at">n_pop =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_pop: &quot;</span>, n_pop),</span>
+<span id="cb37-4"><a href="r.html#cb37-4" tabindex="-1"></a>         <span class="at">n_rock =</span> <span class="fu">paste0</span>(<span class="st">&quot;n_rock: &quot;</span>, n_rock)) <span class="sc">|&gt;</span></span>
+<span id="cb37-5"><a href="r.html#cb37-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> mean_estimate, <span class="at">y =</span> power,</span>
+<span id="cb37-6"><a href="r.html#cb37-6" tabindex="-1"></a>             <span class="at">group =</span> n_subj, <span class="at">color =</span> n_subj)) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="r.html#cb37-7" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
+<span id="cb37-8"><a href="r.html#cb37-8" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">linewidth =</span>  <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb37-9"><a href="r.html#cb37-9" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb37-10"><a href="r.html#cb37-10" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb37-11"><a href="r.html#cb37-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(n_pop <span class="sc">~</span> n_rock) <span class="sc">+</span></span>
+<span id="cb37-12"><a href="r.html#cb37-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb37-13"><a href="r.html#cb37-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Effect size (rock genre - pop genre)&quot;</span>,</span>
+<span id="cb37-14"><a href="r.html#cb37-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Power&quot;</span>,</span>
+<span id="cb37-15"><a href="r.html#cb37-15" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Power analysis via simulation&quot;</span>,</span>
+<span id="cb37-16"><a href="r.html#cb37-16" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Sample size&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="r.html#cb37-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="figures/unnamed-chunk-26-1.png" width="768" /></p>
+<p>Here’s a table that summarizes the output from the power simulation.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="r.html#cb38-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href="r.html#cb38-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="r.html#cb38-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-4"><a href="r.html#cb38-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb38-5"><a href="r.html#cb38-5" tabindex="-1"></a>    <span class="at">columns =</span> power,</span>
+<span id="cb38-6"><a href="r.html#cb38-6" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb38-7"><a href="r.html#cb38-7" tabindex="-1"></a>      <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb38-8"><a href="r.html#cb38-8" tabindex="-1"></a>      <span class="at">domain =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb38-9"><a href="r.html#cb38-9" tabindex="-1"></a>      )</span>
+<span id="cb38-10"><a href="r.html#cb38-10" tabindex="-1"></a>  )</span></code></pre></div>
 <div id="peypicwoph" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#peypicwoph table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';

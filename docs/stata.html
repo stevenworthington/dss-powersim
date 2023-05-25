@@ -248,160 +248,160 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="setup-2" class="section level3 hasAnchor" number="6.1.1">
 <h3><span class="header-section-number">6.1.1</span> Setup<a href="stata.html#setup-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb50-1"><a href="stata.html#cb50-1" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 02138</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb51-1"><a href="stata.html#cb51-1" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 02138</span></code></pre></div>
 </div>
 <div id="step-4-simulate-2" class="section level3 hasAnchor" number="6.1.2">
 <h3><span class="header-section-number">6.1.2</span> Step 4: Simulate<a href="stata.html#step-4-simulate-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb51-1"><a href="stata.html#cb51-1" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb51-2"><a href="stata.html#cb51-2" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 400</span>
-<span id="cb51-3"><a href="stata.html#cb51-3" tabindex="-1"></a><span class="kw">generate</span> age = runiformint(18,65)</span>
-<span id="cb51-4"><a href="stata.html#cb51-4" tabindex="-1"></a><span class="kw">generate</span> female = rbinomial(1,0.5)</span>
-<span id="cb51-5"><a href="stata.html#cb51-5" tabindex="-1"></a><span class="kw">generate</span> interact = age*female</span>
-<span id="cb51-6"><a href="stata.html#cb51-6" tabindex="-1"></a><span class="kw">generate</span> <span class="fu">e</span> = rnormal(0,20)</span>
-<span id="cb51-7"><a href="stata.html#cb51-7" tabindex="-1"></a><span class="kw">generate</span> sbp = 110 + 0.5*age + (-20)*female + 0.35*interact  + <span class="fu">e</span></span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb52-1"><a href="stata.html#cb52-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb52-2"><a href="stata.html#cb52-2" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 400</span>
+<span id="cb52-3"><a href="stata.html#cb52-3" tabindex="-1"></a><span class="kw">generate</span> age = runiformint(18,65)</span>
+<span id="cb52-4"><a href="stata.html#cb52-4" tabindex="-1"></a><span class="kw">generate</span> female = rbinomial(1,0.5)</span>
+<span id="cb52-5"><a href="stata.html#cb52-5" tabindex="-1"></a><span class="kw">generate</span> interact = age*female</span>
+<span id="cb52-6"><a href="stata.html#cb52-6" tabindex="-1"></a><span class="kw">generate</span> <span class="fu">e</span> = rnormal(0,20)</span>
+<span id="cb52-7"><a href="stata.html#cb52-7" tabindex="-1"></a><span class="kw">generate</span> sbp = 110 + 0.5*age + (-20)*female + 0.35*interact  + <span class="fu">e</span></span></code></pre></div>
 <p>We can then test the null hypothesis that the interaction term equals zero using a likelihood-ratio test.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb52-1"><a href="stata.html#cb52-1" tabindex="-1"></a><span class="kw">regress</span> sbp age i.female c.age#i.female</span>
-<span id="cb52-2"><a href="stata.html#cb52-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> full</span>
-<span id="cb52-3"><a href="stata.html#cb52-3" tabindex="-1"></a><span class="kw">regress</span> sbp age i.female</span>
-<span id="cb52-4"><a href="stata.html#cb52-4" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
-<span id="cb52-5"><a href="stata.html#cb52-5" tabindex="-1"></a></span>
-<span id="cb52-6"><a href="stata.html#cb52-6" tabindex="-1"></a>Likelihood-<span class="kw">ratio</span> <span class="kw">test</span>                       LR <span class="fu">chi2</span>(1)  =  13.38</span>
-<span id="cb52-7"><a href="stata.html#cb52-7" tabindex="-1"></a>(Assumption: reduced nested <span class="kw">in</span> full)        Prob &gt; <span class="fu">chi2</span> =  0.0003</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb53-1"><a href="stata.html#cb53-1" tabindex="-1"></a><span class="kw">regress</span> sbp age i.female c.age#i.female</span>
+<span id="cb53-2"><a href="stata.html#cb53-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> full</span>
+<span id="cb53-3"><a href="stata.html#cb53-3" tabindex="-1"></a><span class="kw">regress</span> sbp age i.female</span>
+<span id="cb53-4"><a href="stata.html#cb53-4" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
+<span id="cb53-5"><a href="stata.html#cb53-5" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="stata.html#cb53-6" tabindex="-1"></a>Likelihood-<span class="kw">ratio</span> <span class="kw">test</span>                       LR <span class="fu">chi2</span>(1)  =  13.38</span>
+<span id="cb53-7"><a href="stata.html#cb53-7" tabindex="-1"></a>(Assumption: reduced nested <span class="kw">in</span> full)        Prob &gt; <span class="fu">chi2</span> =  0.0003</span></code></pre></div>
 <p>The test yields a p-value of 0.0003.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb53-1"><a href="stata.html#cb53-1" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span>
-<span id="cb53-2"><a href="stata.html#cb53-2" tabindex="-1"></a></span>
-<span id="cb53-3"><a href="stata.html#cb53-3" tabindex="-1"></a>scalars:</span>
-<span id="cb53-4"><a href="stata.html#cb53-4" tabindex="-1"></a><span class="fu">r</span>(<span class="kw">p</span>) =  .0002540647000293</span>
-<span id="cb53-5"><a href="stata.html#cb53-5" tabindex="-1"></a><span class="fu">r</span>(<span class="fu">chi2</span>) =  13.38189649447986</span>
-<span id="cb53-6"><a href="stata.html#cb53-6" tabindex="-1"></a><span class="fu">r</span>(df) =  1</span>
-<span id="cb53-7"><a href="stata.html#cb53-7" tabindex="-1"></a></span>
-<span id="cb53-8"><a href="stata.html#cb53-8" tabindex="-1"></a><span class="kw">local</span> reject = (<span class="fu">r</span>(<span class="kw">p</span>)&lt;0.05)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb54-1"><a href="stata.html#cb54-1" tabindex="-1"></a><span class="fu">return</span> <span class="ot">list</span></span>
+<span id="cb54-2"><a href="stata.html#cb54-2" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="stata.html#cb54-3" tabindex="-1"></a>scalars:</span>
+<span id="cb54-4"><a href="stata.html#cb54-4" tabindex="-1"></a><span class="fu">r</span>(<span class="kw">p</span>) =  .0002540647000293</span>
+<span id="cb54-5"><a href="stata.html#cb54-5" tabindex="-1"></a><span class="fu">r</span>(<span class="fu">chi2</span>) =  13.38189649447986</span>
+<span id="cb54-6"><a href="stata.html#cb54-6" tabindex="-1"></a><span class="fu">r</span>(df) =  1</span>
+<span id="cb54-7"><a href="stata.html#cb54-7" tabindex="-1"></a></span>
+<span id="cb54-8"><a href="stata.html#cb54-8" tabindex="-1"></a><span class="kw">local</span> reject = (<span class="fu">r</span>(<span class="kw">p</span>)&lt;0.05)</span></code></pre></div>
 </div>
 <div id="step-5-automate-2" class="section level3 hasAnchor" number="6.1.3">
 <h3><span class="header-section-number">6.1.3</span> Step 5: Automate<a href="stata.html#step-5-automate-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, let’s write a program that creates datasets under the alternative hypothesis, fits the models, and uses the <code>simulate</code> command to test the program.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb54-1"><a href="stata.html#cb54-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> simregress</span>
-<span id="cb54-2"><a href="stata.html#cb54-2" tabindex="-1"></a><span class="kw">program</span> simregress, rclass</span>
-<span id="cb54-3"><a href="stata.html#cb54-3" tabindex="-1"></a>    <span class="kw">version</span> 16</span>
-<span id="cb54-4"><a href="stata.html#cb54-4" tabindex="-1"></a>    <span class="co">// DEFINE THE INPUT PARAMETERS AND THEIR DEFAULT VALUES</span></span>
-<span id="cb54-5"><a href="stata.html#cb54-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n(integer)          <span class="co">/// Sample size</span></span>
-<span id="cb54-6"><a href="stata.html#cb54-6" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)    <span class="co">/// Alpha level</span></span>
-<span id="cb54-7"><a href="stata.html#cb54-7" tabindex="-1"></a>            intercept(<span class="fu">real</span> 110) <span class="co">/// Intercept parameter</span></span>
-<span id="cb54-8"><a href="stata.html#cb54-8" tabindex="-1"></a>            age(<span class="fu">real</span> 0.5)       <span class="co">/// Age parameter</span></span>
-<span id="cb54-9"><a href="stata.html#cb54-9" tabindex="-1"></a>            female(<span class="fu">real</span> -20)    <span class="co">/// Female parameter</span></span>
-<span id="cb54-10"><a href="stata.html#cb54-10" tabindex="-1"></a>            interact(<span class="fu">real</span> 0.35) <span class="co">/// Interaction parameter</span></span>
-<span id="cb54-11"><a href="stata.html#cb54-11" tabindex="-1"></a>            esd(<span class="fu">real</span> 20) ]      <span class="co">//  Standard deviation of the error</span></span>
-<span id="cb54-12"><a href="stata.html#cb54-12" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
-<span id="cb54-13"><a href="stata.html#cb54-13" tabindex="-1"></a>        <span class="co">// GENERATE THE RANDOM DATA</span></span>
-<span id="cb54-14"><a href="stata.html#cb54-14" tabindex="-1"></a>        <span class="kw">clear</span></span>
-<span id="cb54-15"><a href="stata.html#cb54-15" tabindex="-1"></a>        <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`n&#39;</span></span>
-<span id="cb54-16"><a href="stata.html#cb54-16" tabindex="-1"></a>        <span class="kw">generate</span> age = runiformint(18,65)</span>
-<span id="cb54-17"><a href="stata.html#cb54-17" tabindex="-1"></a>        <span class="kw">generate</span> female = rbinomial(1,0.5)</span>
-<span id="cb54-18"><a href="stata.html#cb54-18" tabindex="-1"></a>        <span class="kw">generate</span> interact = age*female</span>
-<span id="cb54-19"><a href="stata.html#cb54-19" tabindex="-1"></a>        <span class="kw">generate</span> <span class="fu">e</span> = rnormal(0,<span class="ot">`esd&#39;</span>)</span>
-<span id="cb54-20"><a href="stata.html#cb54-20" tabindex="-1"></a>        <span class="kw">generate</span> sbp = <span class="ot">`intercept&#39;</span> + <span class="ot">`age&#39;</span>*age + <span class="ot">`female&#39;</span>*female + <span class="co">///</span></span>
-<span id="cb54-21"><a href="stata.html#cb54-21" tabindex="-1"></a>           <span class="ot">`interact&#39;</span>*interact  + <span class="fu">e</span></span>
-<span id="cb54-22"><a href="stata.html#cb54-22" tabindex="-1"></a>        <span class="co">// </span><span class="al">TEST</span><span class="co"> THE NULL HYPOTHESIS</span></span>
-<span id="cb54-23"><a href="stata.html#cb54-23" tabindex="-1"></a>        <span class="kw">regress</span> sbp age i.female c.age#i.female</span>
-<span id="cb54-24"><a href="stata.html#cb54-24" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> full</span>
-<span id="cb54-25"><a href="stata.html#cb54-25" tabindex="-1"></a>        <span class="kw">regress</span> sbp age i.female</span>
-<span id="cb54-26"><a href="stata.html#cb54-26" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
-<span id="cb54-27"><a href="stata.html#cb54-27" tabindex="-1"></a>        <span class="kw">lrtest</span> full reduced</span>
-<span id="cb54-28"><a href="stata.html#cb54-28" tabindex="-1"></a>    }</span>
-<span id="cb54-29"><a href="stata.html#cb54-29" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
-<span id="cb54-30"><a href="stata.html#cb54-30" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> reject = (<span class="fu">r</span>(<span class="kw">p</span>)&lt;<span class="ot">`alpha&#39;</span>)</span>
-<span id="cb54-31"><a href="stata.html#cb54-31" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb55-1"><a href="stata.html#cb55-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> simregress</span>
+<span id="cb55-2"><a href="stata.html#cb55-2" tabindex="-1"></a><span class="kw">program</span> simregress, rclass</span>
+<span id="cb55-3"><a href="stata.html#cb55-3" tabindex="-1"></a>    <span class="kw">version</span> 16</span>
+<span id="cb55-4"><a href="stata.html#cb55-4" tabindex="-1"></a>    <span class="co">// DEFINE THE INPUT PARAMETERS AND THEIR DEFAULT VALUES</span></span>
+<span id="cb55-5"><a href="stata.html#cb55-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n(integer)          <span class="co">/// Sample size</span></span>
+<span id="cb55-6"><a href="stata.html#cb55-6" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)    <span class="co">/// Alpha level</span></span>
+<span id="cb55-7"><a href="stata.html#cb55-7" tabindex="-1"></a>            intercept(<span class="fu">real</span> 110) <span class="co">/// Intercept parameter</span></span>
+<span id="cb55-8"><a href="stata.html#cb55-8" tabindex="-1"></a>            age(<span class="fu">real</span> 0.5)       <span class="co">/// Age parameter</span></span>
+<span id="cb55-9"><a href="stata.html#cb55-9" tabindex="-1"></a>            female(<span class="fu">real</span> -20)    <span class="co">/// Female parameter</span></span>
+<span id="cb55-10"><a href="stata.html#cb55-10" tabindex="-1"></a>            interact(<span class="fu">real</span> 0.35) <span class="co">/// Interaction parameter</span></span>
+<span id="cb55-11"><a href="stata.html#cb55-11" tabindex="-1"></a>            esd(<span class="fu">real</span> 20) ]      <span class="co">//  Standard deviation of the error</span></span>
+<span id="cb55-12"><a href="stata.html#cb55-12" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
+<span id="cb55-13"><a href="stata.html#cb55-13" tabindex="-1"></a>        <span class="co">// GENERATE THE RANDOM DATA</span></span>
+<span id="cb55-14"><a href="stata.html#cb55-14" tabindex="-1"></a>        <span class="kw">clear</span></span>
+<span id="cb55-15"><a href="stata.html#cb55-15" tabindex="-1"></a>        <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`n&#39;</span></span>
+<span id="cb55-16"><a href="stata.html#cb55-16" tabindex="-1"></a>        <span class="kw">generate</span> age = runiformint(18,65)</span>
+<span id="cb55-17"><a href="stata.html#cb55-17" tabindex="-1"></a>        <span class="kw">generate</span> female = rbinomial(1,0.5)</span>
+<span id="cb55-18"><a href="stata.html#cb55-18" tabindex="-1"></a>        <span class="kw">generate</span> interact = age*female</span>
+<span id="cb55-19"><a href="stata.html#cb55-19" tabindex="-1"></a>        <span class="kw">generate</span> <span class="fu">e</span> = rnormal(0,<span class="ot">`esd&#39;</span>)</span>
+<span id="cb55-20"><a href="stata.html#cb55-20" tabindex="-1"></a>        <span class="kw">generate</span> sbp = <span class="ot">`intercept&#39;</span> + <span class="ot">`age&#39;</span>*age + <span class="ot">`female&#39;</span>*female + <span class="co">///</span></span>
+<span id="cb55-21"><a href="stata.html#cb55-21" tabindex="-1"></a>           <span class="ot">`interact&#39;</span>*interact  + <span class="fu">e</span></span>
+<span id="cb55-22"><a href="stata.html#cb55-22" tabindex="-1"></a>        <span class="co">// </span><span class="al">TEST</span><span class="co"> THE NULL HYPOTHESIS</span></span>
+<span id="cb55-23"><a href="stata.html#cb55-23" tabindex="-1"></a>        <span class="kw">regress</span> sbp age i.female c.age#i.female</span>
+<span id="cb55-24"><a href="stata.html#cb55-24" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> full</span>
+<span id="cb55-25"><a href="stata.html#cb55-25" tabindex="-1"></a>        <span class="kw">regress</span> sbp age i.female</span>
+<span id="cb55-26"><a href="stata.html#cb55-26" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
+<span id="cb55-27"><a href="stata.html#cb55-27" tabindex="-1"></a>        <span class="kw">lrtest</span> full reduced</span>
+<span id="cb55-28"><a href="stata.html#cb55-28" tabindex="-1"></a>    }</span>
+<span id="cb55-29"><a href="stata.html#cb55-29" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
+<span id="cb55-30"><a href="stata.html#cb55-30" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> reject = (<span class="fu">r</span>(<span class="kw">p</span>)&lt;<span class="ot">`alpha&#39;</span>)</span>
+<span id="cb55-31"><a href="stata.html#cb55-31" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Below, we use <code>simulate</code> to run <code>simregress</code> 200 times and summarize the variable reject. The results indicate that we would have 74% power to detect an interaction parameter of 0.35 given a sample of 400 participants and the other assumptions about the model.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb55-1"><a href="stata.html#cb55-1" tabindex="-1"></a><span class="kw">simulate</span> reject=<span class="fu">r</span>(reject), reps(200) <span class="dv">seed</span>(12345):              <span class="co">///</span></span>
-<span id="cb55-2"><a href="stata.html#cb55-2" tabindex="-1"></a>         simttest, n(200) m0(70) ma(75) <span class="fu">sd</span>(15) <span class="kw">alpha</span>(0.05)</span>
-<span id="cb55-3"><a href="stata.html#cb55-3" tabindex="-1"></a></span>
-<span id="cb55-4"><a href="stata.html#cb55-4" tabindex="-1"></a>Simulations (200)</span>
-<span id="cb55-5"><a href="stata.html#cb55-5" tabindex="-1"></a>----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 </span>
-<span id="cb55-6"><a href="stata.html#cb55-6" tabindex="-1"></a>..................................................    50</span>
-<span id="cb55-7"><a href="stata.html#cb55-7" tabindex="-1"></a>..................................................   100</span>
-<span id="cb55-8"><a href="stata.html#cb55-8" tabindex="-1"></a>..................................................   150</span>
-<span id="cb55-9"><a href="stata.html#cb55-9" tabindex="-1"></a>..................................................   200</span>
-<span id="cb55-10"><a href="stata.html#cb55-10" tabindex="-1"></a></span>
-<span id="cb55-11"><a href="stata.html#cb55-11" tabindex="-1"></a><span class="kw">summarize</span> reject</span>
-<span id="cb55-12"><a href="stata.html#cb55-12" tabindex="-1"></a></span>
-<span id="cb55-13"><a href="stata.html#cb55-13" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
-<span id="cb55-14"><a href="stata.html#cb55-14" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
-<span id="cb55-15"><a href="stata.html#cb55-15" tabindex="-1"></a>      reject |        200        .735    .4424407          0          1</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb56-1"><a href="stata.html#cb56-1" tabindex="-1"></a><span class="kw">simulate</span> reject=<span class="fu">r</span>(reject), reps(200) <span class="dv">seed</span>(12345):              <span class="co">///</span></span>
+<span id="cb56-2"><a href="stata.html#cb56-2" tabindex="-1"></a>         simttest, n(200) m0(70) ma(75) <span class="fu">sd</span>(15) <span class="kw">alpha</span>(0.05)</span>
+<span id="cb56-3"><a href="stata.html#cb56-3" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="stata.html#cb56-4" tabindex="-1"></a>Simulations (200)</span>
+<span id="cb56-5"><a href="stata.html#cb56-5" tabindex="-1"></a>----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 </span>
+<span id="cb56-6"><a href="stata.html#cb56-6" tabindex="-1"></a>..................................................    50</span>
+<span id="cb56-7"><a href="stata.html#cb56-7" tabindex="-1"></a>..................................................   100</span>
+<span id="cb56-8"><a href="stata.html#cb56-8" tabindex="-1"></a>..................................................   150</span>
+<span id="cb56-9"><a href="stata.html#cb56-9" tabindex="-1"></a>..................................................   200</span>
+<span id="cb56-10"><a href="stata.html#cb56-10" tabindex="-1"></a></span>
+<span id="cb56-11"><a href="stata.html#cb56-11" tabindex="-1"></a><span class="kw">summarize</span> reject</span>
+<span id="cb56-12"><a href="stata.html#cb56-12" tabindex="-1"></a></span>
+<span id="cb56-13"><a href="stata.html#cb56-13" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
+<span id="cb56-14"><a href="stata.html#cb56-14" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
+<span id="cb56-15"><a href="stata.html#cb56-15" tabindex="-1"></a>      reject |        200        .735    .4424407          0          1</span></code></pre></div>
 <p>Next, let’s write a program called <code>power\_cmd\_simregress</code> so that we can integrate <code>simregress</code> into Stata’s <code>power</code> command.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb56-1"><a href="stata.html#cb56-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simregress</span>
-<span id="cb56-2"><a href="stata.html#cb56-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simregress, rclass</span>
-<span id="cb56-3"><a href="stata.html#cb56-3" tabindex="-1"></a>    <span class="kw">version</span> 17</span>
-<span id="cb56-4"><a href="stata.html#cb56-4" tabindex="-1"></a>    <span class="co">// DEFINE THE INPUT PARAMETERS AND THEIR DEFAULT VALUES</span></span>
-<span id="cb56-5"><a href="stata.html#cb56-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n(integer)          <span class="co">/// Sample size</span></span>
-<span id="cb56-6"><a href="stata.html#cb56-6" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)    <span class="co">/// Alpha level</span></span>
-<span id="cb56-7"><a href="stata.html#cb56-7" tabindex="-1"></a>            intercept(<span class="fu">real</span> 110) <span class="co">/// Intercept parameter</span></span>
-<span id="cb56-8"><a href="stata.html#cb56-8" tabindex="-1"></a>            age(<span class="fu">real</span> 0.5)       <span class="co">/// Age parameter</span></span>
-<span id="cb56-9"><a href="stata.html#cb56-9" tabindex="-1"></a>            female(<span class="fu">real</span> -20)    <span class="co">/// Female parameter</span></span>
-<span id="cb56-10"><a href="stata.html#cb56-10" tabindex="-1"></a>            interact(<span class="fu">real</span> 0.35) <span class="co">/// Interaction parameter</span></span>
-<span id="cb56-11"><a href="stata.html#cb56-11" tabindex="-1"></a>            esd(<span class="fu">real</span> 20)        <span class="co">/// Standard deviation of the error</span></span>
-<span id="cb56-12"><a href="stata.html#cb56-12" tabindex="-1"></a>            reps(integer 100)]  <span class="co">//   Number of repetitions</span></span>
-<span id="cb56-13"><a href="stata.html#cb56-13" tabindex="-1"></a></span>
-<span id="cb56-14"><a href="stata.html#cb56-14" tabindex="-1"></a>    <span class="co">// GENERATE THE RANDOM DATA AND </span><span class="al">TEST</span><span class="co"> THE NULL HYPOTHESIS</span></span>
-<span id="cb56-15"><a href="stata.html#cb56-15" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
-<span id="cb56-16"><a href="stata.html#cb56-16" tabindex="-1"></a>        <span class="kw">simulate</span> reject=<span class="fu">r</span>(reject), reps(<span class="ot">`reps&#39;</span>):               <span class="co">///</span></span>
-<span id="cb56-17"><a href="stata.html#cb56-17" tabindex="-1"></a>             simregress, n(<span class="ot">`n&#39;</span>) age(<span class="ot">`age&#39;</span>) female(<span class="ot">`female&#39;</span>)    <span class="co">///</span></span>
-<span id="cb56-18"><a href="stata.html#cb56-18" tabindex="-1"></a>                         interact(<span class="ot">`interact&#39;</span>) esd(<span class="ot">`esd&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>)</span>
-<span id="cb56-19"><a href="stata.html#cb56-19" tabindex="-1"></a>        <span class="kw">summarize</span> reject</span>
-<span id="cb56-20"><a href="stata.html#cb56-20" tabindex="-1"></a>    }</span>
-<span id="cb56-21"><a href="stata.html#cb56-21" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
-<span id="cb56-22"><a href="stata.html#cb56-22" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> power = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb56-23"><a href="stata.html#cb56-23" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">N</span> = <span class="ot">`n&#39;</span></span>
-<span id="cb56-24"><a href="stata.html#cb56-24" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">alpha</span> = <span class="ot">`alpha&#39;</span></span>
-<span id="cb56-25"><a href="stata.html#cb56-25" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> intercept = <span class="ot">`intercept&#39;</span></span>
-<span id="cb56-26"><a href="stata.html#cb56-26" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> age = <span class="ot">`age&#39;</span></span>
-<span id="cb56-27"><a href="stata.html#cb56-27" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> female = <span class="ot">`female&#39;</span></span>
-<span id="cb56-28"><a href="stata.html#cb56-28" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> interact = <span class="ot">`interact&#39;</span></span>
-<span id="cb56-29"><a href="stata.html#cb56-29" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> esd = <span class="ot">`esd&#39;</span></span>
-<span id="cb56-30"><a href="stata.html#cb56-30" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb57-1"><a href="stata.html#cb57-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simregress</span>
+<span id="cb57-2"><a href="stata.html#cb57-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simregress, rclass</span>
+<span id="cb57-3"><a href="stata.html#cb57-3" tabindex="-1"></a>    <span class="kw">version</span> 17</span>
+<span id="cb57-4"><a href="stata.html#cb57-4" tabindex="-1"></a>    <span class="co">// DEFINE THE INPUT PARAMETERS AND THEIR DEFAULT VALUES</span></span>
+<span id="cb57-5"><a href="stata.html#cb57-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n(integer)          <span class="co">/// Sample size</span></span>
+<span id="cb57-6"><a href="stata.html#cb57-6" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)    <span class="co">/// Alpha level</span></span>
+<span id="cb57-7"><a href="stata.html#cb57-7" tabindex="-1"></a>            intercept(<span class="fu">real</span> 110) <span class="co">/// Intercept parameter</span></span>
+<span id="cb57-8"><a href="stata.html#cb57-8" tabindex="-1"></a>            age(<span class="fu">real</span> 0.5)       <span class="co">/// Age parameter</span></span>
+<span id="cb57-9"><a href="stata.html#cb57-9" tabindex="-1"></a>            female(<span class="fu">real</span> -20)    <span class="co">/// Female parameter</span></span>
+<span id="cb57-10"><a href="stata.html#cb57-10" tabindex="-1"></a>            interact(<span class="fu">real</span> 0.35) <span class="co">/// Interaction parameter</span></span>
+<span id="cb57-11"><a href="stata.html#cb57-11" tabindex="-1"></a>            esd(<span class="fu">real</span> 20)        <span class="co">/// Standard deviation of the error</span></span>
+<span id="cb57-12"><a href="stata.html#cb57-12" tabindex="-1"></a>            reps(integer 100)]  <span class="co">//   Number of repetitions</span></span>
+<span id="cb57-13"><a href="stata.html#cb57-13" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="stata.html#cb57-14" tabindex="-1"></a>    <span class="co">// GENERATE THE RANDOM DATA AND </span><span class="al">TEST</span><span class="co"> THE NULL HYPOTHESIS</span></span>
+<span id="cb57-15"><a href="stata.html#cb57-15" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
+<span id="cb57-16"><a href="stata.html#cb57-16" tabindex="-1"></a>        <span class="kw">simulate</span> reject=<span class="fu">r</span>(reject), reps(<span class="ot">`reps&#39;</span>):               <span class="co">///</span></span>
+<span id="cb57-17"><a href="stata.html#cb57-17" tabindex="-1"></a>             simregress, n(<span class="ot">`n&#39;</span>) age(<span class="ot">`age&#39;</span>) female(<span class="ot">`female&#39;</span>)    <span class="co">///</span></span>
+<span id="cb57-18"><a href="stata.html#cb57-18" tabindex="-1"></a>                         interact(<span class="ot">`interact&#39;</span>) esd(<span class="ot">`esd&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>)</span>
+<span id="cb57-19"><a href="stata.html#cb57-19" tabindex="-1"></a>        <span class="kw">summarize</span> reject</span>
+<span id="cb57-20"><a href="stata.html#cb57-20" tabindex="-1"></a>    }</span>
+<span id="cb57-21"><a href="stata.html#cb57-21" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
+<span id="cb57-22"><a href="stata.html#cb57-22" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> power = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb57-23"><a href="stata.html#cb57-23" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">N</span> = <span class="ot">`n&#39;</span></span>
+<span id="cb57-24"><a href="stata.html#cb57-24" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">alpha</span> = <span class="ot">`alpha&#39;</span></span>
+<span id="cb57-25"><a href="stata.html#cb57-25" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> intercept = <span class="ot">`intercept&#39;</span></span>
+<span id="cb57-26"><a href="stata.html#cb57-26" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> age = <span class="ot">`age&#39;</span></span>
+<span id="cb57-27"><a href="stata.html#cb57-27" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> female = <span class="ot">`female&#39;</span></span>
+<span id="cb57-28"><a href="stata.html#cb57-28" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> interact = <span class="ot">`interact&#39;</span></span>
+<span id="cb57-29"><a href="stata.html#cb57-29" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> esd = <span class="ot">`esd&#39;</span></span>
+<span id="cb57-30"><a href="stata.html#cb57-30" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Finally, run <code>power simregress</code> for a range of input parameter values, including the parameters listed in double quotes. To do this, we first need to create a program called <code>power\_cmd\_simregress\_init</code>.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb57-1"><a href="stata.html#cb57-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simregress_init</span>
-<span id="cb57-2"><a href="stata.html#cb57-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simregress_init, sclass</span>
-<span id="cb57-3"><a href="stata.html#cb57-3" tabindex="-1"></a>    <span class="kw">sreturn</span> <span class="kw">local</span> pss_colnames <span class="st">&quot;intercept age female interact esd&quot;</span></span>
-<span id="cb57-4"><a href="stata.html#cb57-4" tabindex="-1"></a>    <span class="kw">sreturn</span> <span class="kw">local</span> pss_numopts  <span class="st">&quot;intercept age female interact esd&quot;</span></span>
-<span id="cb57-5"><a href="stata.html#cb57-5" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb58-1"><a href="stata.html#cb58-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simregress_init</span>
+<span id="cb58-2"><a href="stata.html#cb58-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simregress_init, sclass</span>
+<span id="cb58-3"><a href="stata.html#cb58-3" tabindex="-1"></a>    <span class="kw">sreturn</span> <span class="kw">local</span> pss_colnames <span class="st">&quot;intercept age female interact esd&quot;</span></span>
+<span id="cb58-4"><a href="stata.html#cb58-4" tabindex="-1"></a>    <span class="kw">sreturn</span> <span class="kw">local</span> pss_numopts  <span class="st">&quot;intercept age female interact esd&quot;</span></span>
+<span id="cb58-5"><a href="stata.html#cb58-5" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <div id="step-6-summarize-2" class="section level3 hasAnchor" number="6.1.4">
 <h3><span class="header-section-number">6.1.4</span> Step 6: Summarize<a href="stata.html#step-6-summarize-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now, we’re ready to use <code>power simregress</code>! The output below shows the simulated power when the interaction parameter equals 0.2 to 0.4 in increments of 0.05 for samples of size 400, 500, 600, and 700.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb58-1"><a href="stata.html#cb58-1" tabindex="-1"></a>power simregress, n(400(100)700) intercept(110)                 <span class="co">///</span></span>
-<span id="cb58-2"><a href="stata.html#cb58-2" tabindex="-1"></a>                   age(0.5) female(-20) interact(0.2(0.05)0.4)   <span class="co">///</span></span>
-<span id="cb58-3"><a href="stata.html#cb58-3" tabindex="-1"></a>                   reps(1000) <span class="kw">table</span> <span class="kw">graph</span>(xdimension(interact)   <span class="co">///</span></span>
-<span id="cb58-4"><a href="stata.html#cb58-4" tabindex="-1"></a>                   <span class="bn">legend</span>(<span class="bn">rows</span>(1)))</span>
-<span id="cb58-5"><a href="stata.html#cb58-5" tabindex="-1"></a></span>
-<span id="cb58-6"><a href="stata.html#cb58-6" tabindex="-1"></a>Estimated power</span>
-<span id="cb58-7"><a href="stata.html#cb58-7" tabindex="-1"></a>Two-sided <span class="kw">test</span></span>
-<span id="cb58-8"><a href="stata.html#cb58-8" tabindex="-1"></a></span>
-<span id="cb58-9"><a href="stata.html#cb58-9" tabindex="-1"></a>  </span>
-<span id="cb58-10"><a href="stata.html#cb58-10" tabindex="-1"></a>  +--------------------------------------------------------------------+</span>
-<span id="cb58-11"><a href="stata.html#cb58-11" tabindex="-1"></a>  |   <span class="kw">alpha</span>   power       <span class="kw">N</span> intercept     age  female interact     esd |</span>
-<span id="cb58-12"><a href="stata.html#cb58-12" tabindex="-1"></a>  |--------------------------------------------------------------------|</span>
-<span id="cb58-13"><a href="stata.html#cb58-13" tabindex="-1"></a>  |     .05      .3     400       110      .5     -20       .2      20 |</span>
-<span id="cb58-14"><a href="stata.html#cb58-14" tabindex="-1"></a>  |     .05    .421     400       110      .5     -20      .25      20 |</span>
-<span id="cb58-15"><a href="stata.html#cb58-15" tabindex="-1"></a>  |     .05    .546     400       110      .5     -20       .3      20 |</span>
-<span id="cb58-16"><a href="stata.html#cb58-16" tabindex="-1"></a>  |     .05    .685     400       110      .5     -20      .35      20 |</span>
-<span id="cb58-17"><a href="stata.html#cb58-17" tabindex="-1"></a>  |     .05    .767     400       110      .5     -20       .4      20 |</span>
-<span id="cb58-18"><a href="stata.html#cb58-18" tabindex="-1"></a>  |     .05     .34     500       110      .5     -20       .2      20 |</span>
-<span id="cb58-19"><a href="stata.html#cb58-19" tabindex="-1"></a>  |     .05    .509     500       110      .5     -20      .25      20 |</span>
-<span id="cb58-20"><a href="stata.html#cb58-20" tabindex="-1"></a>  |     .05     .63     500       110      .5     -20       .3      20 |</span>
-<span id="cb58-21"><a href="stata.html#cb58-21" tabindex="-1"></a>  |     .05    .767     500       110      .5     -20      .35      20 |</span>
-<span id="cb58-22"><a href="stata.html#cb58-22" tabindex="-1"></a>  |     .05    .872     500       110      .5     -20       .4      20 |</span>
-<span id="cb58-23"><a href="stata.html#cb58-23" tabindex="-1"></a>  |     .05    .412     600       110      .5     -20       .2      20 |</span>
-<span id="cb58-24"><a href="stata.html#cb58-24" tabindex="-1"></a>  |     .05    .556     600       110      .5     -20      .25      20 |</span>
-<span id="cb58-25"><a href="stata.html#cb58-25" tabindex="-1"></a>  |     .05    .712     600       110      .5     -20       .3      20 |</span>
-<span id="cb58-26"><a href="stata.html#cb58-26" tabindex="-1"></a>  |     .05    .829     600       110      .5     -20      .35      20 |</span>
-<span id="cb58-27"><a href="stata.html#cb58-27" tabindex="-1"></a>  |     .05    .886     600       110      .5     -20       .4      20 |</span>
-<span id="cb58-28"><a href="stata.html#cb58-28" tabindex="-1"></a>  |     .05    .471     700       110      .5     -20       .2      20 |</span>
-<span id="cb58-29"><a href="stata.html#cb58-29" tabindex="-1"></a>  |     .05    .634     700       110      .5     -20      .25      20 |</span>
-<span id="cb58-30"><a href="stata.html#cb58-30" tabindex="-1"></a>  |     .05    .771     700       110      .5     -20       .3      20 |</span>
-<span id="cb58-31"><a href="stata.html#cb58-31" tabindex="-1"></a>  |     .05    .908     700       110      .5     -20      .35      20 |</span>
-<span id="cb58-32"><a href="stata.html#cb58-32" tabindex="-1"></a>  |     .05    .957     700       110      .5     -20       .4      20 |</span>
-<span id="cb58-33"><a href="stata.html#cb58-33" tabindex="-1"></a>  +--------------------------------------------------------------------+</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb59-1"><a href="stata.html#cb59-1" tabindex="-1"></a>power simregress, n(400(100)700) intercept(110)                 <span class="co">///</span></span>
+<span id="cb59-2"><a href="stata.html#cb59-2" tabindex="-1"></a>                   age(0.5) female(-20) interact(0.2(0.05)0.4)   <span class="co">///</span></span>
+<span id="cb59-3"><a href="stata.html#cb59-3" tabindex="-1"></a>                   reps(1000) <span class="kw">table</span> <span class="kw">graph</span>(xdimension(interact)   <span class="co">///</span></span>
+<span id="cb59-4"><a href="stata.html#cb59-4" tabindex="-1"></a>                   <span class="bn">legend</span>(<span class="bn">rows</span>(1)))</span>
+<span id="cb59-5"><a href="stata.html#cb59-5" tabindex="-1"></a></span>
+<span id="cb59-6"><a href="stata.html#cb59-6" tabindex="-1"></a>Estimated power</span>
+<span id="cb59-7"><a href="stata.html#cb59-7" tabindex="-1"></a>Two-sided <span class="kw">test</span></span>
+<span id="cb59-8"><a href="stata.html#cb59-8" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="stata.html#cb59-9" tabindex="-1"></a>  </span>
+<span id="cb59-10"><a href="stata.html#cb59-10" tabindex="-1"></a>  +--------------------------------------------------------------------+</span>
+<span id="cb59-11"><a href="stata.html#cb59-11" tabindex="-1"></a>  |   <span class="kw">alpha</span>   power       <span class="kw">N</span> intercept     age  female interact     esd |</span>
+<span id="cb59-12"><a href="stata.html#cb59-12" tabindex="-1"></a>  |--------------------------------------------------------------------|</span>
+<span id="cb59-13"><a href="stata.html#cb59-13" tabindex="-1"></a>  |     .05      .3     400       110      .5     -20       .2      20 |</span>
+<span id="cb59-14"><a href="stata.html#cb59-14" tabindex="-1"></a>  |     .05    .421     400       110      .5     -20      .25      20 |</span>
+<span id="cb59-15"><a href="stata.html#cb59-15" tabindex="-1"></a>  |     .05    .546     400       110      .5     -20       .3      20 |</span>
+<span id="cb59-16"><a href="stata.html#cb59-16" tabindex="-1"></a>  |     .05    .685     400       110      .5     -20      .35      20 |</span>
+<span id="cb59-17"><a href="stata.html#cb59-17" tabindex="-1"></a>  |     .05    .767     400       110      .5     -20       .4      20 |</span>
+<span id="cb59-18"><a href="stata.html#cb59-18" tabindex="-1"></a>  |     .05     .34     500       110      .5     -20       .2      20 |</span>
+<span id="cb59-19"><a href="stata.html#cb59-19" tabindex="-1"></a>  |     .05    .509     500       110      .5     -20      .25      20 |</span>
+<span id="cb59-20"><a href="stata.html#cb59-20" tabindex="-1"></a>  |     .05     .63     500       110      .5     -20       .3      20 |</span>
+<span id="cb59-21"><a href="stata.html#cb59-21" tabindex="-1"></a>  |     .05    .767     500       110      .5     -20      .35      20 |</span>
+<span id="cb59-22"><a href="stata.html#cb59-22" tabindex="-1"></a>  |     .05    .872     500       110      .5     -20       .4      20 |</span>
+<span id="cb59-23"><a href="stata.html#cb59-23" tabindex="-1"></a>  |     .05    .412     600       110      .5     -20       .2      20 |</span>
+<span id="cb59-24"><a href="stata.html#cb59-24" tabindex="-1"></a>  |     .05    .556     600       110      .5     -20      .25      20 |</span>
+<span id="cb59-25"><a href="stata.html#cb59-25" tabindex="-1"></a>  |     .05    .712     600       110      .5     -20       .3      20 |</span>
+<span id="cb59-26"><a href="stata.html#cb59-26" tabindex="-1"></a>  |     .05    .829     600       110      .5     -20      .35      20 |</span>
+<span id="cb59-27"><a href="stata.html#cb59-27" tabindex="-1"></a>  |     .05    .886     600       110      .5     -20       .4      20 |</span>
+<span id="cb59-28"><a href="stata.html#cb59-28" tabindex="-1"></a>  |     .05    .471     700       110      .5     -20       .2      20 |</span>
+<span id="cb59-29"><a href="stata.html#cb59-29" tabindex="-1"></a>  |     .05    .634     700       110      .5     -20      .25      20 |</span>
+<span id="cb59-30"><a href="stata.html#cb59-30" tabindex="-1"></a>  |     .05    .771     700       110      .5     -20       .3      20 |</span>
+<span id="cb59-31"><a href="stata.html#cb59-31" tabindex="-1"></a>  |     .05    .908     700       110      .5     -20      .35      20 |</span>
+<span id="cb59-32"><a href="stata.html#cb59-32" tabindex="-1"></a>  |     .05    .957     700       110      .5     -20       .4      20 |</span>
+<span id="cb59-33"><a href="stata.html#cb59-33" tabindex="-1"></a>  +--------------------------------------------------------------------+</span></code></pre></div>
 <p><img src="https://github.com/hlmshtj-dan/pigo/blob/main/5.png?raw=true" /></p>
 </div>
 </div>
@@ -410,168 +410,168 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="setup-3" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Setup<a href="stata.html#setup-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Again, we set the seed to 02138.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb59-1"><a href="stata.html#cb59-1" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 02138</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb60-1"><a href="stata.html#cb60-1" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 02138</span></code></pre></div>
 </div>
 <div id="step-4-simulate-3" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Step 4: Simulate<a href="stata.html#step-4-simulate-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model. We will simulate 5 observations at 4-month increments for 200 children.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb60-1"><a href="stata.html#cb60-1" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb60-2"><a href="stata.html#cb60-2" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 200</span>
-<span id="cb60-3"><a href="stata.html#cb60-3" tabindex="-1"></a><span class="kw">generate</span> child = <span class="dt">_n</span></span>
-<span id="cb60-4"><a href="stata.html#cb60-4" tabindex="-1"></a><span class="kw">generate</span> female = rbinomial(1,0.5)</span>
-<span id="cb60-5"><a href="stata.html#cb60-5" tabindex="-1"></a><span class="kw">generate</span> u_0i = rnormal(0,0.25)</span>
-<span id="cb60-6"><a href="stata.html#cb60-6" tabindex="-1"></a><span class="kw">generate</span> u_1i = rnormal(0,0.60)</span>
-<span id="cb60-7"><a href="stata.html#cb60-7" tabindex="-1"></a>expand 5</span>
-<span id="cb60-8"><a href="stata.html#cb60-8" tabindex="-1"></a><span class="kw">bysort</span> child: <span class="kw">generate</span> age = (<span class="dt">_n</span>-1)*0.5</span>
-<span id="cb60-9"><a href="stata.html#cb60-9" tabindex="-1"></a><span class="kw">generate</span> interaction = age*female</span>
-<span id="cb60-10"><a href="stata.html#cb60-10" tabindex="-1"></a><span class="kw">generate</span> e_ij = rnormal(0,1.2)</span>
-<span id="cb60-11"><a href="stata.html#cb60-11" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">weight</span> = 5.35 + 3.6*age + (-0.5)*female + (-0.25)*interaction <span class="co">///</span></span>
-<span id="cb60-12"><a href="stata.html#cb60-12" tabindex="-1"></a>    + u_0i + age*u_1i + e_ij</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb61-1"><a href="stata.html#cb61-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb61-2"><a href="stata.html#cb61-2" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 200</span>
+<span id="cb61-3"><a href="stata.html#cb61-3" tabindex="-1"></a><span class="kw">generate</span> child = <span class="dt">_n</span></span>
+<span id="cb61-4"><a href="stata.html#cb61-4" tabindex="-1"></a><span class="kw">generate</span> female = rbinomial(1,0.5)</span>
+<span id="cb61-5"><a href="stata.html#cb61-5" tabindex="-1"></a><span class="kw">generate</span> u_0i = rnormal(0,0.25)</span>
+<span id="cb61-6"><a href="stata.html#cb61-6" tabindex="-1"></a><span class="kw">generate</span> u_1i = rnormal(0,0.60)</span>
+<span id="cb61-7"><a href="stata.html#cb61-7" tabindex="-1"></a>expand 5</span>
+<span id="cb61-8"><a href="stata.html#cb61-8" tabindex="-1"></a><span class="kw">bysort</span> child: <span class="kw">generate</span> age = (<span class="dt">_n</span>-1)*0.5</span>
+<span id="cb61-9"><a href="stata.html#cb61-9" tabindex="-1"></a><span class="kw">generate</span> interaction = age*female</span>
+<span id="cb61-10"><a href="stata.html#cb61-10" tabindex="-1"></a><span class="kw">generate</span> e_ij = rnormal(0,1.2)</span>
+<span id="cb61-11"><a href="stata.html#cb61-11" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">weight</span> = 5.35 + 3.6*age + (-0.5)*female + (-0.25)*interaction <span class="co">///</span></span>
+<span id="cb61-12"><a href="stata.html#cb61-12" tabindex="-1"></a>    + u_0i + age*u_1i + e_ij</span></code></pre></div>
 <p>Our dataset includes the random deviations that we would not observe in a real dataset. We can then use mixed to fit a model to our simulated data.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb61-1"><a href="stata.html#cb61-1" tabindex="-1"></a>mixed <span class="kw">weight</span> age i.female c.age#i.female || child: age , stddev <span class="kw">nolog</span> <span class="kw">noheader</span></span>
-<span id="cb61-2"><a href="stata.html#cb61-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> full</span>
-<span id="cb61-3"><a href="stata.html#cb61-3" tabindex="-1"></a>mixed <span class="kw">weight</span> age i.female || child: age , stddev <span class="kw">nolog</span> <span class="kw">noheader</span></span>
-<span id="cb61-4"><a href="stata.html#cb61-4" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
-<span id="cb61-5"><a href="stata.html#cb61-5" tabindex="-1"></a><span class="kw">lrtest</span> full reduced</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb62-1"><a href="stata.html#cb62-1" tabindex="-1"></a>mixed <span class="kw">weight</span> age i.female c.age#i.female || child: age , stddev <span class="kw">nolog</span> <span class="kw">noheader</span></span>
+<span id="cb62-2"><a href="stata.html#cb62-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> full</span>
+<span id="cb62-3"><a href="stata.html#cb62-3" tabindex="-1"></a>mixed <span class="kw">weight</span> age i.female || child: age , stddev <span class="kw">nolog</span> <span class="kw">noheader</span></span>
+<span id="cb62-4"><a href="stata.html#cb62-4" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
+<span id="cb62-5"><a href="stata.html#cb62-5" tabindex="-1"></a><span class="kw">lrtest</span> full reduced</span></code></pre></div>
 <p>We can then test the null hypothesis that the interaction term equals zero using a likelihood-ratio test.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb62-1"><a href="stata.html#cb62-1" tabindex="-1"></a> <span class="kw">lrtest</span> full reduced</span>
-<span id="cb62-2"><a href="stata.html#cb62-2" tabindex="-1"></a></span>
-<span id="cb62-3"><a href="stata.html#cb62-3" tabindex="-1"></a>Likelihood-<span class="kw">ratio</span> <span class="kw">test</span>                                 LR <span class="fu">chi2</span>(1)  =      8.23</span>
-<span id="cb62-4"><a href="stata.html#cb62-4" tabindex="-1"></a>(Assumption: reduced nested <span class="kw">in</span> full)                  Prob &gt; <span class="fu">chi2</span> =    0.0041</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb63-1"><a href="stata.html#cb63-1" tabindex="-1"></a> <span class="kw">lrtest</span> full reduced</span>
+<span id="cb63-2"><a href="stata.html#cb63-2" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="stata.html#cb63-3" tabindex="-1"></a>Likelihood-<span class="kw">ratio</span> <span class="kw">test</span>                                 LR <span class="fu">chi2</span>(1)  =      8.23</span>
+<span id="cb63-4"><a href="stata.html#cb63-4" tabindex="-1"></a>(Assumption: reduced nested <span class="kw">in</span> full)                  Prob &gt; <span class="fu">chi2</span> =    0.0041</span></code></pre></div>
 <p>The <span class="math inline">\(p\)</span>-value for our test is 0.0041, so we would reject the null hypothesis that the interaction term equals zero.</p>
 </div>
 <div id="step-5-automate-3" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Step 5: Automate<a href="stata.html#step-5-automate-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, let’s write a program that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses the <code>simulate</code> command to run many iterations of the program.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb63-1"><a href="stata.html#cb63-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> simmixed</span>
-<span id="cb63-2"><a href="stata.html#cb63-2" tabindex="-1"></a><span class="kw">program</span> simmixed, rclass</span>
-<span id="cb63-3"><a href="stata.html#cb63-3" tabindex="-1"></a>    <span class="kw">version</span> 16</span>
-<span id="cb63-4"><a href="stata.html#cb63-4" tabindex="-1"></a>    <span class="co">// PARSE INPUT</span></span>
-<span id="cb63-5"><a href="stata.html#cb63-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n1(integer)             <span class="co">///</span></span>
-<span id="cb63-6"><a href="stata.html#cb63-6" tabindex="-1"></a>            n(integer)              <span class="co">///</span></span>
-<span id="cb63-7"><a href="stata.html#cb63-7" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)        <span class="co">///</span></span>
-<span id="cb63-8"><a href="stata.html#cb63-8" tabindex="-1"></a>            intercept(<span class="fu">real</span> 5.35)    <span class="co">///</span></span>
-<span id="cb63-9"><a href="stata.html#cb63-9" tabindex="-1"></a>            age(<span class="fu">real</span> 3.6)           <span class="co">///</span></span>
-<span id="cb63-10"><a href="stata.html#cb63-10" tabindex="-1"></a>            female(<span class="fu">real</span> -0.5)       <span class="co">///</span></span>
-<span id="cb63-11"><a href="stata.html#cb63-11" tabindex="-1"></a>            interact(<span class="fu">real</span> -0.25)    <span class="co">///</span></span>
-<span id="cb63-12"><a href="stata.html#cb63-12" tabindex="-1"></a>            u0i(<span class="fu">real</span> 0.25)          <span class="co">///</span></span>
-<span id="cb63-13"><a href="stata.html#cb63-13" tabindex="-1"></a>            u1i(<span class="fu">real</span> 0.60)          <span class="co">///</span></span>
-<span id="cb63-14"><a href="stata.html#cb63-14" tabindex="-1"></a>            eij(<span class="fu">real</span> 1.2) ]</span>
-<span id="cb63-15"><a href="stata.html#cb63-15" tabindex="-1"></a></span>
-<span id="cb63-16"><a href="stata.html#cb63-16" tabindex="-1"></a>    <span class="co">// COMPUTE POWER</span></span>
-<span id="cb63-17"><a href="stata.html#cb63-17" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
-<span id="cb63-18"><a href="stata.html#cb63-18" tabindex="-1"></a>        <span class="kw">drop</span> <span class="dt">_all</span></span>
-<span id="cb63-19"><a href="stata.html#cb63-19" tabindex="-1"></a>        <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`n&#39;</span></span>
-<span id="cb63-20"><a href="stata.html#cb63-20" tabindex="-1"></a>        <span class="kw">generate</span> child = <span class="dt">_n</span></span>
-<span id="cb63-21"><a href="stata.html#cb63-21" tabindex="-1"></a>        <span class="kw">generate</span> female = rbinomial(1,0.5)</span>
-<span id="cb63-22"><a href="stata.html#cb63-22" tabindex="-1"></a>        <span class="kw">generate</span> u_0i = rnormal(0,<span class="ot">`u0i&#39;</span>)</span>
-<span id="cb63-23"><a href="stata.html#cb63-23" tabindex="-1"></a>        <span class="kw">generate</span> u_1i = rnormal(0,<span class="ot">`u1i&#39;</span>)</span>
-<span id="cb63-24"><a href="stata.html#cb63-24" tabindex="-1"></a>        expand <span class="ot">`n1&#39;</span></span>
-<span id="cb63-25"><a href="stata.html#cb63-25" tabindex="-1"></a>        <span class="kw">bysort</span> child: <span class="kw">generate</span> age = (<span class="dt">_n</span>-1)*0.5</span>
-<span id="cb63-26"><a href="stata.html#cb63-26" tabindex="-1"></a>        <span class="kw">generate</span> interaction = age*female</span>
-<span id="cb63-27"><a href="stata.html#cb63-27" tabindex="-1"></a>        <span class="kw">generate</span> e_ij = rnormal(0,<span class="ot">`eij&#39;</span>)</span>
-<span id="cb63-28"><a href="stata.html#cb63-28" tabindex="-1"></a>        <span class="kw">generate</span> <span class="kw">weight</span> = <span class="ot">`intercept&#39;</span> + <span class="ot">`age&#39;</span>*age + <span class="ot">`female&#39;</span>*female + <span class="co">///</span></span>
-<span id="cb63-29"><a href="stata.html#cb63-29" tabindex="-1"></a>           <span class="ot">`interact&#39;</span>*interaction  + u_0i + age*u_1i + e_ij</span>
-<span id="cb63-30"><a href="stata.html#cb63-30" tabindex="-1"></a></span>
-<span id="cb63-31"><a href="stata.html#cb63-31" tabindex="-1"></a>        mixed <span class="kw">weight</span> age i.female c.age#i.female || child: age, iter(200)</span>
-<span id="cb63-32"><a href="stata.html#cb63-32" tabindex="-1"></a>        <span class="kw">local</span> conv1 = <span class="fu">e</span>(converged)</span>
-<span id="cb63-33"><a href="stata.html#cb63-33" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> full</span>
-<span id="cb63-34"><a href="stata.html#cb63-34" tabindex="-1"></a>        mixed <span class="kw">weight</span> age i.female || child: age, iter(200)</span>
-<span id="cb63-35"><a href="stata.html#cb63-35" tabindex="-1"></a>        <span class="kw">local</span> conv2 = <span class="fu">e</span>(converged)</span>
-<span id="cb63-36"><a href="stata.html#cb63-36" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
-<span id="cb63-37"><a href="stata.html#cb63-37" tabindex="-1"></a>        <span class="kw">lrtest</span> full reduced</span>
-<span id="cb63-38"><a href="stata.html#cb63-38" tabindex="-1"></a>        <span class="kw">local</span> reject = <span class="fu">cond</span>(<span class="ot">`conv1&#39;</span> + <span class="ot">`conv2&#39;</span>==2, (<span class="fu">r</span>(<span class="kw">p</span>)&lt;<span class="ot">`alpha&#39;</span>), .)</span>
-<span id="cb63-39"><a href="stata.html#cb63-39" tabindex="-1"></a>    }</span>
-<span id="cb63-40"><a href="stata.html#cb63-40" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
-<span id="cb63-41"><a href="stata.html#cb63-41" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> reject = <span class="ot">`reject&#39;</span></span>
-<span id="cb63-42"><a href="stata.html#cb63-42" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> conv = <span class="ot">`conv1&#39;</span>+<span class="ot">`conv2&#39;</span></span>
-<span id="cb63-43"><a href="stata.html#cb63-43" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb64-1"><a href="stata.html#cb64-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> simmixed</span>
+<span id="cb64-2"><a href="stata.html#cb64-2" tabindex="-1"></a><span class="kw">program</span> simmixed, rclass</span>
+<span id="cb64-3"><a href="stata.html#cb64-3" tabindex="-1"></a>    <span class="kw">version</span> 16</span>
+<span id="cb64-4"><a href="stata.html#cb64-4" tabindex="-1"></a>    <span class="co">// PARSE INPUT</span></span>
+<span id="cb64-5"><a href="stata.html#cb64-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n1(integer)             <span class="co">///</span></span>
+<span id="cb64-6"><a href="stata.html#cb64-6" tabindex="-1"></a>            n(integer)              <span class="co">///</span></span>
+<span id="cb64-7"><a href="stata.html#cb64-7" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)        <span class="co">///</span></span>
+<span id="cb64-8"><a href="stata.html#cb64-8" tabindex="-1"></a>            intercept(<span class="fu">real</span> 5.35)    <span class="co">///</span></span>
+<span id="cb64-9"><a href="stata.html#cb64-9" tabindex="-1"></a>            age(<span class="fu">real</span> 3.6)           <span class="co">///</span></span>
+<span id="cb64-10"><a href="stata.html#cb64-10" tabindex="-1"></a>            female(<span class="fu">real</span> -0.5)       <span class="co">///</span></span>
+<span id="cb64-11"><a href="stata.html#cb64-11" tabindex="-1"></a>            interact(<span class="fu">real</span> -0.25)    <span class="co">///</span></span>
+<span id="cb64-12"><a href="stata.html#cb64-12" tabindex="-1"></a>            u0i(<span class="fu">real</span> 0.25)          <span class="co">///</span></span>
+<span id="cb64-13"><a href="stata.html#cb64-13" tabindex="-1"></a>            u1i(<span class="fu">real</span> 0.60)          <span class="co">///</span></span>
+<span id="cb64-14"><a href="stata.html#cb64-14" tabindex="-1"></a>            eij(<span class="fu">real</span> 1.2) ]</span>
+<span id="cb64-15"><a href="stata.html#cb64-15" tabindex="-1"></a></span>
+<span id="cb64-16"><a href="stata.html#cb64-16" tabindex="-1"></a>    <span class="co">// COMPUTE POWER</span></span>
+<span id="cb64-17"><a href="stata.html#cb64-17" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
+<span id="cb64-18"><a href="stata.html#cb64-18" tabindex="-1"></a>        <span class="kw">drop</span> <span class="dt">_all</span></span>
+<span id="cb64-19"><a href="stata.html#cb64-19" tabindex="-1"></a>        <span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`n&#39;</span></span>
+<span id="cb64-20"><a href="stata.html#cb64-20" tabindex="-1"></a>        <span class="kw">generate</span> child = <span class="dt">_n</span></span>
+<span id="cb64-21"><a href="stata.html#cb64-21" tabindex="-1"></a>        <span class="kw">generate</span> female = rbinomial(1,0.5)</span>
+<span id="cb64-22"><a href="stata.html#cb64-22" tabindex="-1"></a>        <span class="kw">generate</span> u_0i = rnormal(0,<span class="ot">`u0i&#39;</span>)</span>
+<span id="cb64-23"><a href="stata.html#cb64-23" tabindex="-1"></a>        <span class="kw">generate</span> u_1i = rnormal(0,<span class="ot">`u1i&#39;</span>)</span>
+<span id="cb64-24"><a href="stata.html#cb64-24" tabindex="-1"></a>        expand <span class="ot">`n1&#39;</span></span>
+<span id="cb64-25"><a href="stata.html#cb64-25" tabindex="-1"></a>        <span class="kw">bysort</span> child: <span class="kw">generate</span> age = (<span class="dt">_n</span>-1)*0.5</span>
+<span id="cb64-26"><a href="stata.html#cb64-26" tabindex="-1"></a>        <span class="kw">generate</span> interaction = age*female</span>
+<span id="cb64-27"><a href="stata.html#cb64-27" tabindex="-1"></a>        <span class="kw">generate</span> e_ij = rnormal(0,<span class="ot">`eij&#39;</span>)</span>
+<span id="cb64-28"><a href="stata.html#cb64-28" tabindex="-1"></a>        <span class="kw">generate</span> <span class="kw">weight</span> = <span class="ot">`intercept&#39;</span> + <span class="ot">`age&#39;</span>*age + <span class="ot">`female&#39;</span>*female + <span class="co">///</span></span>
+<span id="cb64-29"><a href="stata.html#cb64-29" tabindex="-1"></a>           <span class="ot">`interact&#39;</span>*interaction  + u_0i + age*u_1i + e_ij</span>
+<span id="cb64-30"><a href="stata.html#cb64-30" tabindex="-1"></a></span>
+<span id="cb64-31"><a href="stata.html#cb64-31" tabindex="-1"></a>        mixed <span class="kw">weight</span> age i.female c.age#i.female || child: age, iter(200)</span>
+<span id="cb64-32"><a href="stata.html#cb64-32" tabindex="-1"></a>        <span class="kw">local</span> conv1 = <span class="fu">e</span>(converged)</span>
+<span id="cb64-33"><a href="stata.html#cb64-33" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> full</span>
+<span id="cb64-34"><a href="stata.html#cb64-34" tabindex="-1"></a>        mixed <span class="kw">weight</span> age i.female || child: age, iter(200)</span>
+<span id="cb64-35"><a href="stata.html#cb64-35" tabindex="-1"></a>        <span class="kw">local</span> conv2 = <span class="fu">e</span>(converged)</span>
+<span id="cb64-36"><a href="stata.html#cb64-36" tabindex="-1"></a>        <span class="kw">estimates</span> <span class="kw">store</span> reduced</span>
+<span id="cb64-37"><a href="stata.html#cb64-37" tabindex="-1"></a>        <span class="kw">lrtest</span> full reduced</span>
+<span id="cb64-38"><a href="stata.html#cb64-38" tabindex="-1"></a>        <span class="kw">local</span> reject = <span class="fu">cond</span>(<span class="ot">`conv1&#39;</span> + <span class="ot">`conv2&#39;</span>==2, (<span class="fu">r</span>(<span class="kw">p</span>)&lt;<span class="ot">`alpha&#39;</span>), .)</span>
+<span id="cb64-39"><a href="stata.html#cb64-39" tabindex="-1"></a>    }</span>
+<span id="cb64-40"><a href="stata.html#cb64-40" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
+<span id="cb64-41"><a href="stata.html#cb64-41" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> reject = <span class="ot">`reject&#39;</span></span>
+<span id="cb64-42"><a href="stata.html#cb64-42" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> conv = <span class="ot">`conv1&#39;</span>+<span class="ot">`conv2&#39;</span></span>
+<span id="cb64-43"><a href="stata.html#cb64-43" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>We then use simulate to run simmixed 10 times using the default parameter values for 5 observations on each of 200 children.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb64-1"><a href="stata.html#cb64-1" tabindex="-1"></a><span class="kw">simulate</span> reject=<span class="fu">r</span>(reject) converged=<span class="fu">r</span>(conv), reps(10) <span class="dv">seed</span>(12345):      </span>
-<span id="cb64-2"><a href="stata.html#cb64-2" tabindex="-1"></a>             simmixed, n1(5) n(200)</span>
-<span id="cb64-3"><a href="stata.html#cb64-3" tabindex="-1"></a></span>
-<span id="cb64-4"><a href="stata.html#cb64-4" tabindex="-1"></a>      command:  simmixed, n1(5) n(200)</span>
-<span id="cb64-5"><a href="stata.html#cb64-5" tabindex="-1"></a>       reject:  <span class="fu">r</span>(reject)</span>
-<span id="cb64-6"><a href="stata.html#cb64-6" tabindex="-1"></a>    converged:  <span class="fu">r</span>(conv)</span>
-<span id="cb64-7"><a href="stata.html#cb64-7" tabindex="-1"></a></span>
-<span id="cb64-8"><a href="stata.html#cb64-8" tabindex="-1"></a>Simulations (10)</span>
-<span id="cb64-9"><a href="stata.html#cb64-9" tabindex="-1"></a>----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb65-1"><a href="stata.html#cb65-1" tabindex="-1"></a><span class="kw">simulate</span> reject=<span class="fu">r</span>(reject) converged=<span class="fu">r</span>(conv), reps(10) <span class="dv">seed</span>(12345):      </span>
+<span id="cb65-2"><a href="stata.html#cb65-2" tabindex="-1"></a>             simmixed, n1(5) n(200)</span>
+<span id="cb65-3"><a href="stata.html#cb65-3" tabindex="-1"></a></span>
+<span id="cb65-4"><a href="stata.html#cb65-4" tabindex="-1"></a>      command:  simmixed, n1(5) n(200)</span>
+<span id="cb65-5"><a href="stata.html#cb65-5" tabindex="-1"></a>       reject:  <span class="fu">r</span>(reject)</span>
+<span id="cb65-6"><a href="stata.html#cb65-6" tabindex="-1"></a>    converged:  <span class="fu">r</span>(conv)</span>
+<span id="cb65-7"><a href="stata.html#cb65-7" tabindex="-1"></a></span>
+<span id="cb65-8"><a href="stata.html#cb65-8" tabindex="-1"></a>Simulations (10)</span>
+<span id="cb65-9"><a href="stata.html#cb65-9" tabindex="-1"></a>----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5</span></code></pre></div>
 <p><code>simulate</code> saved the results of the hypothesis tests to a variable named reject. The mean of reject is our estimate of the power to test the null hypothesis that the age×sex interaction term equals zero, assuming that the weight of 200 children is measured 5 times.</p>
 <p>We could stop with our quick simulation if we were interested only in a specific set of assumptions. But it’s easy to write an additional program named <code>power\_cmd\_simmixed</code> that will allow us to use Stata’s <code>power</code> command to create tables and graphs for a range of sample sizes.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb65-1"><a href="stata.html#cb65-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simmixed</span>
-<span id="cb65-2"><a href="stata.html#cb65-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simmixed, rclass</span>
-<span id="cb65-3"><a href="stata.html#cb65-3" tabindex="-1"></a>    <span class="kw">version</span> 16</span>
-<span id="cb65-4"><a href="stata.html#cb65-4" tabindex="-1"></a>    <span class="co">// PARSE INPUT</span></span>
-<span id="cb65-5"><a href="stata.html#cb65-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n1(integer)             <span class="co">///</span></span>
-<span id="cb65-6"><a href="stata.html#cb65-6" tabindex="-1"></a>            n(integer)              <span class="co">///</span></span>
-<span id="cb65-7"><a href="stata.html#cb65-7" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)        <span class="co">///</span></span>
-<span id="cb65-8"><a href="stata.html#cb65-8" tabindex="-1"></a>            intercept(<span class="fu">real</span> 5.35)    <span class="co">///</span></span>
-<span id="cb65-9"><a href="stata.html#cb65-9" tabindex="-1"></a>            age(<span class="fu">real</span> 3.6)           <span class="co">///</span></span>
-<span id="cb65-10"><a href="stata.html#cb65-10" tabindex="-1"></a>            female(<span class="fu">real</span> -0.5)       <span class="co">///</span></span>
-<span id="cb65-11"><a href="stata.html#cb65-11" tabindex="-1"></a>            interact(<span class="fu">real</span> -0.25)    <span class="co">///</span></span>
-<span id="cb65-12"><a href="stata.html#cb65-12" tabindex="-1"></a>            u0i(<span class="fu">real</span> 0.25)          <span class="co">///</span></span>
-<span id="cb65-13"><a href="stata.html#cb65-13" tabindex="-1"></a>            u1i(<span class="fu">real</span> 0.60)          <span class="co">///</span></span>
-<span id="cb65-14"><a href="stata.html#cb65-14" tabindex="-1"></a>            eij(<span class="fu">real</span> 1.2)           <span class="co">///</span></span>
-<span id="cb65-15"><a href="stata.html#cb65-15" tabindex="-1"></a>            reps(integer 1000) ]</span>
-<span id="cb65-16"><a href="stata.html#cb65-16" tabindex="-1"></a></span>
-<span id="cb65-17"><a href="stata.html#cb65-17" tabindex="-1"></a>    <span class="co">// COMPUTE POWER</span></span>
-<span id="cb65-18"><a href="stata.html#cb65-18" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
-<span id="cb65-19"><a href="stata.html#cb65-19" tabindex="-1"></a>        <span class="kw">simulate</span> reject=<span class="fu">r</span>(reject), reps(<span class="ot">`reps&#39;</span>):                            <span class="co">///</span></span>
-<span id="cb65-20"><a href="stata.html#cb65-20" tabindex="-1"></a>        simmixed, n1(<span class="ot">`n1&#39;</span>) n(<span class="ot">`n&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>) intercept(<span class="ot">`intercept&#39;</span>)     <span class="co">///</span></span>
-<span id="cb65-21"><a href="stata.html#cb65-21" tabindex="-1"></a>                  age(<span class="ot">`age&#39;</span>) female(<span class="ot">`female&#39;</span>) interact(<span class="ot">`interact&#39;</span>)          <span class="co">///</span></span>
-<span id="cb65-22"><a href="stata.html#cb65-22" tabindex="-1"></a>                  u0i(<span class="ot">`u0i&#39;</span>) u1i(<span class="ot">`u1i&#39;</span>) eij(<span class="ot">`eij&#39;</span>)</span>
-<span id="cb65-23"><a href="stata.html#cb65-23" tabindex="-1"></a>        <span class="kw">summarize</span> reject</span>
-<span id="cb65-24"><a href="stata.html#cb65-24" tabindex="-1"></a>    }</span>
-<span id="cb65-25"><a href="stata.html#cb65-25" tabindex="-1"></a></span>
-<span id="cb65-26"><a href="stata.html#cb65-26" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
-<span id="cb65-27"><a href="stata.html#cb65-27" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> power = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb65-28"><a href="stata.html#cb65-28" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> n1 = <span class="ot">`n1&#39;</span></span>
-<span id="cb65-29"><a href="stata.html#cb65-29" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">N</span> = <span class="ot">`n&#39;</span></span>
-<span id="cb65-30"><a href="stata.html#cb65-30" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">alpha</span> = <span class="ot">`alpha&#39;</span></span>
-<span id="cb65-31"><a href="stata.html#cb65-31" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> intercept = <span class="ot">`intercept&#39;</span></span>
-<span id="cb65-32"><a href="stata.html#cb65-32" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> age = <span class="ot">`age&#39;</span></span>
-<span id="cb65-33"><a href="stata.html#cb65-33" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> female = <span class="ot">`female&#39;</span></span>
-<span id="cb65-34"><a href="stata.html#cb65-34" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> interact = <span class="ot">`interact&#39;</span></span>
-<span id="cb65-35"><a href="stata.html#cb65-35" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> u0i = <span class="ot">`u0i&#39;</span></span>
-<span id="cb65-36"><a href="stata.html#cb65-36" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> u1i = <span class="ot">`u1i&#39;</span></span>
-<span id="cb65-37"><a href="stata.html#cb65-37" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> eij = <span class="ot">`eij&#39;</span></span>
-<span id="cb65-38"><a href="stata.html#cb65-38" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb66-1"><a href="stata.html#cb66-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simmixed</span>
+<span id="cb66-2"><a href="stata.html#cb66-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simmixed, rclass</span>
+<span id="cb66-3"><a href="stata.html#cb66-3" tabindex="-1"></a>    <span class="kw">version</span> 16</span>
+<span id="cb66-4"><a href="stata.html#cb66-4" tabindex="-1"></a>    <span class="co">// PARSE INPUT</span></span>
+<span id="cb66-5"><a href="stata.html#cb66-5" tabindex="-1"></a>    <span class="kw">syntax</span>, n1(integer)             <span class="co">///</span></span>
+<span id="cb66-6"><a href="stata.html#cb66-6" tabindex="-1"></a>            n(integer)              <span class="co">///</span></span>
+<span id="cb66-7"><a href="stata.html#cb66-7" tabindex="-1"></a>          [ <span class="kw">alpha</span>(<span class="fu">real</span> 0.05)        <span class="co">///</span></span>
+<span id="cb66-8"><a href="stata.html#cb66-8" tabindex="-1"></a>            intercept(<span class="fu">real</span> 5.35)    <span class="co">///</span></span>
+<span id="cb66-9"><a href="stata.html#cb66-9" tabindex="-1"></a>            age(<span class="fu">real</span> 3.6)           <span class="co">///</span></span>
+<span id="cb66-10"><a href="stata.html#cb66-10" tabindex="-1"></a>            female(<span class="fu">real</span> -0.5)       <span class="co">///</span></span>
+<span id="cb66-11"><a href="stata.html#cb66-11" tabindex="-1"></a>            interact(<span class="fu">real</span> -0.25)    <span class="co">///</span></span>
+<span id="cb66-12"><a href="stata.html#cb66-12" tabindex="-1"></a>            u0i(<span class="fu">real</span> 0.25)          <span class="co">///</span></span>
+<span id="cb66-13"><a href="stata.html#cb66-13" tabindex="-1"></a>            u1i(<span class="fu">real</span> 0.60)          <span class="co">///</span></span>
+<span id="cb66-14"><a href="stata.html#cb66-14" tabindex="-1"></a>            eij(<span class="fu">real</span> 1.2)           <span class="co">///</span></span>
+<span id="cb66-15"><a href="stata.html#cb66-15" tabindex="-1"></a>            reps(integer 1000) ]</span>
+<span id="cb66-16"><a href="stata.html#cb66-16" tabindex="-1"></a></span>
+<span id="cb66-17"><a href="stata.html#cb66-17" tabindex="-1"></a>    <span class="co">// COMPUTE POWER</span></span>
+<span id="cb66-18"><a href="stata.html#cb66-18" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
+<span id="cb66-19"><a href="stata.html#cb66-19" tabindex="-1"></a>        <span class="kw">simulate</span> reject=<span class="fu">r</span>(reject), reps(<span class="ot">`reps&#39;</span>):                            <span class="co">///</span></span>
+<span id="cb66-20"><a href="stata.html#cb66-20" tabindex="-1"></a>        simmixed, n1(<span class="ot">`n1&#39;</span>) n(<span class="ot">`n&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>) intercept(<span class="ot">`intercept&#39;</span>)     <span class="co">///</span></span>
+<span id="cb66-21"><a href="stata.html#cb66-21" tabindex="-1"></a>                  age(<span class="ot">`age&#39;</span>) female(<span class="ot">`female&#39;</span>) interact(<span class="ot">`interact&#39;</span>)          <span class="co">///</span></span>
+<span id="cb66-22"><a href="stata.html#cb66-22" tabindex="-1"></a>                  u0i(<span class="ot">`u0i&#39;</span>) u1i(<span class="ot">`u1i&#39;</span>) eij(<span class="ot">`eij&#39;</span>)</span>
+<span id="cb66-23"><a href="stata.html#cb66-23" tabindex="-1"></a>        <span class="kw">summarize</span> reject</span>
+<span id="cb66-24"><a href="stata.html#cb66-24" tabindex="-1"></a>    }</span>
+<span id="cb66-25"><a href="stata.html#cb66-25" tabindex="-1"></a></span>
+<span id="cb66-26"><a href="stata.html#cb66-26" tabindex="-1"></a>    <span class="co">// RETURN RESULTS</span></span>
+<span id="cb66-27"><a href="stata.html#cb66-27" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> power = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb66-28"><a href="stata.html#cb66-28" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> n1 = <span class="ot">`n1&#39;</span></span>
+<span id="cb66-29"><a href="stata.html#cb66-29" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">N</span> = <span class="ot">`n&#39;</span></span>
+<span id="cb66-30"><a href="stata.html#cb66-30" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> <span class="kw">alpha</span> = <span class="ot">`alpha&#39;</span></span>
+<span id="cb66-31"><a href="stata.html#cb66-31" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> intercept = <span class="ot">`intercept&#39;</span></span>
+<span id="cb66-32"><a href="stata.html#cb66-32" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> age = <span class="ot">`age&#39;</span></span>
+<span id="cb66-33"><a href="stata.html#cb66-33" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> female = <span class="ot">`female&#39;</span></span>
+<span id="cb66-34"><a href="stata.html#cb66-34" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> interact = <span class="ot">`interact&#39;</span></span>
+<span id="cb66-35"><a href="stata.html#cb66-35" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> u0i = <span class="ot">`u0i&#39;</span></span>
+<span id="cb66-36"><a href="stata.html#cb66-36" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> u1i = <span class="ot">`u1i&#39;</span></span>
+<span id="cb66-37"><a href="stata.html#cb66-37" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> eij = <span class="ot">`eij&#39;</span></span>
+<span id="cb66-38"><a href="stata.html#cb66-38" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>It’s also easy to write a program named <code>power\_cmd\_simmixed\_init</code> that will allow us to simulate power for a range of values for the parameters in our model.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb66-1"><a href="stata.html#cb66-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simmixed_init</span>
-<span id="cb66-2"><a href="stata.html#cb66-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simmixed_init, sclass</span>
-<span id="cb66-3"><a href="stata.html#cb66-3" tabindex="-1"></a>      <span class="kw">version</span> 16</span>
-<span id="cb66-4"><a href="stata.html#cb66-4" tabindex="-1"></a>      <span class="kw">sreturn</span> <span class="kw">clear</span></span>
-<span id="cb66-5"><a href="stata.html#cb66-5" tabindex="-1"></a>      <span class="co">// ADD COLUMNS TO THE OUTPUT TABLE</span></span>
-<span id="cb66-6"><a href="stata.html#cb66-6" tabindex="-1"></a>      <span class="kw">sreturn</span> <span class="kw">local</span> pss_colnames <span class="st">&quot;n1 intercept age female interact u0i u1i eij&quot;</span></span>
-<span id="cb66-7"><a href="stata.html#cb66-7" tabindex="-1"></a>      <span class="co">// ALLOW NUMLISTS FOR ALL PARAMETERS</span></span>
-<span id="cb66-8"><a href="stata.html#cb66-8" tabindex="-1"></a>      <span class="kw">sreturn</span> <span class="kw">local</span> pss_numopts  <span class="st">&quot;n1 intercept age female interact u0i u1i eij&quot;</span></span>
-<span id="cb66-9"><a href="stata.html#cb66-9" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb67-1"><a href="stata.html#cb67-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> power_cmd_simmixed_init</span>
+<span id="cb67-2"><a href="stata.html#cb67-2" tabindex="-1"></a><span class="kw">program</span> power_cmd_simmixed_init, sclass</span>
+<span id="cb67-3"><a href="stata.html#cb67-3" tabindex="-1"></a>      <span class="kw">version</span> 16</span>
+<span id="cb67-4"><a href="stata.html#cb67-4" tabindex="-1"></a>      <span class="kw">sreturn</span> <span class="kw">clear</span></span>
+<span id="cb67-5"><a href="stata.html#cb67-5" tabindex="-1"></a>      <span class="co">// ADD COLUMNS TO THE OUTPUT TABLE</span></span>
+<span id="cb67-6"><a href="stata.html#cb67-6" tabindex="-1"></a>      <span class="kw">sreturn</span> <span class="kw">local</span> pss_colnames <span class="st">&quot;n1 intercept age female interact u0i u1i eij&quot;</span></span>
+<span id="cb67-7"><a href="stata.html#cb67-7" tabindex="-1"></a>      <span class="co">// ALLOW NUMLISTS FOR ALL PARAMETERS</span></span>
+<span id="cb67-8"><a href="stata.html#cb67-8" tabindex="-1"></a>      <span class="kw">sreturn</span> <span class="kw">local</span> pss_numopts  <span class="st">&quot;n1 intercept age female interact u0i u1i eij&quot;</span></span>
+<span id="cb67-9"><a href="stata.html#cb67-9" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <div id="step-6-summarize-3" class="section level3 hasAnchor" number="6.2.4">
 <h3><span class="header-section-number">6.2.4</span> Step 6: Summarize<a href="stata.html#step-6-summarize-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now, we can use <code>power simmixed</code> to simulate power for a variety of assumptions. The example below simulates power for a range of sample sizes at both levels 1 and 2. Level 2 sample sizes range from 100 to 500 children in increments of 100. At level 1, we consider 5 and 6 observations per child.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb67-1"><a href="stata.html#cb67-1" tabindex="-1"></a>power simmixed, n1(5 6) n(100(100)500) reps(1000)                         </span>
-<span id="cb67-2"><a href="stata.html#cb67-2" tabindex="-1"></a>               <span class="kw">table</span>(n1 <span class="kw">N</span> power)                                         </span>
-<span id="cb67-3"><a href="stata.html#cb67-3" tabindex="-1"></a>               <span class="kw">graph</span>(ydimension(power) xdimension(<span class="kw">N</span>) plotdimension(n1)    </span>
-<span id="cb67-4"><a href="stata.html#cb67-4" tabindex="-1"></a>               <span class="bn">xtitle</span>(Level 2 Sample Size) <span class="bn">legend</span>(<span class="bn">title</span>(Level 1 Sample Size)))</span>
-<span id="cb67-5"><a href="stata.html#cb67-5" tabindex="-1"></a>xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span id="cb67-6"><a href="stata.html#cb67-6" tabindex="-1"></a>Estimated power</span>
-<span id="cb67-7"><a href="stata.html#cb67-7" tabindex="-1"></a>Two-sided <span class="kw">test</span></span>
-<span id="cb67-8"><a href="stata.html#cb67-8" tabindex="-1"></a></span>
-<span id="cb67-9"><a href="stata.html#cb67-9" tabindex="-1"></a>  +-------------------------+</span>
-<span id="cb67-10"><a href="stata.html#cb67-10" tabindex="-1"></a>  |      n1       <span class="kw">N</span>   power |</span>
-<span id="cb67-11"><a href="stata.html#cb67-11" tabindex="-1"></a>  |-------------------------|</span>
-<span id="cb67-12"><a href="stata.html#cb67-12" tabindex="-1"></a>  |       5     100   .2629 |</span>
-<span id="cb67-13"><a href="stata.html#cb67-13" tabindex="-1"></a>  |       6     100    .313 |</span>
-<span id="cb67-14"><a href="stata.html#cb67-14" tabindex="-1"></a>  |       5     200    .397 |</span>
-<span id="cb67-15"><a href="stata.html#cb67-15" tabindex="-1"></a>  |       6     200    .569 |</span>
-<span id="cb67-16"><a href="stata.html#cb67-16" tabindex="-1"></a>  |       5     300    .621 |</span>
-<span id="cb67-17"><a href="stata.html#cb67-17" tabindex="-1"></a>  |       6     300    .735 |</span>
-<span id="cb67-18"><a href="stata.html#cb67-18" tabindex="-1"></a>  |       5     400    .734 |</span>
-<span id="cb67-19"><a href="stata.html#cb67-19" tabindex="-1"></a>  |       6     400    .855 |</span>
-<span id="cb67-20"><a href="stata.html#cb67-20" tabindex="-1"></a>  |       5     500    .828 |</span>
-<span id="cb67-21"><a href="stata.html#cb67-21" tabindex="-1"></a>  |       6     500    .917 |</span>
-<span id="cb67-22"><a href="stata.html#cb67-22" tabindex="-1"></a>  +-------------------------+</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb68-1"><a href="stata.html#cb68-1" tabindex="-1"></a>power simmixed, n1(5 6) n(100(100)500) reps(1000)                         </span>
+<span id="cb68-2"><a href="stata.html#cb68-2" tabindex="-1"></a>               <span class="kw">table</span>(n1 <span class="kw">N</span> power)                                         </span>
+<span id="cb68-3"><a href="stata.html#cb68-3" tabindex="-1"></a>               <span class="kw">graph</span>(ydimension(power) xdimension(<span class="kw">N</span>) plotdimension(n1)    </span>
+<span id="cb68-4"><a href="stata.html#cb68-4" tabindex="-1"></a>               <span class="bn">xtitle</span>(Level 2 Sample Size) <span class="bn">legend</span>(<span class="bn">title</span>(Level 1 Sample Size)))</span>
+<span id="cb68-5"><a href="stata.html#cb68-5" tabindex="-1"></a>xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<span id="cb68-6"><a href="stata.html#cb68-6" tabindex="-1"></a>Estimated power</span>
+<span id="cb68-7"><a href="stata.html#cb68-7" tabindex="-1"></a>Two-sided <span class="kw">test</span></span>
+<span id="cb68-8"><a href="stata.html#cb68-8" tabindex="-1"></a></span>
+<span id="cb68-9"><a href="stata.html#cb68-9" tabindex="-1"></a>  +-------------------------+</span>
+<span id="cb68-10"><a href="stata.html#cb68-10" tabindex="-1"></a>  |      n1       <span class="kw">N</span>   power |</span>
+<span id="cb68-11"><a href="stata.html#cb68-11" tabindex="-1"></a>  |-------------------------|</span>
+<span id="cb68-12"><a href="stata.html#cb68-12" tabindex="-1"></a>  |       5     100   .2629 |</span>
+<span id="cb68-13"><a href="stata.html#cb68-13" tabindex="-1"></a>  |       6     100    .313 |</span>
+<span id="cb68-14"><a href="stata.html#cb68-14" tabindex="-1"></a>  |       5     200    .397 |</span>
+<span id="cb68-15"><a href="stata.html#cb68-15" tabindex="-1"></a>  |       6     200    .569 |</span>
+<span id="cb68-16"><a href="stata.html#cb68-16" tabindex="-1"></a>  |       5     300    .621 |</span>
+<span id="cb68-17"><a href="stata.html#cb68-17" tabindex="-1"></a>  |       6     300    .735 |</span>
+<span id="cb68-18"><a href="stata.html#cb68-18" tabindex="-1"></a>  |       5     400    .734 |</span>
+<span id="cb68-19"><a href="stata.html#cb68-19" tabindex="-1"></a>  |       6     400    .855 |</span>
+<span id="cb68-20"><a href="stata.html#cb68-20" tabindex="-1"></a>  |       5     500    .828 |</span>
+<span id="cb68-21"><a href="stata.html#cb68-21" tabindex="-1"></a>  |       6     500    .917 |</span>
+<span id="cb68-22"><a href="stata.html#cb68-22" tabindex="-1"></a>  +-------------------------+</span></code></pre></div>
 <p><img src="https://github.com/hlmshtj-dan/pigo/blob/main/3.png?raw=true" /></p>
 
 </div>
