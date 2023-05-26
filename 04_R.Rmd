@@ -98,6 +98,8 @@ songs <- tibble(
   genre_i = rep(c(0, 1), c(n_pop, n_rock)),
   O_0i = rnorm(n = n_pop + n_rock, mean = 0, sd = omega_0)
 )
+
+print(songs)
 ```
 
 #### Simulate the sampling of subjects
@@ -118,6 +120,8 @@ subjects <- faux::rnorm_multi(
     varnames = c("T_0j", "T_1j")
   ) |>
   mutate(subj_id = seq_len(n_subj)) # add subject IDs
+
+print(subjects)
 ```
 
 #### Check the simulated values
@@ -145,6 +149,8 @@ Since all subjects rate all songs (i.e., the design is fully crossed) we can set
 # cross subject and song IDs; add an error term
 trials <- crossing(subjects, songs) |>
   mutate(e_ij = rnorm(n(), mean = 0, sd = sigma))
+
+print(trials)
 ```
 
 #### Calculate response values
@@ -155,6 +161,8 @@ With this resulting `trials` table, in combination with the constants `beta_0` a
 dat_sim <- trials |>
   mutate(liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j) * genre_i + e_ij) %>%
   select(subj_id, song_id, category, genre_i, liking_ij)
+
+print(dat_sim)
 ```
 
 #### Plot the data
@@ -263,11 +271,11 @@ crossing(subjects, songs) |>
 
 ## Power calculation single run
 
-We can wrap the data generating function and modeling code in a new function `power_one_run()` that returns a tidy table of the analysis results for a single simulation run. We'll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.
+We can wrap the data generating function and modeling code in a new function `single_run()` that returns a tidy table of the analysis results for a single simulation run. We'll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.
 
 ```{r}
 # set up the power function
-power_one_run <- function(...) {
+single_run <- function(...) {
   # ... is a shortcut that forwards any additional arguments to sim_data()
   dat_sim <- sim_data(...)
   mod_sim <- suppressWarnings({ suppressMessages({ # suppress singularity messages
@@ -277,16 +285,16 @@ power_one_run <- function(...) {
 }
 ```
 
-Let's test that our new `power_one_run()` function performs as expected.
+Let's test that our new `single_run()` function performs as expected.
 
 ```{r}
 # run one model with default parameters
-power_one_run()
+single_run()
 ```
 
 ```{r}
 # run one model with new parameters
-power_one_run(n_pop = 10, n_rock = 50, beta_1 = 2)
+single_run(n_pop = 10, n_rock = 50, beta_1 = 2)
 ```
 
 ## Power calculation automated
@@ -294,7 +302,7 @@ power_one_run(n_pop = 10, n_rock = 50, beta_1 = 2)
 To get an accurate estimation of power, we need to run the simulation many times. Here we use the `future_map_dfr()` function to iterate over a sequence of integers denoting the replications we want to perform.
 
 ```{r}
-sims <- future_map_dfr(1:reps, ~ power_one_run())
+sims <- future_map_dfr(1:reps, ~ single_run())
 ```
 
 We can finally calculate power for our parameter of interest `beta_1`(denoted in the tidy model output table as the term `genre_i`) by filtering to keep only that term and the calculating the proportion of times the $p$-value is below the `alpha` (`r alpha`) threshold.
@@ -318,7 +326,7 @@ We can do a sanity check to see if our simulation is performing as expected by c
 
 ```{r}
 # run simulations and calculate the false positive rate
-sims_fp <- future_map_dfr(1:reps, ~ power_one_run(beta_1 = 0))
+sims_fp <- future_map_dfr(1:reps, ~ single_run(beta_1 = 0))
 
 # calculate mean estimates and power for specified alpha
 sims_fp |>
@@ -342,15 +350,15 @@ pgrid <- crossing(
 )
 ```
 
-We can now wrap our `power_one_run()` function within a more general function `parameter_search()` that takes the grid of parameter values as input and uses the `future_pmap_dfr()` function to iterate over each row of parameter values in `pgrid` and feed them into `power_one_run()`.
+We can now wrap our `single_run()` function within a more general function `parameter_search()` that takes the grid of parameter values as input and uses the `future_pmap_dfr()` function to iterate over each row of parameter values in `pgrid` and feed them into `single_run()`.
 
 ```{r}
 # fit the models over the parameters
 parameter_search <- function(params = pgrid){
   future_pmap_dfr(
     .l = params, # iterate over the grid of parameter values
-    .f = ~ power_one_run(
-             n_subj = ..1, # plug each row of parameter values into power_one_run()
+    .f = ~ single_run(
+             n_subj = ..1, # plug each row of parameter values into single_run()
              n_pop  = ..2, 
              n_rock = ..3,
              beta_1 = ..4
@@ -422,7 +430,7 @@ sims_table |>
   theme_bw()
 ```
 
-Here's a table that summarizes the output from the power simulation.
+Here's a nicely formatted table that summarizes the output from the power simulation.
 
 ```{r}
 sims_table |>
