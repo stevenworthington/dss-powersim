@@ -20,7 +20,7 @@ There are two broad steps involved in conducting simulation-based power analysis
 
 - Implement  
     4. **Simulate:** Simulate the sampling process for a single dataset, assuming the alternative hypothesis, and fit the model of interest.
-    5. **Automate:** Write a function/program/macro to automate the process of creating datasets, fitting models, testing the hypothesis of interest, and calculating power for that test. The function/program/macro should be flexible enough to allow for iterating power calculations over a grid of different parameter values.
+    5. **Automate:** Write a function/program/macro to automate the process of creating datasets, fitting models, testing the hypothesis of interest, and calculating power for that test - the number of significant simulations out of the total number of simulations. The function/program/macro should be flexible enough to allow for iterating power calculations over a grid of different parameter values.
     6. **Summarize:** Summarize the relationships between power, sample size, and effect size in tables and figures.
 
 The implementation phase can be summarized by the following graphic:
