@@ -427,7 +427,7 @@ Here's a table that summarizes the output from the power simulation.
 ```{r}
 sims_table |>
   gt() |>
-  tab_header(title = "Power values for mixed effects model") |>
+  tab_header(title = "Power analysis via simulation") |>
   data_color(
     columns = power,
     fn = scales::col_numeric(

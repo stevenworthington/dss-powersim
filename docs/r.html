@@ -585,7 +585,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          5.25    1.46   0.9</code></pre>
+## 1 genre_i          4.93    1.46  0.92</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of <code>genre_ij</code> (<code>beta_1</code>) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
@@ -599,7 +599,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.01</code></pre>
+## 1  0.06</code></pre>
 <p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set at 0.05.</p>
 </div>
 </div>
@@ -691,7 +691,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here’s a table that summarizes the output from the power simulation.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="r.html#cb38-1" tabindex="-1"></a>sims_table <span class="sc">|&gt;</span></span>
 <span id="cb38-2"><a href="r.html#cb38-2" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb38-3"><a href="r.html#cb38-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">&quot;Power values for mixed effects model&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="r.html#cb38-3" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">&quot;Power analysis via simulation&quot;</span>) <span class="sc">|&gt;</span></span>
 <span id="cb38-4"><a href="r.html#cb38-4" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
 <span id="cb38-5"><a href="r.html#cb38-5" tabindex="-1"></a>    <span class="at">columns =</span> power,</span>
 <span id="cb38-6"><a href="r.html#cb38-6" tabindex="-1"></a>    <span class="at">fn =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
@@ -1142,7 +1142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
     <tr class="gt_heading">
-      <td colspan="8" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Power values for mixed effects model</td>
+      <td colspan="8" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Power analysis via simulation</td>
     </tr>
     
     <tr class="gt_col_headings">
