@@ -99,7 +99,7 @@ songs <- tibble(
   O_0i = rnorm(n = n_pop + n_rock, mean = 0, sd = omega_0)
 )
 
-print(songs)
+print(songs, n=10)
 ```
 
 #### Simulate the sampling of subjects
@@ -119,9 +119,10 @@ subjects <- faux::rnorm_multi(
     r = rho, # set correlation
     varnames = c("T_0j", "T_1j")
   ) |>
-  mutate(subj_id = seq_len(n_subj)) # add subject IDs
+  mutate(subj_id = seq_len(n_subj)) |> # add subject IDs
+  as_tibble()
 
-print(subjects)
+print(subjects, n=10)
 ```
 
 #### Check the simulated values
@@ -150,7 +151,7 @@ Since all subjects rate all songs (i.e., the design is fully crossed) we can set
 trials <- crossing(subjects, songs) |>
   mutate(e_ij = rnorm(n(), mean = 0, sd = sigma))
 
-print(trials)
+print(trials, n=10)
 ```
 
 #### Calculate response values
@@ -162,7 +163,7 @@ dat_sim <- trials |>
   mutate(liking_ij = beta_0 + T_0j + O_0i + (beta_1 + T_1j) * genre_i + e_ij) %>%
   select(subj_id, song_id, category, genre_i, liking_ij)
 
-print(dat_sim)
+print(dat_sim, n=10)
 ```
 
 #### Plot the data
