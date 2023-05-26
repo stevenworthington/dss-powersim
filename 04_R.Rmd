@@ -261,7 +261,7 @@ crossing(subjects, songs) |>
 }
 ```
 
-## Power calculation (single run)
+## Power calculation single run
 
 We can wrap the data generating function and modeling code in a new function `power_one_run()` that returns a tidy table of the analysis results for a single simulation run. We'll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.
 

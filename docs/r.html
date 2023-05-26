@@ -174,7 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.4" data-path="r.html"><a href="r.html#analyze-the-simulated-data"><i class="fa fa-check"></i><b>4.2.4</b> Analyze the simulated data</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="r.html"><a href="r.html#data-simulation-automated"><i class="fa fa-check"></i><b>4.3</b> Data simulation automated</a></li>
-<li class="chapter" data-level="4.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>4.4</b> Power calculation (single run)</a></li>
+<li class="chapter" data-level="4.4" data-path="r.html"><a href="r.html#power-calculation-single-run"><i class="fa fa-check"></i><b>4.4</b> Power calculation single run</a></li>
 <li class="chapter" data-level="4.5" data-path="r.html"><a href="r.html#power-calculation-automated"><i class="fa fa-check"></i><b>4.5</b> Power calculation automated</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="r.html"><a href="r.html#check-false-positive-rate"><i class="fa fa-check"></i><b>4.5.1</b> Check false positive rate</a></li>
@@ -530,7 +530,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb20-38"><a href="r.html#cb20-38" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="power-calculation-single-run" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Power calculation (single run)<a href="r.html#power-calculation-single-run" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">4.4</span> Power calculation single run<a href="r.html#power-calculation-single-run" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can wrap the data generating function and modeling code in a new function <code>power_one_run()</code> that returns a tidy table of the analysis results for a single simulation run. We’ll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="r.html#cb21-1" tabindex="-1"></a><span class="co"># set up the power function</span></span>
 <span id="cb21-2"><a href="r.html#cb21-2" tabindex="-1"></a>power_one_run <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
@@ -585,7 +585,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 4
 ##   term    mean_estimate mean_se power
 ##   &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 genre_i          5.03    1.48   0.9</code></pre>
+## 1 genre_i          5.01    1.49  0.91</code></pre>
 <div id="check-false-positive-rate" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Check false positive rate<a href="r.html#check-false-positive-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of <code>genre_ij</code> (<code>beta_1</code>) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.</p>
@@ -599,7 +599,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 1 × 1
 ##   power
 ##   &lt;dbl&gt;
-## 1  0.06</code></pre>
+## 1  0.07</code></pre>
 <p>Ideally, the false positive rate will be equal to <code>alpha</code>, which we set at 0.05.</p>
 </div>
 </div>
