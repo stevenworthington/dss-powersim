@@ -68,7 +68,7 @@ Finally, we need to establish the data-generating parameters in the model. You m
 
 ```{r param-all, echo=FALSE, results="asis"}
 tibble::tribble(~`code`, ~`value`, ~`description`,
-        "$\\texttt{beta_0}$", "65", "intercept; i.e., mean of liking rating for 'pop' genre",
+        "$\\texttt{beta_0}$", "60", "intercept; i.e., mean of liking rating for 'pop' genre",
         "$\\texttt{beta_1}$", "5", "slope; i.e, mean difference btw 'pop' and 'rock' song ratings",
         "$\\texttt{tau_0}$", "7", "by-subject random intercept sd",
         "$\\texttt{tau_1}$", "4", "by-subject random slope sd",
