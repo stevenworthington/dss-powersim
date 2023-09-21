@@ -1,0 +1,305 @@
+
+```{r setup, include=FALSE, echo=FALSE}
+require(knitr)
+knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.path="figures/")
+
+require(reticulate)
+# install_miniconda()
+use_miniconda(condaenv="base", required=TRUE)
+```
+
+# Python 
+
+## Simple linear regression
+
+### Setup
+
+First, let's import the libraries used for simulation based power analysis in Python.
+
+```{python, results=FALSE, echo=FALSE}
+conda_install(envname="base", packages=c("numpy", "pandas", "scikit-learn", "statsmodels", "scipy", "matplotlib"))
+```
+
+```{python}
+import random
+import numpy as np
+import pandas as pd
+
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
+import scipy
+
+import matplotlib.pyplot as plt
+```
+
+We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.
+
+```{python}
+np.random.seed(02138)
+```
+
+### Step 4: Simulate
+
+Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model.
+
+```{python}
+def generate_dataset(sample_size, interact_coef):
+    
+    data_set = []
+    
+    for i in range(sample_size):
+        
+        _id = i
+        age = np.random.randint(18,66)
+        female = np.random.choice([0, 1])
+        interact = age * female
+        e = np.random.normal(0, 20)
+        
+        sbp = 110 + 0.5*age + (-20)*female + interact_coef*interact + e
+        
+        data_set.append([_id, age, female, interact, e, sbp])
+      
+    data_set = pd.DataFrame(data_set)
+    data_set.columns = ["_id", "age", "female", "interact", 'e', "sbp"]
+    
+    return data_set
+```
+
+### Step 5: Automate
+
+Next, let's write a function that creates datasets under the alternative hypothesis, fits the models, and uses a likelihood-ratio test to calculate power.
+
+```{python}
+def cal_power(sample_size, interact_coef, simiu_cnt, alpha):
+    
+    power_list = []
+    
+    for i in range(simiu_cnt):
+        
+        dataset = generate_dataset(sample_size, interact_coef)
+    
+        y1 = dataset['sbp']
+        x1 = dataset[['age', 'female', 'interact']]
+        x1 = sm.add_constant(x1)
+        full_model = sm.OLS(y1, x1).fit()
+        full_ll = full_model.llf
+    
+        y2 = dataset['sbp']
+        x2 = dataset[['age', 'female']]
+        x2 = sm.add_constant(x2)
+        reduced_model = sm.OLS(y2, x2).fit()
+        reduced_ll = reduced_model.llf
+    
+        LR_statistic = -2*(reduced_ll-full_ll)
+        power = scipy.stats.chi2.sf(LR_statistic, 1)
+        
+        if power<=alpha:
+            power_list.append(1)
+        else:
+            power_list.append(0)
+    
+    mean_power = sum(power_list)/len(power_list)
+    
+    return [sample_size, interact_coef, mean_power]
+```
+
+```{python}
+result = []
+
+for i in range(400, 800, 100):
+    for j in [0.2, 0.25, 0.3, 0.35, 0.4]:
+        result.append(cal_power(sample_size = i, interact_coef = j, simiu_cnt = 1000, alpha = 0.05))
+
+result = pd.DataFrame(result)
+result.columns = ['N', 'interact_coef', 'Power']
+result
+```
+
+### Step 6: Summarize
+
+In this part, we export the results of the simulations which include two parts: a table and a graph showing the results from the simulations. It should be noted that the graph from Python simulation is a little bit different from that in Stata, and this is mainly caused by different simulation process within Stata and Python. 
+
+```{python}
+	N	interact_coef	Power
+0	400	0.20	0.320
+1	400	0.25	0.413
+2	400	0.30	0.557
+3	400	0.35	0.664
+4	400	0.40	0.798
+5	500	0.20	0.328
+6	500	0.25	0.513
+7	500	0.30	0.636
+8	500	0.35	0.788
+9	500	0.40	0.869
+10	600	0.20	0.406
+11	600	0.25	0.569
+12	600	0.30	0.714
+13	600	0.35	0.829
+14	600	0.40	0.926
+15	700	0.20	0.447
+16	700	0.25	0.601
+17	700	0.30	0.776
+18	700	0.35	0.887
+19	700	0.40	0.955
+```
+
+```{python}
+n_list = result['N'].unique()
+color_list = ['darkblue', 'firebrick', 'darkgreen', 'orange']
+
+plt.figure(figsize=(15,6))
+
+for i in range(len(n_list)):
+    n = n_list[i]
+    c = color_list[i]
+    plt.plot(result[result['N']==n]['interact_coef'], result[result['N']==n]['Power'], 'o-', color = c)
+
+plt.grid()
+
+plt.xticks([0.2, 0.25, 0.3, 0.35, 0.4], fontsize = 12)
+plt.yticks([0.2, 0.4, 0.6, 0.8, 1], fontsize = 12)
+
+plt.xlabel('interact', fontsize = 15)
+plt.ylabel('Power', fontsize = 15)  
+
+plt.legend(result['N'].unique(), fontsize = 12)
+plt.title('Estimate Power: Two-sided Test', fontsize = 18)
+
+plt.show()
+```
+
+![](https://github.com/hlmshtj-dan/pigo/blob/main/7.png?raw=true)
+
+
+## Mixed effects model
+
+For the mixed effects model example, we will continue to use the same Python libraries and pseudo-random number generator seed as previously.
+
+### Step 4: Simulate
+
+Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model. We will simulate 5 observations at 4-month increments for 200 children.
+
+```{python}
+def generate_dataset(sample_size, obser_cnt):
+    
+    data_set = []
+    
+    for i in range(sample_size):
+        child_id = i
+        female_origin = np.random.choice([0, 1])
+        u_0i_origin = np.random.normal(0, 0.25)
+        u_1i_origin = np.random.normal(0, 0.60)
+        
+        for j in range(obser_cnt):
+            
+            child = child_id
+            female = female_origin
+            age = 0.5*j
+            u_0i = u_0i_origin
+            u_1i = u_1i_origin
+            interaction = age * female
+            e_ij = np.random.normal(0, 1.2)
+            weight = 5.35 + 3.6*age + (-0.5)*female + (-0.25)*interaction + u_0i + age*u_1i + e_ij
+            
+            data_set.append([child, female, age, u_0i, u_1i, interaction, e_ij, weight])
+      
+    data_set = pd.DataFrame(data_set)
+    data_set.columns = ["child_id", "female", "age", "u_0i", "u_li", "interaction", "e_ij", "weight"]
+    
+    return data_set
+```
+
+### Step 5: Automate
+
+Next, let's write a function that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses a for loop to run many iterations of the function.
+
+```{python}
+def cal_power(sample_size, obser_cnt, simiu_cnt, alpha):
+    
+    power_list = []
+    
+    for i in range(simiu_cnt):
+        
+        dataset = generate_dataset(sample_size, obser_cnt)
+    
+        y1 = dataset['weight']
+        x1 = dataset[['female', 'age', 'interaction']]
+        x1 = sm.add_constant(x1)
+        full_model = sm.OLS(y1, x1).fit()
+        full_ll = full_model.llf
+    
+        y2 = dataset['weight']
+        x2 = dataset[['female', 'age']]
+        x2 = sm.add_constant(x2)
+        reduced_model = sm.OLS(y2, x2).fit()
+        reduced_ll = reduced_model.llf
+    
+        LR_statistic = -2*(reduced_ll-full_ll)
+        power = scipy.stats.chi2.sf(LR_statistic, 1)
+        
+        if power<=alpha:
+            power_list.append(1)
+        else:
+            power_list.append(0)
+    
+    mean_power = sum(power_list)/len(power_list)
+    
+    return [obser_cnt, sample_size, mean_power]
+```
+
+```{python}
+result = []
+
+for i in range(100, 600, 100):
+    for j in range(5, 7):
+        result.append(cal_power(sample_size = i, obser_cnt = j, simiu_cnt = 1000, alpha = 0.05))
+
+result = pd.DataFrame(result)
+result.columns = ['n1', 'N', 'Power']
+result
+```
+
+### Step 6: Summarize
+
+The last procedure is to export the results which contain a table and a graph. 
+
+```{python}
+n1	N	Power
+0	5	100	0.290
+1	6	100	0.398
+2	5	200	0.491
+3	6	200	0.632
+4	5	300	0.655
+5	6	300	0.798
+6	5	400	0.779
+7	6	400	0.917
+8	5	500	0.857
+9	6	500	0.940
+```
+
+```{python}
+n1_list = result['n1'].unique()
+color_list = ['darkblue', 'firebrick']
+
+plt.figure(figsize=(15,6))
+
+for i in range(len(n1_list)):
+    n = n1_list[i]
+    c = color_list[i]
+    plt.plot(result[result['n1']==n]['N'], result[result['n1']==n]['Power'], '-o', color = c)
+
+plt.grid()
+
+plt.xticks([100, 200, 300, 400, 500], fontsize = 12)
+plt.yticks([0.2, 0.4, 0.6, 0.8, 1], fontsize = 12)
+
+plt.xlabel('Level 2 Sample Size', fontsize = 15)
+plt.ylabel('Power', fontsize = 15)  
+
+plt.legend(result['n1'].unique(), fontsize = 12)
+plt.title('Power: Two-sided Test', fontsize = 18)
+
+plt.show()
+```
+
+![](https://github.com/hlmshtj-dan/pigo/blob/main/8.png?raw=true)
