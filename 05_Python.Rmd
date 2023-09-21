@@ -1,11 +1,11 @@
 
 ```{r setup, include=FALSE, echo=FALSE}
-#require(knitr)
-knitr::opts_chunk$set(eval=FALSE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, 
-                      fig.path="figures/")
-#knitr::opts_knit$set(root.dir="Python/PythonInstall")
-#require(reticulate)
-#use_condaenv(condaenv="r-reticulate", required=TRUE)
+require(knitr)
+knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.path="figures/")
+
+require(reticulate)
+# install_miniconda()
+use_miniconda(condaenv="base", required=TRUE)
 ```
 
 # Python 
@@ -15,6 +15,10 @@ knitr::opts_chunk$set(eval=FALSE, results=TRUE, echo=TRUE, message=FALSE, warnin
 ### Setup
 
 First, let's import the libraries used for simulation based power analysis in Python.
+
+```{python, results=FALSE, echo=FALSE}
+conda_install(envname="base", packages=c("numpy", "pandas", "scikit-learn", "statsmodels", "scipy", "matplotlib"))
+```
 
 ```{python}
 import random

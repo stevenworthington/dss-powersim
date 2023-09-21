@@ -1,412 +1,675 @@
 
-```{r, include=FALSE, echo=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 require(knitr)
-statapath <- "/Applications/Stata/StataMP.app/Contents/MacOS/stata-mp"
-knitr::opts_chunk$set(eval=FALSE, engine="stata", engine.path=list(stata=statapath), comment="", 
-                      collectcode=TRUE, cleanlog=FALSE, message=FALSE, warning=FALSE, error=FALSE,
-                      fig.path="figures/")
-# knitr::opts_knit$set(root.dir="Stata/StataInstall")
+knitr::opts_chunk$set(eval=TRUE, results=TRUE, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE, fig.path="figures/")
+
+# https://users.ssc.wisc.edu/~hemken/Stataworkshops/Statamarkdown/stata-and-r-markdown.html
+require(Statamarkdown)
+knitr::opts_chunk$set(engine="stata", comment="", collectcode=TRUE, cleanlog=FALSE) 
 ```
 
 # Stata
 
-## Simple linear regression
+## Setup
 
-### Setup
-
-We will also set the pseudo-random number generator seed to 02138 to make the stochastic components of our simulations reproducible.
+We will need several Stata packages to draw a violin plot. We can use “ssc install [package_name]” to install them.
 
 ```{stata}
+ssc install violinplot, replace     // module to draw violin plots
+ssc install dstat, replace          // violinplot's dependency, module to compute summary statistics
+ssc install moremata, replace       // violinplot's dependency, module (Mata) to provide various functions
+ssc install palettes, replace       // violinplot's dependency, module to provide color palettes
+ssc install colrspace, replace      // violinplot's dependency, module providing a class-based color management system in Mata
+```
+
+We will also set the pseudo-random number generator seed to `02138` to make the stochastic components of our simulations reproducible (this is similar to the process in R and Python).
+
+```{stata}
+clear all
 set seed 02138
 ```
 
-### Step 4: Simulate
+## Data simulation step by step
 
-Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model.
+To give an overview of the power simulation task, we will simulate data from a design with crossed random factors of subjects and songs (see [Power of What?](./power-of-what.html) for design details), fit a model to the simulated data, recover from the model output the parameter values we put in, calculate power, and finally automate the whole process so that we can calculate power for different effect sizes. 
+### Establish the simulation parameters
+
+Before we start, let’s set some global parameters for our power simulations. 
 
 ```{stata}
+// number of simulation replications for power calculation
+local reps = 30
+
+// specified alpha for power calculation
+local alpha = 0.05
+```
+
+### Establish the data-generating parameters
+
+The first thing to do is to set up the parameters that govern the process we assume gave rise to the data - the *data-generating process*, or DGP. We previously decided upon the the data-generating parameters (see [Power of What?](./power-of-what.html)), so we just need to code them here.
+
+Note: There is a difference between Stata and R and the Python: We decrease the data-generating parameters to simplify our model, and we delete some paramaters: by-song random intercept `omega_0`, by-subject random slope sd `tau_1`, and the correlation between intercept and slope `rho`.
+
+```{stata}
+// set all data-generating parameters
+local beta_0 = 60   // intercept; i.e., the grand mean
+local beta_1 = 5    // slope; i.e., effect of category
+local tau_0 = 7     // by-subject random intercept sd
+local sigma = 8     // residual (error) sd
+```
+
+### Simulate the sampling process
+
+Next, we will simulate the sampling process for the data. First, let's define parameters related to the number of observations.
+
+```{stata}
+// Set number of subjects and songs
+local n_subj = 25   // number of subjects
+local n_pop = 15    // number of songs in pop category
+local n_rock = 15   // number of songs in rock category
+local n_all = `n_pop' + `n_rock'
+```
+
+#### Simulate the sampling of songs
+
+We need to create a table listing each song $i$, which category it is in (`rock` or `pop`).
+
+```{stata}
+// simulate a sample of songs
 clear
-set obs 400
-generate age = runiformint(18,65)
-generate female = rbinomial(1,0.5)
-generate interact = age*female
-generate e = rnormal(0,20)
-generate sbp = 110 + 0.5*age + (-20)*female + 0.35*interact  + e
+set obs `n_all'
+
+// Generate a sequence of song ids
+gen song_id = _n
+
+// Generate the category variable
+gen category = "pop"
+replace category = "rock" if song_id > `n_pop'
+
+// Generate the genre variable
+gen genre_i = 0
+replace genre_i = 1 if song_id > `n_pop'
+
+list in 1/10
+gen key = 1
+
+save songs, replace
 ```
 
-We can then test the null hypothesis that the interaction term equals zero using a likelihood-ratio test.
-
 ```{stata}
-regress sbp age i.female c.age#i.female
-estimates store full
-regress sbp age i.female
-estimates store reduced
-
-Likelihood-ratio test                       LR chi2(1)  =  13.38
-(Assumption: reduced nested in full)        Prob > chi2 =  0.0003
+     +------------------------------+
+     | song_id   category   genre_i |
+     |------------------------------|
+  1. |       1        pop         0 |
+  2. |       2        pop         0 |
+  3. |       3        pop         0 |
+  4. |       4        pop         0 |
+  5. |       5        pop         0 |
+     |------------------------------|
+  6. |       6        pop         0 |
+  7. |       7        pop         0 |
+  8. |       8        pop         0 |
+  9. |       9        pop         0 |
+ 10. |      10        pop         0 |
+     +------------------------------+
 ```
 
-The test yields a p-value of 0.0003.
+#### Simulate the sampling of subjects
+
+Now we simulate the sampling of participants, which results in table listing each individual and their random effect (a random intercept). To do this, we must sample $t_0$ from a normal distribution.
+
+We will use the function `rnormal`, which generates a simulated value from a univariate normal distribution with a mean of 0 and a standard deviations of `tau_0` of each variable.
 
 ```{stata}
+// simulate a sample of subjects
+clear
+set obs `n_subj'
+
+// Generate the by-subject random intercept
+gen t0 = rnormal(0, `tau_0')
+
+// Generate a sequence of subject ids
+gen subj_id = _n
+
+list in 1 / 10
+gen key = 1
+
+save subjects, replace
+```
+
+```{stata}
+     +---------------------+
+     |        t0   subj_id |
+     |---------------------|
+  1. |  4.356949         1 |
+  2. |  .0887434         2 |
+  3. |  .1867903         3 |
+  4. |  11.24607         4 |
+  5. | -1.842066         5 |
+     |---------------------|
+  6. |  1.966723         6 |
+  7. |  2.544997         7 |
+  8. | -9.950144         8 |
+  9. | -8.176116         9 |
+ 1.  | -4.609569        10 |
+     +---------------------+
+```
+
+#### Check the simulated values
+
+Let's do a quick sanity check by comparing our simulated values to the parameters we used as inputs. Because the sampling process is stochastic, we shouldn't expect that these will exactly match for any given run of the simulation.
+
+```{stata}
+qui summarize t0
+egen tau_0_s = sd(t0)
+display "tau_0, " tau_0 ", " tau_0_s
+```
+
+```{stata}
+tau_0, 7, 7.4337502
+```
+
+#### Simulate trials
+
+Since all subjects rate all songs (i.e., the design is fully crossed) we can set up a table of trials by including every possible combination of the rows in the `subjects` and `songs` tables. Each trial has random error associated with it, reflecting fluctuations in trial-by-trial ratings due to unkown factors. We simulate this by sampling values from a univariate normal distribution with a mean of 0 and a standard deviation of `sigma`.
+
+```{stata}
+// cross subject and song IDs; add an error term
+use subjects
+cross using songs.dta
+drop key
+sort subj_id song_id
+
+gen e_ij = rnormal(0, `sigma')
+
+list in 1 / 10
+```
+
+```{stata}
+     +-------------------------------------------------------------------------+
+     |       t0   subj_id   tau_0_s   song_id   category   genre_i        e_ij |
+     |-------------------------------------------------------------------------|
+  1. | 4.356949         1   7.43375         1        pop         0     7.08673 |
+  2. | 4.356949         1   7.43375         2        pop         0    -15.5205 |
+  3. | 4.356949         1   7.43375         3        pop         0    6.984706 |
+  4. | 4.356949         1   7.43375         4        pop         0    16.87559 |
+  5. | 4.356949         1   7.43375         5        pop         0   -2.192098 |
+     |-------------------------------------------------------------------------|
+  6. | 4.356949         1   7.43375         6        pop         0    8.764422 |
+  7. | 4.356949         1   7.43375         7        pop         0   -10.27403 |
+  8. | 4.356949         1   7.43375         8        pop         0   -5.694414 |
+  9. | 4.356949         1   7.43375         9        pop         0    3.550642 |
+ 10. | 4.356949         1   7.43375        10        pop         0    11.85906 |
+     +-------------------------------------------------------------------------+
+```
+
+#### Calculate response values
+
+With this resulting `trials` table, in combination with the constants `beta_0` and `beta_1`, we have the full set of values that we need to compute the response variable `liking_ij` according the linear model we defined previously (see [Power of What?](./power-of-what.html)).
+
+```{stata}
+gen liking_ij = `beta_0' + t0 +  `beta_1'  * genre_i + e_ij
+keep subj_id song_id category genre_i liking_ij
+
+list in 1 / 10
+save data_sim, replace
+```
+
+```{stata}
+     +---------------------------------------------------+
+     | subj_id   song_id   category   genre_i   liking~j |
+     |---------------------------------------------------|
+  1. |       1         1        pop         0   71.44368 |
+  2. |       1         2        pop         0   48.83645 |
+  3. |       1         3        pop         0   71.34165 |
+  4. |       1         4        pop         0   81.23254 |
+  5. |       1         5        pop         0   62.16485 |
+     |---------------------------------------------------|
+  6. |       1         6        pop         0   73.12137 |
+  7. |       1         7        pop         0   54.08292 |
+  8. |       1         8        pop         0   58.66254 |
+  9. |       1         9        pop         0   67.90759 |
+ 10. |       1        10        pop         0   76.21601 |
+     +---------------------------------------------------+
+```
+
+#### Plot the data
+
+Let’s visualize the distribution of the response variable for each of the two song genres and superimpose the simulated parameter estimates for the means of these two groups.
+
+```{stata}
+use data_sim
+
+// Set the palette colors
+local palette "orange dodgerblue"
+
+// Create a violin plot for actual data
+violinplot liking_ij, over(category) colors(`palette') vertical mean(type(line) lp(dash) stat(mean)) title("Predicted versus simulated values")
+```
+
+![](./figures/stata_violin.png)
+
+### Analyze the simulated data
+
+Now we can analyze our simulated data in a linear mixed effects model using the function `mixed`. The model formula in `mixed` maps onto how we calculated our `liking_ij` outcome variable above.
+
+```{stata}
+mixed liking_ij genre_i || subj_id:
+```
+
+```{stata}
+Performing EM optimization ...
+
+Performing gradient-based optimization:
+Iteration 0:   log likelihood = -2670.5389
+Iteration 1:   log likelihood = -2670.5389
+
+Computing standard errors ...
+
+Mixed-effects ML regression                     Number of obs     =        750
+Group variable: subj_id                         Number of groups  =         25
+                                                Obs per group:
+                                                              min =         30
+                                                              avg =       30.0
+                                                              max =         30
+                                                Wald chi2(1)      =     106.36
+Log likelihood = -2670.5389                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+   liking_ij | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     genre_i |   6.072638   .5888334    10.31   0.000     4.918545     7.22673
+       _cons |   59.72681   1.538746    38.82   0.000     56.71092    62.74269
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+subj_id: Identity            |
+                  var(_cons) |   54.85944   16.12992      30.83037    97.61667
+-----------------------------+------------------------------------------------
+               var(Residual) |   65.01089   3.414539      58.65146    72.05986
+------------------------------------------------------------------------------
+LR test vs. linear model: chibar2(01) = 377.14        Prob >= chibar2 = 0.0000
+```
+
+The terms in formula are as follows:
+
+- `liking_ij` is the response.
+- `genre_i` is the dummy coded variable identifying whether song $i$ belongs to the pop or rock genre.
+- `|| subj_id` specified a subject-specific random intercept (`t0`)
+
+Now we can estimate the model.
+
+```{stata}
+matrix b = e(b)
+matrix list b
+```
+
+```{stata}
+     liking_ij:  liking_ij:   lns1_1_1:    lnsig_e:
+       genre_i       _cons       _cons       _cons
+y1   6.0726376   59.726807   2.0023872   2.0872774
+```
+
+## Data simulation automated
+
+Now that we've tested the data generating code, we can put it into a function so that it's easy to run it repeatedly.
+
+```{stata}
+capture program define sim_data
+	args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
+
+  // simulate a sample of songs
+	clear
+	local n_all = `n_pop' + `n_rock'
+	set obs `n_all'
+	gen song_id = _n
+	gen category = "pop"
+	replace category = "rock" if song_id > `n_pop'
+	gen genre_i = 0
+	replace genre_i = 1 if song_id > `n_pop'
+	gen key = 1
+	save songs, replace
+
+  // simulate a sample of subjects
+	clear
+	set obs `n_subj'
+
+	gen t0 = rnormal(0, `tau_0')
+	gen subj_id = _n
+	gen key = 1
+	save subjects, replace
+
+  // cross subject and song IDs
+	use subjects
+	cross using songs.dta
+	drop key
+	sort subj_id song_id
+	gen e_ij = rnormal(0, `sigma')
+
+	gen liking_ij = `beta_0' + t0 + `beta_1' * genre_i + e_ij
+	keep subj_id song_id category genre_i liking_ij
+end
+```
+
+## Power calculation single run
+
+We can wrap the data generating function and modeling code in a new function `single_run()` that returns the analysis results for a single simulation run. We'll suppress warnings and messages from the modeling fitting process, as these sometimes occur with simulation runs that generate extreme realized values for parameters.
+
+```{stata}
+capture program define single_run, rclass
+	args n_subj n_pop n_rock beta_0 beta_1 tau_0 sigma
+
+	clear
+	sim_data `n_subj' `n_pop' `n_rock' `beta_0' `beta_1' `tau_0' `sigma'
+	mixed liking_ij genre_i || subj_id:, noretable nofetable noheader nogroup
+
+  estimates clear
+	estimates store model_results
+
+  // calculate analysis results
+	matrix coefficients = e(b)
+	matrix std_errors = e(V)
+	matrix p_values = e(p)
+
+	return scalar coef = coefficients[1, 1]
+	return scalar std_err = std_errors[1, 1]
+	return scalar p_value = p_values[1, 1]
+end
+```
+
+Let's test that our new `single_run()` function performs as expected.
+
+```{stata}
+// run one model with default parameters
+single_run 25 15 15 60 5 7 8
 return list
-
-scalars:
-r(p) =  .0002540647000293
-r(chi2) =  13.38189649447986
-r(df) =  1
-
-local reject = (r(p)<0.05)
 ```
-
-### Step 5: Automate
-
-Next, let's write a program that creates datasets under the alternative hypothesis, fits the models, and uses the `simulate` command to test the program.
 
 ```{stata}
-capture program drop simregress
-program simregress, rclass
-    version 16
-    // DEFINE THE INPUT PARAMETERS AND THEIR DEFAULT VALUES
-    syntax, n(integer)          /// Sample size
-          [ alpha(real 0.05)    /// Alpha level
-            intercept(real 110) /// Intercept parameter
-            age(real 0.5)       /// Age parameter
-            female(real -20)    /// Female parameter
-            interact(real 0.35) /// Interaction parameter
-            esd(real 20) ]      //  Standard deviation of the error
-    quietly {
-        // GENERATE THE RANDOM DATA
-        clear
-        set obs `n'
-        generate age = runiformint(18,65)
-        generate female = rbinomial(1,0.5)
-        generate interact = age*female
-        generate e = rnormal(0,`esd')
-        generate sbp = `intercept' + `age'*age + `female'*female + ///
-           `interact'*interact  + e
-        // TEST THE NULL HYPOTHESIS
-        regress sbp age i.female c.age#i.female
-        estimates store full
-        regress sbp age i.female
-        estimates store reduced
-        lrtest full reduced
-    }
-    // RETURN RESULTS
-    return scalar reject = (r(p)<`alpha')
-end
+r(p_value) <- 4.72641527483e-25
+r(std_err) <- .3582958364476441
+r(coef) <- 6.188306213378914
 ```
-
-Below, we use `simulate` to run `simregress` 200 times and summarize the variable reject. The results indicate that we would have 74% power to detect an interaction parameter of 0.35 given a sample of 400 participants and the other assumptions about the model.
 
 ```{stata}
-simulate reject=r(reject), reps(200) seed(12345):              ///
-         simttest, n(200) m0(70) ma(75) sd(15) alpha(0.05)
-
-Simulations (200)
-----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
-..................................................    50
-..................................................   100
-..................................................   150
-..................................................   200
-
-summarize reject
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-      reject |        200        .735    .4424407          0          1
-
+// run one model with new parameters
+single_run 25 10 50 60 2 7 8
+return list
 ```
-
-Next, let's write a program called `power\_cmd\_simregress` so that we can integrate `simregress` into Stata's `power` command.
 
 ```{stata}
-capture program drop power_cmd_simregress
-program power_cmd_simregress, rclass
-    version 17
-    // DEFINE THE INPUT PARAMETERS AND THEIR DEFAULT VALUES
-    syntax, n(integer)          /// Sample size
-          [ alpha(real 0.05)    /// Alpha level
-            intercept(real 110) /// Intercept parameter
-            age(real 0.5)       /// Age parameter
-            female(real -20)    /// Female parameter
-            interact(real 0.35) /// Interaction parameter
-            esd(real 20)        /// Standard deviation of the error
-            reps(integer 100)]  //   Number of repetitions
-
-    // GENERATE THE RANDOM DATA AND TEST THE NULL HYPOTHESIS
-    quietly {
-        simulate reject=r(reject), reps(`reps'):               ///
-             simregress, n(`n') age(`age') female(`female')    ///
-                         interact(`interact') esd(`esd') alpha(`alpha')
-        summarize reject
-    }
-    // RETURN RESULTS
-    return scalar power = r(mean)
-    return scalar N = `n'
-    return scalar alpha = `alpha'
-    return scalar intercept = `intercept'
-    return scalar age = `age'
-    return scalar female = `female'
-    return scalar interact = `interact'
-    return scalar esd = `esd'
-end
+r(p_value) <- .0000102758196074
+r(std_err) <- .2962159160223973
+r(coef) <- 2.400874560546665
 ```
 
-Finally, run `power simregress` for a range of input parameter values, including the parameters listed in double quotes. To do this, we first need to create a program called `power\_cmd\_simregress\_init`.
+## Power calculation automated
 
-```{stata}
-capture program drop power_cmd_simregress_init
-program power_cmd_simregress_init, sclass
-    sreturn local pss_colnames "intercept age female interact esd"
-    sreturn local pss_numopts  "intercept age female interact esd"
-end
-```
+To get an accurate estimation of power, we need to run the simulation many times. Here we use a matrix `results` to store the analysis results of each run.
 
-### Step 6: Summarize
-
-Now, we’re ready to use `power simregress`! The output below shows the simulated power when the interaction parameter equals 0.2 to 0.4 in increments of 0.05 for samples of size 400, 500, 600, and 700.
-
-```stata
-power simregress, n(400(100)700) intercept(110)                 ///
-                   age(0.5) female(-20) interact(0.2(0.05)0.4)   ///
-                   reps(1000) table graph(xdimension(interact)   ///
-                   legend(rows(1)))
-
-Estimated power
-Two-sided test
-
-  
-  +--------------------------------------------------------------------+
-  |   alpha   power       N intercept     age  female interact     esd |
-  |--------------------------------------------------------------------|
-  |     .05      .3     400       110      .5     -20       .2      20 |
-  |     .05    .421     400       110      .5     -20      .25      20 |
-  |     .05    .546     400       110      .5     -20       .3      20 |
-  |     .05    .685     400       110      .5     -20      .35      20 |
-  |     .05    .767     400       110      .5     -20       .4      20 |
-  |     .05     .34     500       110      .5     -20       .2      20 |
-  |     .05    .509     500       110      .5     -20      .25      20 |
-  |     .05     .63     500       110      .5     -20       .3      20 |
-  |     .05    .767     500       110      .5     -20      .35      20 |
-  |     .05    .872     500       110      .5     -20       .4      20 |
-  |     .05    .412     600       110      .5     -20       .2      20 |
-  |     .05    .556     600       110      .5     -20      .25      20 |
-  |     .05    .712     600       110      .5     -20       .3      20 |
-  |     .05    .829     600       110      .5     -20      .35      20 |
-  |     .05    .886     600       110      .5     -20       .4      20 |
-  |     .05    .471     700       110      .5     -20       .2      20 |
-  |     .05    .634     700       110      .5     -20      .25      20 |
-  |     .05    .771     700       110      .5     -20       .3      20 |
-  |     .05    .908     700       110      .5     -20      .35      20 |
-  |     .05    .957     700       110      .5     -20       .4      20 |
-  +--------------------------------------------------------------------+
-
-```
-
-![](https://github.com/hlmshtj-dan/pigo/blob/main/5.png?raw=true)
-
-
-## Mixed effects model
-
-### Setup
-
-Again, we set the seed to 02138.
-
-```{stata}
-set seed 02138
-```
-
-### Step 4: Simulate
-
-Next, we create a simulated dataset based on our assumptions about the model under the alternative hypothesis, and fit the model. We will simulate 5 observations at 4-month increments for 200 children.
+We can finally calculate power for our parameter of interest `beta_1` by filtering to keep only that term and the calculating the proportion of times the $p$-value is below the `alpha` threshold.
 
 ```{stata}
 clear
-set obs 200
-generate child = _n
-generate female = rbinomial(1,0.5)
-generate u_0i = rnormal(0,0.25)
-generate u_1i = rnormal(0,0.60)
-expand 5
-bysort child: generate age = (_n-1)*0.5
-generate interaction = age*female
-generate e_ij = rnormal(0,1.2)
-generate weight = 5.35 + 3.6*age + (-0.5)*female + (-0.25)*interaction ///
-    + u_0i + age*u_1i + e_ij
+matrix results = J(`reps', 3, .)
+forval i = 1/`reps' {
+	single_run 25 15 15 60 5 7 8
+	matrix results[`i', 1] = r(coef)
+  matrix results[`i', 2] = r(std_err)
+  matrix results[`i', 3] = r(p_value)
+}
+
+clear
+svmat results, names(x)
+
+// calculate mean estimates and power for specified alpha
+gen power = 0
+replace power = 1 if x3 < `alpha'
+
+egen coef_mean = mean(x1)
+egen std_err_mean = mean(x2)
+egen power_mean = mean(power)
+
+di "Coef. Mean: " coef_mean
+di "Std.Err. Mean: " std_err_mean
+di "Power Mean: " power_mean
 ```
 
-Our dataset includes the random deviations that we would not observe in a real dataset. We can then use mixed to fit a model to our simulated data.
-
 ```{stata}
-mixed weight age i.female c.age#i.female || child: age , stddev nolog noheader
-estimates store full
-mixed weight age i.female || child: age , stddev nolog noheader
-estimates store reduced
-lrtest full reduced
+Coef. Mean: 4.8985529
+Std.Err. Mean: .34172475
+Power Mean: 1
 ```
 
-We can then test the null hypothesis that the interaction term equals zero using a likelihood-ratio test.
+### Check false positive rate
+
+We can do a sanity check to see if our simulation is performing as expected by checking the false positive rate (Type I error rate). We set the effect of `genre_ij` (`beta_1`) to 0 to calculate the false positive rate, which is the probability of concluding there is an effect when there is no actual effect in the population.
 
 ```{stata}
- lrtest full reduced
+// run simulations and calculate the false positive rate
+clear
+matrix results = J(`reps', 3, .)
+forval i = 1/`reps' {
+	single_run 25 15 15 60 0 7 8
+	matrix results[`i', 1] = r(coef)
+  matrix results[`i', 2] = r(std_err)
+  matrix results[`i', 3] = r(p_value)
+}
 
-Likelihood-ratio test                                 LR chi2(1)  =      8.23
-(Assumption: reduced nested in full)                  Prob > chi2 =    0.0041
+clear
+svmat results, names(x)
+
+// calculate power for specified alpha
+gen power = 0
+replace power = 1 if x3 < `alpha'
+
+egen power_mean = mean(power)
+
+di "Power Mean: " power_mean
 ```
 
-The $p$-value for our test is 0.0041, so we would reject the null hypothesis that the interaction term equals zero.
+```{stata}
+Power Mean: .03333334
+```
 
-### Step 5: Automate
+Ideally, the false positive rate will be equal to `alpha`, which we set at 0.05.
 
-Next, let's write a program that creates datasets under the alternative hypothesis, fits the mixed effects models, tests the null hypothesis of interest, and uses the `simulate` command to run many iterations of the program.
+## Power for different effect sizes
+
+In real life, we will not know the effect size of our quantity of interest and so we will need to repeatedly perform the power analysis over a range of different plausible effect sizes. Perhaps we might also want to calculate power as we vary other data-generating parameters, such as the number of pop and rock songs sampled and the number of subjects sampled. We can create a table that combines all combinations of the parameters we want to vary in a grid.
 
 ```{stata}
-capture program drop simmixed
-program simmixed, rclass
-    version 16
-    // PARSE INPUT
-    syntax, n1(integer)             ///
-            n(integer)              ///
-          [ alpha(real 0.05)        ///
-            intercept(real 5.35)    ///
-            age(real 3.6)           ///
-            female(real -0.5)       ///
-            interact(real -0.25)    ///
-            u0i(real 0.25)          ///
-            u1i(real 0.60)          ///
-            eij(real 1.2) ]
+// grid of paramater values of interest
+matrix define params = (10, 10, 10, 1 \ 10, 10, 10, 2 \ 10, 10, 10, 3 \ 10, 10, 10, 4 \ 10, 10, 10, 5 ///
+\ 10, 10, 40, 1 \ 10, 10, 40, 2 \ 10, 10, 40, 3 \ 10, 10, 40, 4 \ 10, 10, 40, 5 ///
+\ 10, 40, 10, 1 \ 10, 40, 10, 2 \ 10, 40, 10, 3 \ 10, 40, 10, 4 \ 10, 40, 10, 5 ///
+\ 10, 40, 40, 1 \ 10, 40, 40, 2 \ 10, 40, 40, 3 \ 10, 40, 40, 4 \ 10, 40, 40, 5 ///
+\ 25, 10, 10, 1 \ 25, 10, 10, 2 \ 25, 10, 10, 3 \ 25, 10, 10, 4 \ 25, 10, 10, 5 ///
+\ 25, 10, 40, 1 \ 25, 10, 40, 2 \ 25, 10, 40, 3 \ 25, 10, 40, 4 \ 25, 10, 40, 5 ///
+\ 25, 40, 10, 1 \ 25, 40, 10, 2 \ 25, 40, 10, 3 \ 25, 40, 10, 4 \ 25, 40, 10, 5 ///
+\ 25, 40, 40, 1 \ 25, 40, 40, 2 \ 25, 40, 40, 3 \ 25, 40, 40, 4 \ 25, 40, 40, 5 ///
+\ 50, 10, 10, 1 \ 50, 10, 10, 2 \ 50, 10, 10, 3 \ 50, 10, 10, 4 \ 50, 10, 10, 5 ///
+\ 50, 10, 40, 1 \ 50, 10, 40, 2 \ 50, 10, 40, 3 \ 50, 10, 40, 4 \ 50, 10, 40, 5 ///
+\ 50, 40, 10, 1 \ 50, 40, 10, 2 \ 50, 40, 10, 3 \ 50, 40, 10, 4 \ 50, 40, 10, 5 ///
+\ 50, 40, 40, 1 \ 50, 40, 40, 2 \ 50, 40, 40, 3 \ 50, 40, 40, 4 \ 50, 40, 40, 5)
+```
 
-    // COMPUTE POWER
-    quietly {
-        drop _all
-        set obs `n'
-        generate child = _n
-        generate female = rbinomial(1,0.5)
-        generate u_0i = rnormal(0,`u0i')
-        generate u_1i = rnormal(0,`u1i')
-        expand `n1'
-        bysort child: generate age = (_n-1)*0.5
-        generate interaction = age*female
-        generate e_ij = rnormal(0,`eij')
-        generate weight = `intercept' + `age'*age + `female'*female + ///
-           `interact'*interaction  + u_0i + age*u_1i + e_ij
+We can now wrap our `single_run()` function within a more general function `parameter_search()` that takes the grid of parameter values as input and uses a matrix `results` to store analysis results of each `single_run()`.
 
-        mixed weight age i.female c.age#i.female || child: age, iter(200)
-        local conv1 = e(converged)
-        estimates store full
-        mixed weight age i.female || child: age, iter(200)
-        local conv2 = e(converged)
-        estimates store reduced
-        lrtest full reduced
-        local reject = cond(`conv1' + `conv2'==2, (r(p)<`alpha'), .)
-    }
-    // RETURN RESULTS
-    return scalar reject = `reject'
-    return scalar conv = `conv1'+`conv2'
+```{stata}
+capture program define parameter_search, rclass
+	args params
+
+	local rows = rowsof(params)
+	matrix results = J(`rows', 7, .)
+
+	forval i = 1/`rows' {
+		local n_subj = params[`i', 1]
+		local n_pop = params[`i', 2]
+		local n_rock = params[`i', 3]
+		local beta_1 = params[`i', 4]
+
+		single_run `n_subj' `n_pop' `n_rock' 60 `beta_1' 7 8
+		matrix results[`i', 1] = `n_subj'
+		matrix results[`i', 2] = `n_pop'
+		matrix results[`i', 3] = `n_rock'
+		matrix results[`i', 4] = `beta_1'
+		matrix results[`i', 5] = r(coef)
+		matrix results[`i', 6] = r(std_err)
+		matrix results[`i', 7] = r(p_value)
+	}
+
+	return matrix RE results
 end
 ```
 
-We then use simulate to run simmixed 10 times using the default parameter values for 5 observations on each of 200 children.
+If we call `parameter_search()` it will return a single replication of simulations for each combination of parameter values in `params`.
+
 
 ```{stata}
-simulate reject=r(reject) converged=r(conv), reps(10) seed(12345):      
-             simmixed, n1(5) n(200)
-
-      command:  simmixed, n1(5) n(200)
-       reject:  r(reject)
-    converged:  r(conv)
-
-Simulations (10)
-----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5
+parameter_search params
+return list
+matrix list r(RE)
 ```
-
-`simulate` saved the results of the hypothesis tests to a variable named reject. The mean of reject is our estimate of the power to test the null hypothesis that the age×sex interaction term equals zero, assuming that the weight of 200 children is measured 5 times.
-
-We could stop with our quick simulation if we were interested only in a specific set of assumptions. But it’s easy to write an additional program named `power\_cmd\_simmixed` that will allow us to use Stata's `power` command to create tables and graphs for a range of sample sizes.
 
 ```{stata}
-capture program drop power_cmd_simmixed
-program power_cmd_simmixed, rclass
-    version 16
-    // PARSE INPUT
-    syntax, n1(integer)             ///
-            n(integer)              ///
-          [ alpha(real 0.05)        ///
-            intercept(real 5.35)    ///
-            age(real 3.6)           ///
-            female(real -0.5)       ///
-            interact(real -0.25)    ///
-            u0i(real 0.25)          ///
-            u1i(real 0.60)          ///
-            eij(real 1.2)           ///
-            reps(integer 1000) ]
-
-    // COMPUTE POWER
-    quietly {
-        simulate reject=r(reject), reps(`reps'):                            ///
-        simmixed, n1(`n1') n(`n') alpha(`alpha') intercept(`intercept')     ///
-                  age(`age') female(`female') interact(`interact')          ///
-                  u0i(`u0i') u1i(`u1i') eij(`eij')
-        summarize reject
-    }
-
-    // RETURN RESULTS
-    return scalar power = r(mean)
-    return scalar n1 = `n1'
-    return scalar N = `n'
-    return scalar alpha = `alpha'
-    return scalar intercept = `intercept'
-    return scalar age = `age'
-    return scalar female = `female'
-    return scalar interact = `interact'
-    return scalar u0i = `u0i'
-    return scalar u1i = `u1i'
-    return scalar eij = `eij'
-end
+        n_subj      n_pop     n_rock     beta_1 mean_estimate   mean_se   p_value
+ r1         10         10         10          1   .47494198    1.239268   .66964415
+ r2         10         10         10          2   3.0235003    1.0573823  .00327878
+ r3         10         10         10          3   2.5193965    1.3232685  .02851385
+ r4         10         10         10          4   3.2663269    1.1604749  .00242869
+ r5         10         10         10          5   4.512447     1.3411888  .00009762
+...        ...        ...        ...        ...        ...          ...        ...
+r56         50         40         40          1   .91534407    .06439964  .00030979
+r57         50         40         40          2   2.1029328    .06544551  2.031e-16
+r58         50         40         40          3   2.1936547    .06501484  7.750e-18
+r59         50         40         40          4   3.819552     .06465943  5.356e-51
+r60         50         40         40          5   5.0927042    .06438308  1.331e-89
 ```
 
-It's also easy to write a program named `power\_cmd\_simmixed\_init` that will allow us to simulate power for a range of values for the parameters in our model.
+Then we just repeatedly call `parameter_search()` for the number of times specified by `reps` and store the result in a matrix `final_results`. Fair warning, this will take some time if you have set a high number of replications!
 
 ```{stata}
-capture program drop power_cmd_simmixed_init
-program power_cmd_simmixed_init, sclass
-      version 16
-      sreturn clear
-      // ADD COLUMNS TO THE OUTPUT TABLE
-      sreturn local pss_colnames "n1 intercept age female interact u0i u1i eij"
-      // ALLOW NUMLISTS FOR ALL PARAMETERS
-      sreturn local pss_numopts  "n1 intercept age female interact u0i u1i eij"
-end
+// replicate the parameter search many times
+clear
+matrix final_results = J(1, 7, .)
+forval i = 1/`reps' {
+  parameter_search params
+
+	matrix final_results = final_results \ r(RE)
+}
+
+// rename the columns
+clear
+svmat final_results, names(final_results)
+rename final_results1 n_subj
+rename final_results2 n_pop
+rename final_results3 n_rock
+rename final_results4 beta_1
+rename final_results5 mean_estimate
+rename final_results6 mean_se
+rename final_results7 p_value
+drop in 1
 ```
 
-### Step 6: Summarize
-
-Now, we can use `power simmixed` to simulate power for a variety of assumptions. The example below simulates power for a range of sample sizes at both levels 1 and 2. Level 2 sample sizes range from 100 to 500 children in increments of 100. At level 1, we consider 5 and 6 observations per child.
+Now, as before, we can calculate power. But this time we'll group by all of the parameters we manipulated in `pgrid`, so that we can get power estimates for all combinations of parameter values.
 
 ```{stata}
-power simmixed, n1(5 6) n(100(100)500) reps(1000)                         
-               table(n1 N power)                                         
-               graph(ydimension(power) xdimension(N) plotdimension(n1)    
-               xtitle(Level 2 Sample Size) legend(title(Level 1 Sample Size)))
-xxxxxxxxxxxxxxxxxxxxxxxxxxx
-Estimated power
-Two-sided test
+gen power = 0
+replace power = 1 if p_value < `alpha'
 
-  +-------------------------+
-  |      n1       N   power |
-  |-------------------------|
-  |       5     100   .2629 |
-  |       6     100    .313 |
-  |       5     200    .397 |
-  |       6     200    .569 |
-  |       5     300    .621 |
-  |       6     300    .735 |
-  |       5     400    .734 |
-  |       6     400    .855 |
-  |       5     500    .828 |
-  |       6     500    .917 |
-  +-------------------------+
+drop p_value
+
+collapse (mean) mean_estimate mean_se power, by(n_subj n_pop n_rock beta_1)
+list
+
+save sims_table, replace
 ```
 
-![](https://github.com/hlmshtj-dan/pigo/blob/main/3.png?raw=true)
+```{stata}
+     +-------------------------------------------------------------------+
+     | n_subj   n_pop   n_rock   beta_1   mean_e~e    mean_se      power |
+     |-------------------------------------------------------------------|
+  1. |     10      10       10        1   .9330658   1.282326         .1 |
+  2. |     10      10       10        2   2.087282   1.308163         .4 |
+  3. |     10      10       10        3   3.007084   1.273099         .7 |
+  4. |     10      10       10        4   3.740511   1.247234   .9333333 |
+  5. |     10      10       10        5    4.91571   1.230261          1 |
+     |-------------------------------------------------------------------|
+  6. |     10      10       40        1   1.044745   .8020979   .1333333 |
+  7. |     10      10       40        2   1.864043   .8039126   .5333334 |
+  8. |     10      10       40        3   2.870547   .7925556   .9333333 |
+  9. |     10      10       40        4   3.927847   .8019575          1 |
+ 10. |     10      10       40        5   5.001452   .7979248          1 |
+     |-------------------------------------------------------------------|
+ 11. |     10      40       10        1   1.088359   .7953615   .2666667 |
+ 12. |     10      40       10        2   1.763146   .7826523   .5666667 |
+ 13. |     10      40       10        3    3.01577   .7989414   .9333333 |
+ 14. |     10      40       10        4   3.848555   .8134724          1 |
+ 15. |     10      40       10        5   4.842256   .8033995          1 |
+     |-------------------------------------------------------------------|
+ 16. |     10      40       40        1   1.009365   .3240535         .4 |
+ 17. |     10      40       40        2   1.910475   .3170457          1 |
+ 18. |     10      40       40        3   3.029165   .3161722          1 |
+ 19. |     10      40       40        4   3.937832   .3200775          1 |
+ 20. |     10      40       40        5    5.03176   .3150537          1 |
+     |-------------------------------------------------------------------|
+ 21. |     25      10       10        1   1.220851    .508523   .4333333 |
+ 22. |     25      10       10        2   2.084612   .5145983         .9 |
+ 23. |     25      10       10        3   2.966755   .5040562          1 |
+ 24. |     25      10       10        4   3.998576   .5082341          1 |
+ 25. |     25      10       10        5   5.150187   .5073274          1 |
+     |-------------------------------------------------------------------|
+ 26. |     25      10       40        1   .9724839   .3205428   .3666667 |
+ 27. |     25      10       40        2   2.071421   .3162772         .9 |
+ 28. |     25      10       40        3   2.910469   .3166142          1 |
+ 29. |     25      10       40        4   3.932338   .3194729          1 |
+ 30. |     25      10       40        5   5.073044   .3135965          1 |
+     |-------------------------------------------------------------------|
+ 31. |     25      40       10        1   1.067082   .3219517   .3333333 |
+ 32. |     25      40       10        2   1.978866   .3202438   .9333333 |
+ 33. |     25      40       10        3   2.763089   .3182098          1 |
+ 34. |     25      40       10        4   4.072734   .3219956          1 |
+ 35. |     25      40       10        5   4.801973    .322404          1 |
+     |-------------------------------------------------------------------|
+ 36. |     25      40       40        1   .9484852   .1260218         .8 |
+ 37. |     25      40       40        2      2.064   .1294248          1 |
+ 38. |     25      40       40        3   3.087075   .1281161          1 |
+ 39. |     25      40       40        4   4.099739   .1284199          1 |
+ 40. |     25      40       40        5    4.96015   .1279773          1 |
+     |-------------------------------------------------------------------|
+ 41. |     50      10       10        1   1.158431    .255538         .6 |
+ 42. |     50      10       10        2   2.035999   .2542999   .9666666 |
+ 43. |     50      10       10        3   2.898555   .2546997          1 |
+ 44. |     50      10       10        4   3.928086   .2520648          1 |
+ 45. |     50      10       10        5    5.02601   .2586493          1 |
+     |-------------------------------------------------------------------|
+ 46. |     50      10       40        1   .9787318   .1604155         .8 |
+ 47. |     50      10       40        2   1.997271   .1600331          1 |
+ 48. |     50      10       40        3   3.136078    .159765          1 |
+ 49. |     50      10       40        4   3.937304   .1609297          1 |
+ 50. |     50      10       40        5   4.999249   .1592302          1 |
+     |-------------------------------------------------------------------|
+ 51. |     50      40       10        1   1.022432   .1597262   .7333333 |
+ 52. |     50      40       10        2   2.106123   .1612996          1 |
+ 53. |     50      40       10        3   3.008906   .1596548          1 |
+ 54. |     50      40       10        4    4.08501   .1611212          1 |
+ 55. |     50      40       10        5   4.934673   .1599543          1 |
+     |-------------------------------------------------------------------|
+ 56. |     50      40       40        1   1.055165   .0640208   .9666666 |
+ 57. |     50      40       40        2   1.954965   .0641747          1 |
+ 58. |     50      40       40        3   2.989451   .0640864          1 |
+ 59. |     50      40       40        4   3.941508   .0641336          1 |
+ 60. |     50      40       40        5   4.988971   .0641844          1 |
+     +-------------------------------------------------------------------+
+```
+
+Here's a graph that visualizes the output of the power simulation.
+
+```{stata}
+twoway (connected power beta_1 if n_subj == 10, sort) (connected power beta_1 if n_subj == 25, sort) (connected power beta_1 if n_subj == 50, sort), scheme(s2color) by(n_pop n_rock) legend(lab(1 "sample_size = 10") lab(2 "sample_size = 25") lab(3 "sample_size = 50"))
+```
+
+![](./figures/stata_final.png)
